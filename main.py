@@ -15,18 +15,20 @@ def khoi_tao_db():
     with get_db() as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS keys (key_str TEXT PRIMARY KEY, expire_time DATETIME, is_banned INTEGER)''')
-        # TẠO KEY MASTER MỚI CHO VUA KITO
         c.execute("INSERT OR IGNORE INTO keys (key_str, expire_time, is_banned) VALUES (?, ?, ?)", ('adminvuakito', '2099-12-31 23:59:59', 0))
         conn.commit()
 
 khoi_tao_db()
 
-# ================= LÕI AI V6: QUANTUM NEURAL ENGINE =================
+# ================= LÕI AI V6: QUANTUM NEURAL ENGINE (ĐÃ FIX LỖI LOADING CORE) =================
 def phan_tich_ai_v6_quantum(kq_list):
     tong_tai = kq_list.count("Tài"); tong_xiu = kq_list.count("Xỉu")
-    if len(kq_list) < 20: return {"du_doan": "LOADING CORE...", "ti_le": 0, "tong_tai": tong_tai, "tong_xiu": tong_xiu}
     
-    gan_nhat = kq_list[-20:]; kq_cuoi = kq_list[-1]
+    # HẠ MỨC YÊU CẦU XUỐNG 10 PHIÊN (Để API trả 15 phiên là ăn ngay)
+    if len(kq_list) < 10: 
+        return {"du_doan": "LOADING CORE...", "ti_le": 0, "tong_tai": tong_tai, "tong_xiu": tong_xiu}
+    
+    gan_nhat = kq_list[-15:]; kq_cuoi = kq_list[-1]
     chuoi_bet = 1
     for i in range(len(kq_list)-2, -1, -1):
         if kq_list[i] == kq_cuoi: chuoi_bet += 1
@@ -47,8 +49,8 @@ def phan_tich_ai_v6_quantum(kq_list):
     elif chuoi_bet >= 5: du_doan = kq_cuoi; ty_le = random.uniform(98.0, 99.9)
     else:
         lech_cau = tong_tai - tong_xiu
-        if lech_cau > 10: du_doan = "XỈU"; ty_le = random.uniform(81.0, 87.5)
-        elif lech_cau < -10: du_doan = "TÀI"; ty_le = random.uniform(81.0, 87.5)
+        if lech_cau > 8: du_doan = "XỈU"; ty_le = random.uniform(81.0, 87.5)
+        elif lech_cau < -8: du_doan = "TÀI"; ty_le = random.uniform(81.0, 87.5)
         else: du_doan = "TÀI" if kq_cuoi == "Xỉu" else "XỈU"; ty_le = random.uniform(75.5, 83.5)
 
     return {"du_doan": du_doan, "ti_le": round(ty_le, 1), "tong_tai": tong_tai, "tong_xiu": tong_xiu}
@@ -154,4 +156,4 @@ async def home(): return FileResponse("index.html")
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
-    
+                           
