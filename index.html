@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KING AI SYSTEM - V6 MAX XỊN</title>
+    <title>KING AI SYSTEM - AUTO ĐẢO CẦU</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
@@ -44,7 +44,6 @@
 
         .input-box { width: 100%; background: rgba(0,0,0,0.8); border: 2px solid var(--secondary); border-radius: 8px; color: var(--secondary); font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: bold; padding: 15px; text-align: center; margin-bottom: 20px; outline: none; transition: all 0.3s; letter-spacing: 2px; }
         .input-box:focus { box-shadow: 0 0 20px rgba(255,215,0,0.8); background: #000; }
-        .input-box::placeholder { color: rgba(255,215,0,0.4); letter-spacing: normal; }
         
         #game-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; background: #000; }
         #game-frame { width: 100%; height: 100%; border: none; }
@@ -52,22 +51,19 @@
         
         #draggable-robot { position: absolute; top: 50%; left: 5%; z-index: 2005; display: flex; flex-direction: row; align-items: center; transition: transform 0.2s ease; transform-origin: left center; }
         .robo-img { width: 110px; height: 110px; object-fit: cover; border-radius: 50%; border: 3px solid var(--robot-glow); filter: drop-shadow(0 0 25px rgba(0,242,254,0.9)); cursor: grab; z-index: 2; position: relative; margin-right: -25px; background: #000; }
-        .robo-img:active { cursor: grabbing; filter: drop-shadow(0 0 35px rgba(0,242,254,1)); }
         
         .robo-dialog { background: rgba(0,0,0,0.95); border: 2px solid var(--secondary); padding: 15px 15px 15px 35px; border-radius: 20px; text-align: center; box-shadow: 0 0 30px rgba(255,215,0,0.5); width: 180px; position: relative; z-index: 1; }
         
         #robo-menu { display: none; position: absolute; top: 40px; right: -90px; background: #000; border: 2px solid var(--secondary); border-radius: 10px; z-index: 2010; width: 150px; text-align: left; overflow: hidden; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
         .menu-item { padding: 12px 15px; font-size: 14px; font-weight: bold; cursor: pointer; border-bottom: 1px solid var(--border-color); color: var(--secondary); display: flex; align-items: center; gap: 10px; }
-        .menu-item:hover { background: rgba(255,215,0,0.2); }
         .menu-row { display: flex; justify-content: space-between; padding: 8px; background: rgba(255,215,0,0.1); }
         .btn-sz { flex: 1; border: 1px solid var(--secondary); background: transparent; color: var(--secondary); border-radius: 5px; font-size: 12px; padding: 6px; margin: 0 3px; cursor: pointer; font-weight: bold; }
-        .btn-sz:hover { background: var(--secondary); color: #000; }
 
         .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; font-weight: bold; color: var(--secondary); cursor: pointer; text-shadow: 0 0 10px rgba(255,215,0,0.8); }
-        .list-item { background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 1px solid var(--secondary); margin-bottom: 10px; font-size: 14px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); box-shadow: 0 0 10px rgba(255,215,0,0.2); }
+        .list-item { background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 1px solid var(--secondary); margin-bottom: 10px; font-size: 14px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); }
         .stats-box { border-top: 1px dashed var(--secondary); margin-top: 10px; padding-top: 10px; font-size: 12px; font-weight: 900; display: flex; justify-content: space-around; }
         
-        select.input-box option { background: #000; color: var(--secondary); }
+        .glow-green { color: #00ff00 !important; text-shadow: 0 0 10px #00ff00 !important; font-weight: 900; }
     </style>
 </head>
 <body>
@@ -96,7 +92,7 @@
                 <div id="robo-view-auto">
                     <div style="font-size: 12px; font-weight: 800; color: #fff;" id="robo-subtitle">PHIÊN: <span id="robo-phien" style="color: var(--secondary);">...</span></div>
                     <div id="robo-kq" style="font-size: 24px; font-family: 'Playfair Display', serif; font-weight: 900; padding: 5px 0; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">SCANNING</div>
-                    <div id="robo-tyle" style="color: var(--secondary); font-size: 13px; font-weight: 900; text-shadow: 0 0 8px var(--secondary);">Đang tải dữ liệu...</div>
+                    <div id="robo-tyle" style="color: var(--secondary); font-size: 12px; font-weight: 900; text-shadow: 0 0 8px var(--secondary);">Đang tải dữ liệu...</div>
                     <div class="stats-box" id="robo-thongke" style="display:none;">
                         <div style="color: #ff3333; text-shadow: 0 0 5px #ff3333;">TÀI: <span id="tk-tai">0</span></div>
                         <div style="color: #ffffff; text-shadow: 0 0 5px #ffffff;">XỈU: <span id="tk-xiu">0</span></div>
@@ -138,7 +134,7 @@
     <div id="main-dashboard">
         <div class="panel">
             <div class="panel-title" style="font-size: 2rem;"><i class="fas fa-chess-king"></i> KHO VŨ KHÍ HOÀNG GIA</div>
-            <div class="cate-title"><i class="fas fa-dice"></i> HỆ TÀI XỈU AI V6 LƯỢNG TỬ</div>
+            <div class="cate-title"><i class="fas fa-dice"></i> HỆ TÀI XỈU AI V6 (TỰ ĐẢO CẦU)</div>
             
             <img src="https://i.postimg.cc/3JzvBWP6/Screenshot-2026-03-14-10-32-55-76-40deb401b9ffe8e1df2f1cc5ba480b12.jpg" 
                  class="game-banner-btn" 
@@ -163,7 +159,6 @@
             
             <div style="background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--secondary); box-shadow: inset 0 0 15px rgba(255,215,0,0.2);">
                 <input type="text" id="custom-key-input" class="input-box" placeholder="Nhập tên Key (Để trống = Tự random)" style="margin-bottom: 15px; font-size: 13px;">
-                
                 <select id="key-duration" class="input-box" style="margin-bottom: 10px;">
                     <option value="1H">Gói 1 Giờ</option>
                     <option value="1D">Gói 1 Ngày</option>
@@ -172,12 +167,11 @@
                 </select>
                 <button class="cyber-btn" onclick="adminCreateKey()"><i class="fas fa-hammer"></i> RÈN KEY MỚI</button>
             </div>
-
             <h3 style="margin: 15px 0; color: var(--secondary); text-align: left; font-family: 'Playfair Display';">KHO KEY ĐÃ CẤP</h3>
             <div id="admin-keys" style="max-height: 250px; overflow-y: auto; text-align: left;"></div>
         </div>
-                                                                                                                                                       </div>
-                   <script>
+    </div>
+    <script>
         let currentKey = localStorage.getItem("royal_key") || ""; 
         let scanInterval; let phienCu = ""; let activeGame = ""; 
         let isSpamming = false;
@@ -293,12 +287,19 @@
                     
                     el.innerText = "⏳ LOADING..."; 
                     el.style.color = "var(--secondary)";
-                    tyleEl.innerText = "Đợi bố chút... đang nâng cấp tool xịn!";
+                    tyleEl.innerHTML = "Đợi bố chút... đang nâng cấp tool xịn!";
                     document.getElementById('robo-thongke').style.display = 'none';
 
                     setTimeout(() => {
                         el.innerText = data.du_doan; 
-                        tyleEl.innerText = "WIN: " + data.ti_le + "%";
+                        
+                        // HIỆU ỨNG TỰ ĐẢO CẦU CỰC GẮT
+                        if (data.dao_cau) {
+                            tyleEl.innerHTML = "<span class='glow-green'><i class='fas fa-sync-alt'></i> TỰ ĐẢO CẦU</span> | WIN: " + data.ti_le + "%";
+                        } else {
+                            tyleEl.innerText = "WIN: " + data.ti_le + "%";
+                        }
+                        
                         el.style.color = data.du_doan === "TÀI" ? "#ff4d4d" : (data.du_doan === "XỈU" ? "#fff" : "var(--secondary)");
                         if(data.tong_tai !== undefined && data.tong_xiu !== undefined) {
                             document.getElementById('robo-thongke').style.display = 'flex';
@@ -370,14 +371,13 @@
             let dur = document.getElementById('key-duration').value;
             let customK = document.getElementById('custom-key-input') ? document.getElementById('custom-key-input').value.trim() : "";
             let res = await fetch('/api/admin/create_key', { 
-                method: 'POST', 
-                headers: {'Content-Type':'application/json'}, 
+                method: 'POST', headers: {'Content-Type':'application/json'}, 
                 body: JSON.stringify({admin_key: currentKey, duration: dur, custom_key: customK})
             });
             let json = await res.json();
             if(json.status === "success") {
                 prompt("Rèn Key thành công! Copy mã này ném cho khách:", json.new_key);
-                if(document.getElementById('custom-key-input')) document.getElementById('custom-key-input').value = ""; // Xóa trắng ô
+                if(document.getElementById('custom-key-input')) document.getElementById('custom-key-input').value = ""; 
                 loadAdminData();
             } else { alert("Lỗi: " + json.msg); }
         }
