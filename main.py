@@ -50,20 +50,16 @@ def phan_tich_ai_v6_quantum(kq_list):
     tong_tai = kq_list.count("Tài"); tong_xiu = kq_list.count("Xỉu")
     if len(kq_list) < 6: return {"du_doan": "LOADING CORE...", "ti_le": 0, "tong_tai": tong_tai, "tong_xiu": tong_xiu, "dao_cau": False}
     
-    # 1. AI Tính toán cho ván hiện tại
     du_doan_hien_tai = tinh_toan_goc(kq_list)
-    
-    # 2. AI nhìn lại quá khứ: Ván trước nó đã tính ra gì?
     du_doan_truoc = tinh_toan_goc(kq_list[:-1])
-    kq_cuoi = kq_list[-1] # Kết quả thực tế ván trước
+    kq_cuoi = kq_list[-1]
     
     ty_le = random.uniform(85.5, 93.5)
     dao_cau = False
     
-    # 3. KÍCH HOẠT ĐẢO CẦU NẾU VÁN TRƯỚC AI DỰ ĐOÁN SAI
     if du_doan_truoc != "" and du_doan_truoc.upper() != kq_cuoi.upper():
         du_doan_hien_tai = "TÀI" if du_doan_hien_tai == "XỈU" else "XỈU"
-        ty_le = random.uniform(96.5, 99.9) # Buff tỷ lệ Win lên max vì bẻ nhà cái
+        ty_le = random.uniform(96.5, 99.9) 
         dao_cau = True
 
     if du_doan_hien_tai == "": du_doan_hien_tai = "TÀI" if kq_cuoi == "Xỉu" else "XỈU"
@@ -82,15 +78,46 @@ async def scan_game(tool: str, key: str):
     if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and key != "adminvuakito": 
         return {"status": "error", "msg": "Key đã hết hạn! Vui lòng nạp thêm tiền chuộc Key."}
 
-    url = "https://wtx.tele68.com/v1/tx/lite-sessions" if tool == "lc79" else "https://wtx.macminim6.online/v1/tx/lite-sessions"
+    # BỘ LỌC CỔNG API MỚI (Đã gỡ Betvip, thêm MD5 Mới)
+    if tool == "lc79":
+        url = "https://wtx.tele68.com/v1/tx/lite-sessions"
+    elif tool == "lc79_md5":
+        url = "https://wcl.tele68.com/v1/chanlefull/sessions"
+    elif tool == "new_md5":
+        url = "https://wtxmd52.macminim6.online/v1/txmd5/sessions"
+    else:
+        return {"status": "error", "msg": "Tool không hợp lệ!"}
+
     try:
         res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5).json()
-        if not res.get("list"): return {"status": "error", "msg": "Chờ cầu mới..."}
-        lst = res["list"][::-1]
-        kq = ["Tài" if "TAI" in str(s.get("resultTruyenThong", "")).upper() else "Xỉu" for s in lst]
+        lst = res.get("data", res.get("list", res)) if isinstance(res, dict) else res
+        if not lst or not isinstance(lst, list): return {"status": "error", "msg": "Chờ cầu mới..."}
+        if isinstance(lst[0], dict) and lst[0].get("id", 0) < lst[-1].get("id", 0): lst = lst[::-1]
+        
+        kq = []
+        is_chanle = False
+        for s in lst:
+            val = str(s).upper()
+            if "CHẴN" in val or "CHAN" in val or "LẺ" in val or "LE" in val or "chanle" in url.lower():
+                is_chanle = True
+                if "CHẴN" in val or "CHAN" in val or "'C'" in val or "0" in val: kq.append("Tài")
+                else: kq.append("Xỉu")
+            else:
+                if "TAI" in val or "TÀI" in val or "'RESULT': 1" in val or "'T'" in val: kq.append("Tài")
+                else: kq.append("Xỉu")
         
         data = phan_tich_ai_v6_quantum(kq)
-        data["phien"] = str(int(lst[-1]["id"]) + 1)
+        
+        if is_chanle and data["du_doan"] != "LOADING CORE...":
+            data["du_doan"] = "CHẴN" if data["du_doan"] == "TÀI" else "LẺ"
+            data["tong_chan"] = data.pop("tong_tai", 0)
+            data["tong_le"] = data.pop("tong_xiu", 0)
+
+        s_cuoi = lst[-1]
+        if isinstance(s_cuoi, dict) and "id" in s_cuoi: data["phien"] = str(int(s_cuoi["id"]) + 1)
+        elif isinstance(s_cuoi, dict) and "phien" in s_cuoi: data["phien"] = str(int(s_cuoi["phien"]) + 1)
+        else: data["phien"] = str(random.randint(900000, 999999))
+            
         return {"status": "success", "data": data}
     except: return {"status": "error", "msg": "Mất tín hiệu vệ tinh!"}
 
@@ -157,3 +184,4 @@ async def home(): return FileResponse("index.html")
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
+        
