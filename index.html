@@ -80,8 +80,8 @@
                 </div>
                 
                 <div id="robo-menu">
+                    <div class="menu-item" onclick="switchRoboMode('betvip')"><i class="fas fa-dice"></i> BETVIP (AUTO)</div>
                     <div class="menu-item" onclick="switchRoboMode('lc79')"><i class="fas fa-dice"></i> LC79 (AUTO)</div>
-                    <div class="menu-item" onclick="switchRoboMode('new_md5')"><i class="fas fa-bolt"></i> VIP MD5 (MỚI)</div>
                     <div class="menu-item" onclick="switchRoboMode('lc79_md5')"><i class="fas fa-satellite-dish"></i> LC79 MD5 (AUTO)</div>
                     <div class="menu-row">
                         <button class="btn-sz" onclick="changeRoboSize(0.7)">Nhỏ</button>
@@ -131,13 +131,14 @@
         <div class="panel">
             <div class="panel-title" style="font-size: 2rem;"><i class="fas fa-chess-king"></i> KHO VŨ KHÍ HOÀNG GIA</div>
             <div class="cate-title"><i class="fas fa-dice"></i> HỆ THỐNG AUTO ĐẢO CẦU V6</div>
+            
+            <img src="https://i.postimg.cc/3JzvBWP6/Screenshot-2026-03-14-10-32-55-76-40deb401b9ffe8e1df2f1cc5ba480b12.jpg" 
+                 class="game-banner-btn" onclick="openTool('betvip', 'TOOL BETVIP', 'https://play.betvip.fit/')">
                  
             <img src="https://i.postimg.cc/vH4nf52J/Screenshot-2026-03-14-10-33-38-24-40deb401b9ffe8e1df2f1cc5ba480b12.jpg" 
                  class="game-banner-btn" onclick="openTool('lc79', 'TOOL LC79', 'https://lc79.bet')">
 
             <div class="cate-title"><i class="fas fa-fingerprint"></i> HỆ MÃ HÓA MD5 TỰ ĐỘNG</div>
-            
-            <button class="cyber-btn" onclick="openTool('new_md5', 'TOOL VIP MD5 (MỚI)', '')"><i class="fas fa-bolt"></i> TOOL VIP MD5 (MỚI)</button>
             <button class="cyber-btn btn-red" onclick="openTool('lc79_md5', 'LC79 MD5 (AUTO)', 'https://lc79.bet')"><i class="fas fa-satellite-dish"></i> LC79 MD5 (DÒ SÓNG TỰ ĐỘNG)</button>
             
             <button class="cyber-btn" id="btn-admin-panel" style="display:none; margin-top: 30px; background: transparent; border-color: var(--robot-glow); color: var(--robot-glow); box-shadow: 0 0 15px rgba(0,242,254,0.4);" onclick="loadAdminData()">⚙️ QUẢN TRỊ VƯƠNG QUỐC (TẠO KEY)</button>
@@ -209,8 +210,7 @@
             document.getElementById('game-overlay').style.display = 'block';
             if (url !== '') { document.getElementById('game-frame').src = url; }
 
-            // Đổi Tên Hiển Thị Chẵn/Lẻ Tự Động Theo Nguồn
-            if (gameTarget.includes('lc79_md5')) {
+            if (gameTarget.includes('md5')) {
                 document.getElementById('tk-tai-label').innerText = "CHẴN"; document.getElementById('tk-xiu-label').innerText = "LẺ";
             } else {
                 document.getElementById('tk-tai-label').innerText = "TÀI"; document.getElementById('tk-xiu-label').innerText = "XỈU";
@@ -227,7 +227,7 @@
 
         function switchRoboMode(mode) {
             document.getElementById('robo-menu').style.display = 'none'; 
-            let title = mode === 'new_md5' ? 'TOOL VIP MD5' : (mode === 'lc79' ? 'TOOL LC79' : 'LC79 MD5 (AUTO)');
+            let title = mode === 'betvip' ? 'TOOL BETVIP' : (mode === 'lc79' ? 'TOOL LC79' : 'LC79 MD5 (AUTO)');
             openTool(mode, title, '');
         }
 
