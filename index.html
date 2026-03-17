@@ -80,8 +80,9 @@
                 </div>
                 
                 <div id="robo-menu">
-                    <div class="menu-item" onclick="switchRoboMode('tx')"><i class="fas fa-dice"></i> Soi Cầu VIP</div>
-                    <div class="menu-item" onclick="switchRoboMode('md5')"><i class="fas fa-fingerprint"></i> Phân Tích MD5</div>
+                    <div class="menu-item" onclick="switchRoboMode('lc79')"><i class="fas fa-dice"></i> LC79 (AUTO)</div>
+                    <div class="menu-item" onclick="switchRoboMode('new_md5')"><i class="fas fa-bolt"></i> VIP MD5 (MỚI)</div>
+                    <div class="menu-item" onclick="switchRoboMode('lc79_md5')"><i class="fas fa-satellite-dish"></i> LC79 MD5 (AUTO)</div>
                     <div class="menu-row">
                         <button class="btn-sz" onclick="changeRoboSize(0.7)">Nhỏ</button>
                         <button class="btn-sz" onclick="changeRoboSize(1)">Vừa</button>
@@ -94,14 +95,9 @@
                     <div id="robo-kq" style="font-size: 24px; font-family: 'Playfair Display', serif; font-weight: 900; padding: 5px 0; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">SCANNING</div>
                     <div id="robo-tyle" style="color: var(--secondary); font-size: 12px; font-weight: 900; text-shadow: 0 0 8px var(--secondary);">Đang tải dữ liệu...</div>
                     <div class="stats-box" id="robo-thongke" style="display:none;">
-                        <div style="color: #ff3333; text-shadow: 0 0 5px #ff3333;">TÀI: <span id="tk-tai">0</span></div>
-                        <div style="color: #ffffff; text-shadow: 0 0 5px #ffffff;">XỈU: <span id="tk-xiu">0</span></div>
+                        <div style="color: #ff3333; text-shadow: 0 0 5px #ff3333;"><span id="tk-tai-label">TÀI</span>: <span id="tk-tai">0</span></div>
+                        <div style="color: #ffffff; text-shadow: 0 0 5px #ffffff;"><span id="tk-xiu-label">XỈU</span>: <span id="tk-xiu">0</span></div>
                     </div>
-                </div>
-
-                <div id="robo-view-md5" style="display: none;">
-                    <input type="text" id="robo-md5-input" placeholder="Dán mã MD5..." class="input-box" style="padding: 10px; font-size: 12px; margin-bottom: 10px;">
-                    <button class="cyber-btn" style="padding: 10px; font-size: 12px; margin-bottom: 0;" onclick="analyzeMD5_Robo()">DỰ ĐOÁN MD5</button>
                 </div>
             </div>
         </div>
@@ -134,18 +130,15 @@
     <div id="main-dashboard">
         <div class="panel">
             <div class="panel-title" style="font-size: 2rem;"><i class="fas fa-chess-king"></i> KHO VŨ KHÍ HOÀNG GIA</div>
-            <div class="cate-title"><i class="fas fa-dice"></i> HỆ TÀI XỈU AI V6 (TỰ ĐẢO CẦU)</div>
-            
-            <img src="https://i.postimg.cc/3JzvBWP6/Screenshot-2026-03-14-10-32-55-76-40deb401b9ffe8e1df2f1cc5ba480b12.jpg" 
-                 class="game-banner-btn" 
-                 onclick="openTool('betvip', 'TOOL BETVIP', 'https://play.betvip.fit/')">
+            <div class="cate-title"><i class="fas fa-dice"></i> HỆ THỐNG AUTO ĐẢO CẦU V6</div>
                  
             <img src="https://i.postimg.cc/vH4nf52J/Screenshot-2026-03-14-10-33-38-24-40deb401b9ffe8e1df2f1cc5ba480b12.jpg" 
-                 class="game-banner-btn" 
-                 onclick="openTool('lc79', 'TOOL LC79', 'https://lc79.bet')">
+                 class="game-banner-btn" onclick="openTool('lc79', 'TOOL LC79', 'https://lc79.bet')">
 
-            <div class="cate-title"><i class="fas fa-fingerprint"></i> HỆ MÃ HÓA MD5</div>
-            <button class="cyber-btn btn-red" onclick="openTool('md5', 'TOOL MD5 VIP', '')"><i class="fas fa-shield-alt"></i> TOOL MD5 (CHẠY ĐỘC LẬP)</button>
+            <div class="cate-title"><i class="fas fa-fingerprint"></i> HỆ MÃ HÓA MD5 TỰ ĐỘNG</div>
+            
+            <button class="cyber-btn" onclick="openTool('new_md5', 'TOOL VIP MD5 (MỚI)', '')"><i class="fas fa-bolt"></i> TOOL VIP MD5 (MỚI)</button>
+            <button class="cyber-btn btn-red" onclick="openTool('lc79_md5', 'LC79 MD5 (AUTO)', 'https://lc79.bet')"><i class="fas fa-satellite-dish"></i> LC79 MD5 (DÒ SÓNG TỰ ĐỘNG)</button>
             
             <button class="cyber-btn" id="btn-admin-panel" style="display:none; margin-top: 30px; background: transparent; border-color: var(--robot-glow); color: var(--robot-glow); box-shadow: 0 0 15px rgba(0,242,254,0.4);" onclick="loadAdminData()">⚙️ QUẢN TRỊ VƯƠNG QUỐC (TẠO KEY)</button>
             <button class="cyber-btn btn-red" style="margin-top: 10px;" onclick="logout()">ĐĂNG XUẤT KEY</button>
@@ -171,21 +164,16 @@
             <div id="admin-keys" style="max-height: 250px; overflow-y: auto; text-align: left;"></div>
         </div>
     </div>
-    <script>
+        <script>
         let currentKey = localStorage.getItem("royal_key") || ""; 
         let scanInterval; let phienCu = ""; let activeGame = ""; 
-        let isSpamming = false;
-        let isPredicting = false; 
+        let isSpamming = false; let isPredicting = false; 
 
-        if(currentKey) { 
-            document.getElementById('auth-key').value = currentKey;
-            verifyKey(true); 
-        }
+        if(currentKey) { document.getElementById('auth-key').value = currentKey; verifyKey(true); }
 
         async function verifyKey(isAuto = false) {
             if (isSpamming) return;
             isSpamming = true; setTimeout(() => { isSpamming = false; }, 2000);
-
             let k = document.getElementById('auth-key').value.trim();
             if(!k) { document.getElementById('auth-msg').innerText = "Vui lòng dâng lên Mã Key!"; return; }
             if(!isAuto) { document.getElementById('auth-msg').innerText = "Đang kiểm chứng Hoàng Gia..."; document.getElementById('auth-msg').style.color = "orange"; }
@@ -194,58 +182,43 @@
                 let res = await fetch('/api/verify_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({key: k})});
                 let json = await res.json();
                 if (json.status === "success") {
-                    currentKey = k;
-                    localStorage.setItem("royal_key", currentKey); 
-                    
+                    currentKey = k; localStorage.setItem("royal_key", currentKey); 
                     document.getElementById('auth-wrapper').style.display = 'none'; 
                     document.getElementById('main-header').style.display = 'flex'; 
                     document.getElementById('main-dashboard').style.display = 'grid';
                     document.getElementById('header-expire').innerText = json.expire;
-                    
-                    if (json.role === "admin") {
-                        document.getElementById('btn-admin-panel').style.display = 'block';
-                    } else {
-                        document.getElementById('btn-admin-panel').style.display = 'none';
-                    }
+                    document.getElementById('btn-admin-panel').style.display = (json.role === "admin") ? 'block' : 'none';
                 } else { 
-                    if(!isAuto) {
-                        document.getElementById('auth-msg').innerText = json.msg; 
-                        document.getElementById('auth-msg').style.color = "red"; 
-                    } else {
-                        localStorage.removeItem("royal_key");
-                        currentKey = "";
-                    }
+                    if(!isAuto) { document.getElementById('auth-msg').innerText = json.msg; document.getElementById('auth-msg').style.color = "red"; } 
+                    else { localStorage.removeItem("royal_key"); currentKey = ""; }
                 }
-            } catch(e) {
-                if(!isAuto) { document.getElementById('auth-msg').innerText = "Mất kết nối Server Hoàng Gia!"; document.getElementById('auth-msg').style.color = "red"; }
-            }
+            } catch(e) { if(!isAuto) { document.getElementById('auth-msg').innerText = "Mất kết nối Server Hoàng Gia!"; document.getElementById('auth-msg').style.color = "red"; } }
         }
 
         function logout() { 
             localStorage.removeItem("royal_key"); currentKey = ""; activeGame = ""; clearInterval(scanInterval); isPredicting = false;
-            document.getElementById('main-header').style.display = 'none'; 
-            document.getElementById('main-dashboard').style.display = 'none'; 
-            document.getElementById('auth-wrapper').style.display = 'flex'; 
-            document.getElementById('auth-key').value = "";
-            document.getElementById('auth-msg').innerText = "Đã thoái vị. Vui lòng nhập Key mới.";
-            document.getElementById('auth-msg').style.color = "var(--secondary)";
+            document.getElementById('main-header').style.display = 'none'; document.getElementById('main-dashboard').style.display = 'none'; 
+            document.getElementById('auth-wrapper').style.display = 'flex'; document.getElementById('auth-key').value = "";
+            document.getElementById('auth-msg').innerText = "Đã thoái vị. Vui lòng nhập Key mới."; document.getElementById('auth-msg').style.color = "var(--secondary)";
         }
 
         function openTool(gameTarget, titleName, url) {
-            if (gameTarget !== 'md5') { activeGame = gameTarget; }
+            activeGame = gameTarget; 
             phienCu = ""; clearInterval(scanInterval); isPredicting = false;
             document.getElementById('robo-mode-title').innerText = titleName;
             document.getElementById('game-overlay').style.display = 'block';
             if (url !== '') { document.getElementById('game-frame').src = url; }
 
-            if (gameTarget === 'md5') {
-                document.getElementById('robo-view-auto').style.display = 'none'; document.getElementById('robo-view-md5').style.display = 'block'; document.getElementById('draggable-robot').style.transform = 'scale(1.3)'; 
+            // Đổi Tên Hiển Thị Chẵn/Lẻ Tự Động Theo Nguồn
+            if (gameTarget.includes('lc79_md5')) {
+                document.getElementById('tk-tai-label').innerText = "CHẴN"; document.getElementById('tk-xiu-label').innerText = "LẺ";
             } else {
-                document.getElementById('robo-view-auto').style.display = 'block'; document.getElementById('robo-view-md5').style.display = 'none';
-                document.getElementById('robo-subtitle').innerHTML = 'PHIÊN: <span id="robo-phien">...</span>';
-                document.getElementById('robo-kq').innerText = "SCANNING"; document.getElementById('robo-tyle').innerText = "Phân tích lõi V6..."; document.getElementById('robo-thongke').style.display = 'none';
-                getSignalTX(); scanInterval = setInterval(getSignalTX, 2000); 
+                document.getElementById('tk-tai-label').innerText = "TÀI"; document.getElementById('tk-xiu-label').innerText = "XỈU";
             }
+
+            document.getElementById('robo-subtitle').innerHTML = 'PHIÊN: <span id="robo-phien">...</span>';
+            document.getElementById('robo-kq').innerText = "SCANNING"; document.getElementById('robo-tyle').innerText = "Đang tải dữ liệu..."; document.getElementById('robo-thongke').style.display = 'none';
+            getSignalTX(); scanInterval = setInterval(getSignalTX, 2000); 
         }
 
         function closeGame() { activeGame = ""; document.getElementById('game-overlay').style.display = 'none'; document.getElementById('game-frame').src = ''; clearInterval(scanInterval); isPredicting = false; }
@@ -253,93 +226,56 @@
         function changeRoboSize(scale) { document.getElementById('draggable-robot').style.transform = `scale(${scale})`; document.getElementById('robo-menu').style.display = 'none'; }
 
         function switchRoboMode(mode) {
-            document.getElementById('robo-menu').style.display = 'none'; phienCu = ""; clearInterval(scanInterval); isPredicting = false;
-            if (mode === 'md5') {
-                document.getElementById('robo-mode-title').innerText = 'TOOL MD5 VIP'; document.getElementById('robo-view-auto').style.display = 'none'; document.getElementById('robo-view-md5').style.display = 'block';
-            } else if (mode === 'tx') {
-                document.getElementById('robo-mode-title').innerText = (activeGame === 'lc79') ? 'TOOL LC79' : 'TOOL BETVIP';
-                document.getElementById('robo-view-auto').style.display = 'block'; document.getElementById('robo-view-md5').style.display = 'none';
-                document.getElementById('robo-subtitle').innerHTML = 'PHIÊN: <span id="robo-phien">...</span>';
-                document.getElementById('robo-kq').innerText = "SCANNING"; document.getElementById('robo-tyle').innerText = "Phân tích lõi V6..."; document.getElementById('robo-thongke').style.display = 'none';
-                getSignalTX(); scanInterval = setInterval(getSignalTX, 2000);
-            }
+            document.getElementById('robo-menu').style.display = 'none'; 
+            let title = mode === 'new_md5' ? 'TOOL VIP MD5' : (mode === 'lc79' ? 'TOOL LC79' : 'LC79 MD5 (AUTO)');
+            openTool(mode, title, '');
         }
 
         async function getSignalTX() {
             if (isPredicting) return; 
-            let apiTarget = (activeGame === 'lc79') ? 'lc79' : 'vip';
             try {
-                let res = await fetch(`/api/scan?tool=${apiTarget}&key=${currentKey}`); let json = await res.json();
+                let res = await fetch(`/api/scan?tool=${activeGame}&key=${currentKey}`); let json = await res.json();
                 if(json.status === "error") { 
-                    if(json.msg === "Chờ cầu mới...") return; 
+                    if(json.msg.includes("Chờ cầu mới")) return; 
                     alert(json.msg); clearInterval(scanInterval); closeGame(); 
                     if(json.msg.includes("hết hạn") || json.msg.includes("khóa")) logout();
                     return; 
                 }
                 let data = json.data;
                 if(data.phien !== phienCu) {
-                    isPredicting = true;
-                    phienCu = data.phien; 
+                    isPredicting = true; phienCu = data.phien; 
                     document.getElementById('robo-phien').innerText = "#" + data.phien;
                     
-                    let el = document.getElementById('robo-kq');
-                    let tyleEl = document.getElementById('robo-tyle');
+                    let el = document.getElementById('robo-kq'); let tyleEl = document.getElementById('robo-tyle');
                     
-                    el.innerText = "⏳ LOADING..."; 
-                    el.style.color = "var(--secondary)";
+                    el.innerText = "⏳ LOADING..."; el.style.color = "var(--secondary)";
                     tyleEl.innerHTML = "Đợi bố chút... đang nâng cấp tool xịn!";
                     document.getElementById('robo-thongke').style.display = 'none';
 
                     setTimeout(() => {
                         el.innerText = data.du_doan; 
                         
-                        // HIỆU ỨNG TỰ ĐẢO CẦU CỰC GẮT
                         if (data.dao_cau) {
                             tyleEl.innerHTML = "<span class='glow-green'><i class='fas fa-sync-alt'></i> TỰ ĐẢO CẦU</span> | WIN: " + data.ti_le + "%";
                         } else {
                             tyleEl.innerText = "WIN: " + data.ti_le + "%";
                         }
                         
-                        el.style.color = data.du_doan === "TÀI" ? "#ff4d4d" : (data.du_doan === "XỈU" ? "#fff" : "var(--secondary)");
-                        if(data.tong_tai !== undefined && data.tong_xiu !== undefined) {
+                        el.style.color = (data.du_doan === "TÀI" || data.du_doan === "CHẴN") ? "#ff4d4d" : "#fff";
+                        
+                        if(data.tong_chan !== undefined && data.tong_le !== undefined) {
                             document.getElementById('robo-thongke').style.display = 'flex';
+                            document.getElementById('tk-tai-label').innerText = "CHẴN"; document.getElementById('tk-xiu-label').innerText = "LẺ";
+                            document.getElementById('tk-tai').innerText = data.tong_chan; document.getElementById('tk-xiu').innerText = data.tong_le;
+                        } else if(data.tong_tai !== undefined && data.tong_xiu !== undefined) {
+                            document.getElementById('robo-thongke').style.display = 'flex';
+                            document.getElementById('tk-tai-label').innerText = "TÀI"; document.getElementById('tk-xiu-label').innerText = "XỈU";
                             document.getElementById('tk-tai').innerText = data.tong_tai; document.getElementById('tk-xiu').innerText = data.tong_xiu;
                         }
                         isPredicting = false; 
                     }, 5000);
                 }
             } catch (e) {}
-        }
-
-        function analyzeMD5_Robo() {
-            if (isPredicting) return; 
-            let md5Str = document.getElementById('robo-md5-input').value.trim().toLowerCase();
-            if(!/^[0-9a-f]{32}$/.test(md5Str)) return alert("Mã MD5 phải đúng 32 ký tự!");
-            
-            isPredicting = true;
-            document.getElementById('robo-view-md5').style.display = 'none'; 
-            document.getElementById('robo-view-auto').style.display = 'block'; 
-            document.getElementById('robo-thongke').style.display = 'none';
-            document.getElementById('robo-subtitle').innerHTML = 'KẾT QUẢ MD5';
-            
-            let el = document.getElementById('robo-kq'); 
-            let tyleEl = document.getElementById('robo-tyle');
-            
-            el.innerText = "⏳ SCAN...";
-            el.style.color = "var(--secondary)";
-            tyleEl.innerText = "Đợi bố chút... đang nâng cấp tool xịn!";
-
-            let part1 = md5Str.substring(0, 5); let part2 = md5Str.substring(13, 18); let part3 = md5Str.substring(27, 32);
-            let sum1 = parseInt(part1, 16) % 100; let sum2 = parseInt(part2, 16) % 100; let sum3 = parseInt(part3, 16) % 100;
-            let finalScore = (sum1 + sum2 + sum3) / 3; let isTai = (finalScore > 50); let ti_le = 88 + (finalScore % 11) + (Math.random() * 0.9);
-            
-            setTimeout(() => {
-                document.getElementById('robo-subtitle').innerHTML = 'KẾT QUẢ MD5 <i class="fas fa-redo" style="cursor:pointer; color:var(--accent);" onclick="switchRoboMode(\'md5\')"></i>';
-                el.innerText = isTai ? "TÀI" : "XỈU"; 
-                tyleEl.innerText = "WIN: " + ti_le.toFixed(1) + "%";
-                el.style.color = isTai ? "#ff4d4d" : "#fff";
-                isPredicting = false;
-            }, 5000);
         }
 
         async function loadAdminData() { 
@@ -357,8 +293,7 @@
                 htmlKeys += `
                     <div class="list-item" style="flex-direction:column; align-items:flex-start;">
                         <div style="width:100%; display:flex; justify-content:space-between;">
-                            <b style="color:var(--accent); font-size:16px;">${k[0]}</b>
-                            ${btn}
+                            <b style="color:var(--accent); font-size:16px;">${k[0]}</b>${btn}
                         </div>
                         <div style="font-size:11px; margin-top:5px; color:#aaa;">HSD: ${k[1]}<br>Tình trạng: ${status}</div>
                         <button class="btn-sz" style="width:100%; margin-top:8px; margin-left:0; border-color:var(--secondary);" onclick="actionKey('${k[0]}','delete')">XÓA KEY VÀNG</button>
