@@ -78,15 +78,15 @@ async def scan_game(tool: str, key: str):
     if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and key != "adminvuakito": 
         return {"status": "error", "msg": "Key đã hết hạn! Vui lòng nạp thêm tiền chuộc Key."}
 
-    # BỘ LỌC CỔNG API CHUẨN: CHỈ CÓ BETVIP VÀ LC79
+    # BỘ LỌC CỔNG API: 4 CỔNG ĐỘC QUYỀN
     if tool == "lc79":
         url = "https://wtx.tele68.com/v1/tx/lite-sessions"
     elif tool == "lc79_md5":
         url = "https://wcl.tele68.com/v1/chanlefull/sessions"
-    elif tool == "betvip" or tool == "vip":
+    elif tool == "betvip_md5":
+        url = "https://wtxmd52.macminim6.online/v1/txmd5/sessions"
+    else: # Mặc định là betvip thường
         url = "https://wtx.macminim6.online/v1/tx/lite-sessions"
-    else:
-        url = "https://wtx.macminim6.online/v1/tx/lite-sessions" # Fallback về betvip
 
     try:
         res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5).json()
@@ -184,4 +184,4 @@ async def home(): return FileResponse("index.html")
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
-                    
+    
