@@ -3,87 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KING AI SYSTEM - AUTO ĐẢO CẦU</title>
+    <title>KING AI V9 - OMEGA MATRIX</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --primary: #0a0a0a; 
-            --secondary: #FFD700; 
-            --accent: #DAA520; 
-            --robot-glow: #00f2fe; 
-            --text-main: #ffffff; 
-            --bg-gradient: radial-gradient(circle at center, #2e2400 0%, #000000 100%); 
-            --panel-bg: rgba(15, 10, 0, 0.85); 
-            --border-color: #B8860B; 
-        }
+        :root { --secondary: #00ffcc; --accent: #ff0055; --bg: #050505; --panel: rgba(10,10,15,0.9); }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Nunito', sans-serif; background: var(--bg-gradient); color: var(--text-main); overflow-x: hidden; min-height: 100vh; }
+        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; min-height: 100vh; }
         
-        header { height: 75px; background: var(--panel-bg); border-bottom: 2px solid var(--secondary); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 5px 20px rgba(255,215,0,0.4); }
-        .logo { display: flex; align-items: center; gap: 10px; font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--secondary); text-shadow: 0 0 10px rgba(255,215,0,0.8); }
-        .logo-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--secondary); object-fit: cover; box-shadow: 0 0 15px rgba(255,215,0,1); background: #000; }
+        header { height: 70px; background: var(--panel); border-bottom: 2px solid var(--secondary); display: flex; justify-content: space-between; align-items: center; padding: 0 15px; box-shadow: 0 5px 25px rgba(0,255,204,0.3); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--secondary); text-shadow: 0 0 10px var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .logo-img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--secondary); box-shadow: 0 0 10px var(--secondary); }
+        .badge { background: rgba(0,255,204,0.1); border: 1px solid var(--secondary); color: var(--secondary); padding: 5px 10px; border-radius: 8px; font-size: 11px; text-align: right; }
         
-        .profile-badge { background: linear-gradient(45deg, rgba(218,165,32,0.2), rgba(255,215,0,0.1)); border: 1px solid var(--secondary); color: var(--secondary); padding: 8px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; text-align: right; box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+        #auth-wrapper, .modal-overlay { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 999; backdrop-filter: blur(10px); background: rgba(0,0,0,0.9); }
+        .auth-box, .modal-box { background: var(--panel); border: 2px solid var(--secondary); border-radius: 15px; padding: 25px; width: 90%; max-width: 380px; box-shadow: 0 0 40px rgba(0,255,204,0.4); text-align: center; }
         
-        #auth-wrapper, .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 999; backdrop-filter: blur(8px); background: rgba(0,0,0,0.9); }
-        .auth-box, .modal-box { background: var(--panel-bg); border: 2px solid var(--secondary); border-radius: 15px; padding: 30px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 0 40px rgba(255,215,0,0.5); text-align: center; }
+        #main-dashboard { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .cate-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent); margin: 20px 0 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,0,85,0.5); border-left: 4px solid var(--accent); padding-left: 10px; }
         
-        #main-dashboard { display: none; grid-template-columns: 1fr; gap: 20px; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .panel { background: rgba(10, 5, 0, 0.7); border: 2px solid var(--secondary); border-radius: 15px; padding: 25px; box-shadow: inset 0 0 30px rgba(255,215,0,0.15), 0 0 15px rgba(255,215,0,0.2); }
-        .panel-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: var(--secondary); margin-bottom: 20px; text-align: center; border-bottom: 2px dashed var(--secondary); padding-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
-        .cate-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--accent); margin: 20px 0 15px 0; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        .cyber-btn { padding: 14px; border: 2px solid var(--secondary); border-radius: 8px; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; color: #000; width: 100%; margin-bottom: 10px; background: linear-gradient(90deg, #00ffcc, #00b3ff); box-shadow: 0 0 15px rgba(0,255,204,0.5); display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .cyber-btn:active { transform: scale(0.95); }
+        .btn-red { background: transparent; color: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px rgba(255,0,85,0.3); }
+        .btn-purple { background: transparent; color: #b300ff; border-color: #b300ff; box-shadow: 0 0 15px rgba(179,0,255,0.3); }
         
-        .cyber-btn { padding: 15px; border: 2px solid var(--secondary); border-radius: 8px; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 900; color: #000; width: 100%; margin-bottom: 15px; background: linear-gradient(180deg, #FFDF00 0%, #DAA520 100%); box-shadow: 0 0 20px rgba(255,215,0,0.4); transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase; }
-        .cyber-btn:hover { box-shadow: 0 0 30px rgba(255,255,0,0.8); transform: scale(1.03); color: #000; }
-        .btn-red { background: transparent; color: var(--secondary); border-color: var(--secondary); box-shadow: none; }
-        .btn-red:hover { background: rgba(255,215,0,0.2); color: var(--secondary); }
-        
-        .game-banner-btn { width: 100%; height: 130px; border-radius: 12px; border: 2px solid var(--secondary); object-fit: cover; cursor: pointer; margin-bottom: 15px; box-shadow: 0 0 15px rgba(255,215,0,0.3); transition: all 0.3s; display: block; }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .banner { width: 100%; height: 110px; border-radius: 10px; border: 2px solid #333; object-fit: cover; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-box { width: 100%; background: #000; border: 1px solid var(--secondary); border-radius: 8px; color: var(--secondary); padding: 12px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
 
-        .input-box { width: 100%; background: rgba(0,0,0,0.8); border: 2px solid var(--secondary); border-radius: 8px; color: var(--secondary); font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: bold; padding: 15px; text-align: center; margin-bottom: 20px; outline: none; transition: all 0.3s; letter-spacing: 2px; }
-        .input-box:focus { box-shadow: 0 0 20px rgba(255,215,0,0.8); background: #000; }
-        
-        #game-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; background: #000; }
+        #game-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: #000; }
         #game-frame { width: 100%; height: 100%; border: none; }
-        .close-game-btn { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.8); color: var(--secondary); border: 2px solid var(--secondary); padding: 10px 20px; border-radius: 8px; font-weight: 900; z-index: 2001; font-family: 'Nunito', sans-serif; box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        .close-game-btn { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.8); color: var(--accent); border: 2px solid var(--accent); padding: 8px 15px; border-radius: 8px; font-weight: 900; z-index: 2001; }
         
-        #draggable-robot { position: absolute; top: 50%; left: 5%; z-index: 2005; display: flex; flex-direction: row; align-items: center; transition: transform 0.2s ease; transform-origin: left center; }
-        .robo-img { width: 110px; height: 110px; object-fit: cover; border-radius: 50%; border: 3px solid var(--robot-glow); filter: drop-shadow(0 0 25px rgba(0,242,254,0.9)); cursor: grab; z-index: 2; position: relative; margin-right: -25px; background: #000; }
+        #draggable-robot { position: absolute; top: 40%; left: 5%; z-index: 2005; display: flex; align-items: center; }
+        .robo-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--secondary); box-shadow: 0 0 20px var(--secondary); cursor: grab; z-index: 2; margin-right: -20px; background: #000; }
         
-        .robo-dialog { background: rgba(0,0,0,0.95); border: 2px solid var(--secondary); padding: 15px 15px 15px 35px; border-radius: 20px; text-align: center; box-shadow: 0 0 30px rgba(255,215,0,0.5); width: 180px; position: relative; z-index: 1; }
-        
-        #robo-menu { display: none; position: absolute; top: 40px; right: -90px; background: #000; border: 2px solid var(--secondary); border-radius: 10px; z-index: 2010; width: 150px; text-align: left; overflow: hidden; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
-        .menu-item { padding: 12px 15px; font-size: 14px; font-weight: bold; cursor: pointer; border-bottom: 1px solid var(--border-color); color: var(--secondary); display: flex; align-items: center; gap: 10px; }
-        .menu-row { display: flex; justify-content: space-between; padding: 8px; background: rgba(255,215,0,0.1); }
-        .btn-sz { flex: 1; border: 1px solid var(--secondary); background: transparent; color: var(--secondary); border-radius: 5px; font-size: 12px; padding: 6px; margin: 0 3px; cursor: pointer; font-weight: bold; }
+        .robo-dialog { background: rgba(5,5,10,0.95); border: 2px solid var(--secondary); padding: 15px 15px 15px 30px; border-radius: 15px; text-align: center; box-shadow: 0 0 30px rgba(0,255,204,0.4); width: 190px; position: relative; z-index: 1; }
+        .robo-dialog::before { content: ''; position: absolute; inset: -2px; border-radius: 16px; background: linear-gradient(45deg, var(--secondary), var(--accent), var(--secondary)); z-index: -1; filter: blur(5px); opacity: 0.5; animation: glow 3s linear infinite; }
+        @keyframes glow { 0% { filter: hue-rotate(0deg) blur(5px); } 100% { filter: hue-rotate(360deg) blur(5px); } }
 
-        .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; font-weight: bold; color: var(--secondary); cursor: pointer; text-shadow: 0 0 10px rgba(255,215,0,0.8); }
-        .list-item { background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 1px solid var(--secondary); margin-bottom: 10px; font-size: 14px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); }
-        .stats-box { border-top: 1px dashed var(--secondary); margin-top: 10px; padding-top: 10px; font-size: 12px; font-weight: 900; display: flex; justify-content: space-around; }
+        .active-tool-badge { background: var(--accent); color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 5px; margin-bottom: 5px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 10px var(--accent); }
+        .phien-text { font-size: 11px; color: #aaa; margin-bottom: 5px; }
+        .kq-text { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.8); margin: 5px 0; }
+        .tyle-text { color: var(--secondary); font-size: 12px; }
         
-        .glow-green { color: #00ff00 !important; text-shadow: 0 0 10px #00ff00 !important; font-weight: 900; }
+        .stats-box { border-top: 1px dashed #555; margin-top: 10px; padding-top: 8px; font-size: 11px; display: flex; justify-content: space-around; }
+        .glow-red { color: #ff3333; text-shadow: 0 0 8px #ff3333; }
+        .glow-green { color: #00ffcc; text-shadow: 0 0 8px #00ffcc; font-weight: 900; }
+
+        #robo-menu { display: none; position: absolute; top: 35px; right: -130px; background: #000; border: 1px solid var(--secondary); border-radius: 8px; z-index: 2010; width: 160px; text-align: left; }
+        .menu-item { padding: 10px; font-size: 11px; cursor: pointer; border-bottom: 1px solid #333; color: var(--secondary); }
+        .menu-row { display: flex; justify-content: space-between; padding: 8px; background: rgba(255,255,255,0.05); }
+        .btn-sz { flex: 1; border: 1px solid var(--secondary); background: transparent; color: var(--secondary); border-radius: 5px; font-size: 12px; padding: 6px; margin: 0 3px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="game-overlay">
-        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-times"></i> THOÁT</button>
+        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-power-off"></i> THOÁT</button>
         <iframe id="game-frame" src=""></iframe>
         <div id="draggable-robot">
             <img class="robo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png">
             <div class="robo-dialog">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--secondary); margin-bottom: 10px; padding-bottom: 5px;">
-                    <span id="robo-mode-title" style="font-size: 14px; font-weight: 900; color: var(--robot-glow); text-shadow: 0 0 8px var(--robot-glow);">AI MAX XỊN</span>
-                    <i class="fas fa-bars" style="cursor: pointer; color: var(--secondary); font-size: 18px; padding: 0 5px;" onclick="toggleRoboMenu()"></i>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="active-tool-badge" id="robo-tool-name">BETVIP</div>
+                    <i class="fas fa-cog" style="color:var(--secondary); cursor:pointer;" onclick="toggleMenu()"></i>
                 </div>
                 
                 <div id="robo-menu">
-                    <div class="menu-item" onclick="switchRoboMode('betvip')"><i class="fas fa-dice"></i> BETVIP TÀI XỈU</div>
-                    <div class="menu-item" onclick="switchRoboMode('lc79')"><i class="fas fa-dice"></i> LC79 TÀI XỈU HŨ</div>
-                    <div class="menu-item" onclick="switchRoboMode('lc79_md5')"><i class="fas fa-satellite-dish"></i> LC79 TÀI XỈU MD5</div>
+                    <div class="menu-item" onclick="switchTool('betvip_tx', 'BETVIP TÀI XỈU', 'https://play.betvip.fit/')"><i class="fas fa-dice"></i> BETVIP TÀI XỈU</div>
+                    <div class="menu-item" onclick="switchTool('betvip_md5', 'BETVIP MD5', 'https://play.betvip.fit/')"><i class="fas fa-bolt"></i> BETVIP MD5</div>
+                    <div class="menu-item" onclick="switchTool('lc79_tx', 'LC79 TÀI XỈU', 'https://lc79.bet')"><i class="fas fa-dice"></i> LC79 TÀI XỈU</div>
+                    <div class="menu-item" onclick="switchTool('lc79_md5', 'LC79 MD5', 'https://lc79.bet')"><i class="fas fa-bolt"></i> LC79 MD5</div>
+                    <div class="menu-item" onclick="switchTool('lc79_xd', 'LC79 XÓC ĐĨA', 'https://lc79.bet')"><i class="fas fa-dot-circle"></i> LC79 XÓC ĐĨA</div>
                     <div class="menu-row">
                         <button class="btn-sz" onclick="changeRoboSize(0.7)">Nhỏ</button>
                         <button class="btn-sz" onclick="changeRoboSize(1)">Vừa</button>
@@ -91,14 +83,13 @@
                     </div>
                 </div>
 
-                <div id="robo-view-auto">
-                    <div style="font-size: 12px; font-weight: 800; color: #fff;" id="robo-subtitle">PHIÊN: <span id="robo-phien" style="color: var(--secondary);">...</span></div>
-                    <div id="robo-kq" style="font-size: 24px; font-family: 'Playfair Display', serif; font-weight: 900; padding: 5px 0; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">SCANNING</div>
-                    <div id="robo-tyle" style="color: var(--secondary); font-size: 12px; font-weight: 900; text-shadow: 0 0 8px var(--secondary);">Đang tải dữ liệu...</div>
-                    <div class="stats-box" id="robo-thongke" style="display:none;">
-                        <div style="color: #ff3333; text-shadow: 0 0 5px #ff3333;"><span id="tk-tai-label">TÀI</span>: <span id="tk-tai">0</span></div>
-                        <div style="color: #ffffff; text-shadow: 0 0 5px #ffffff;"><span id="tk-xiu-label">XỈU</span>: <span id="tk-xiu">0</span></div>
-                    </div>
+                <div class="phien-text">PHIÊN: <span id="robo-phien" style="color:#fff; font-weight:bold;">ĐANG TẢI...</span></div>
+                <div class="kq-text" id="robo-kq">SCANNING</div>
+                <div class="tyle-text" id="robo-tyle">Đang đồng bộ API...</div>
+                
+                <div class="stats-box" id="robo-thongke" style="display:none;">
+                    <div class="glow-red"><span id="tk-tai-label">TÀI</span>: <span id="tk-tai">0</span></div>
+                    <div style="color:#fff;"><span id="tk-xiu-label">XỈU</span>: <span id="tk-xiu">0</span></div>
                 </div>
             </div>
         </div>
@@ -106,82 +97,58 @@
 
     <div id="auth-wrapper">
         <div class="auth-box">
-            <div class="logo" style="justify-content: center; margin-bottom: 15px; font-size: 2rem;">
-                <img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png" style="width: 80px; height: 80px;">
-            </div>
-            <div class="panel-title" style="border:none; margin-bottom: 25px; font-size: 1.8rem; text-shadow: 0 0 15px var(--secondary);">KING VIP ACCESS</div>
-            
-            <input type="text" id="auth-key" class="input-box" placeholder="NHẬP MÃ KEY CỦA VUA...">
-            <button class="cyber-btn" onclick="verifyKey()">KÍCH HOẠT QUYỀN NĂNG</button>
-            <div id="auth-msg" style="margin-top: 15px; font-weight:bold; color: var(--secondary); text-shadow: 0 0 5px var(--secondary);"></div>
-            <div style="margin-top: 15px; font-size: 12px; color: var(--border-color);">Độc Quyền Khai Thác Bởi Hưng Admin</div>
+            <div class="logo" style="justify-content:center; margin-bottom:15px; font-size:2rem;"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"></div>
+            <div style="font-family:'Playfair Display'; font-size:1.5rem; color:var(--secondary); margin-bottom:20px;">V9 OMEGA MATRIX</div>
+            <input type="text" id="auth-key" class="input-box" placeholder="NHẬP MÃ KEY VÀO ĐÂY...">
+            <button class="cyber-btn" onclick="verifyKey()"><i class="fas fa-key"></i> KÍCH HOẠT HỆ THỐNG</button>
+            <div id="auth-msg" style="margin-top:10px; color:var(--accent); font-weight:bold;"></div>
         </div>
     </div>
 
     <header id="main-header" style="display:none;">
-        <div class="logo">
-            <img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png" style="width: 35px; height: 35px;"> HƯNG ADMIN
-        </div>
-        <div class="profile-badge">
-            <div style="color: #fff;">TRẠNG THÁI: <span style="color: #00ff00; text-shadow: 0 0 5px #00ff00;">ĐÃ KÍCH HOẠT</span></div>
-            <div>HSD: <span id="header-expire" style="color: var(--secondary); text-shadow: 0 0 5px var(--secondary);">...</span></div>
-        </div>
+        <div class="logo"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"> HƯNG ADMIN</div>
+        <div class="badge">Trạng thái: <span style="color:#00ffcc;">Online</span><br>HSD: <span id="header-expire">...</span></div>
     </header>
 
     <div id="main-dashboard">
-        <div class="panel">
-            <div class="panel-title" style="font-size: 2rem;"><i class="fas fa-chess-king"></i> KHO VŨ KHÍ HOÀNG GIA</div>
-            
-            <div class="cate-title"><i class="fas fa-crown"></i> HỆ THỐNG BETVIP</div>
-            <img src="https://i.postimg.cc/3JzvBWP6/Screenshot-2026-03-14-10-32-55-76-40deb401b9ffe8e1df2f1cc5ba480b12.jpg" 
-                 class="game-banner-btn" onclick="openTool('betvip', 'BETVIP - TÀI XỈU HŨ', 'https://play.betvip.fit/')">
-
-            <div class="cate-title" style="margin-top: 25px;"><i class="fas fa-gem"></i> HỆ THỐNG LC79.BET</div>
-            <img src="https://i.postimg.cc/vH4nf52J/Screenshot-2026-03-14-10-33-38-24-40deb401b9ffe8e1df2f1cc5ba480b12.jpg" 
-                 class="game-banner-btn" style="cursor: default;" alt="LC79">
-            
-            <div class="grid-2">
-                <button class="cyber-btn" onclick="openTool('lc79', 'LC79 - TÀI XỈU HŨ', 'https://lc79.bet')" style="margin-bottom: 0; font-size: 12px;"><i class="fas fa-dice"></i> TÀI XỈU HŨ</button>
-                <button class="cyber-btn btn-red" onclick="openTool('lc79_md5', 'LC79 - TÀI XỈU MD5', 'https://lc79.bet')" style="margin-bottom: 0; font-size: 12px;"><i class="fas fa-bolt"></i> TÀI XỈU MD5</button>
-            </div>
-            
-            <button class="cyber-btn" id="btn-admin-panel" style="display:none; margin-top: 30px; background: transparent; border-color: var(--robot-glow); color: var(--robot-glow); box-shadow: 0 0 15px rgba(0,242,254,0.4);" onclick="loadAdminData()">⚙️ QUẢN TRỊ VƯƠNG QUỐC (TẠO KEY)</button>
-            <button class="cyber-btn btn-red" style="margin-top: 10px;" onclick="logout()">ĐĂNG XUẤT KEY</button>
+        <div class="cate-title"><i class="fas fa-crown"></i> CỔNG BETVIP V9</div>
+        <div class="grid-2">
+            <button class="cyber-btn" onclick="switchTool('betvip_tx', 'BETVIP TÀI XỈU', 'https://play.betvip.fit/')"><i class="fas fa-dice"></i> TÀI XỈU HŨ</button>
+            <button class="cyber-btn btn-red" onclick="switchTool('betvip_md5', 'BETVIP MD5', 'https://play.betvip.fit/')"><i class="fas fa-bolt"></i> TÀI XỈU MD5</button>
         </div>
+        
+        <div class="cate-title" style="margin-top: 30px;"><i class="fas fa-gem"></i> CỔNG LC79 V9</div>
+        <div class="grid-2" style="margin-bottom: 10px;">
+            <button class="cyber-btn" onclick="switchTool('lc79_tx', 'LC79 TÀI XỈU', 'https://lc79.bet')"><i class="fas fa-dice"></i> TÀI XỈU HŨ</button>
+            <button class="cyber-btn btn-red" onclick="switchTool('lc79_md5', 'LC79 MD5', 'https://lc79.bet')"><i class="fas fa-bolt"></i> TÀI XỈU MD5</button>
+        </div>
+        <button class="cyber-btn btn-purple" onclick="switchTool('lc79_xd', 'LC79 XÓC ĐĨA', 'https://lc79.bet')"><i class="fas fa-dot-circle"></i> XÓC ĐĨA CHẴN LẺ</button>
+        
+        <button class="cyber-btn" id="btn-admin" style="display:none; margin-top:30px; background:transparent; border-color:#aaa; color:#aaa;" onclick="document.getElementById('admin-modal').style.display='flex'">⚙️ QUẢN TRỊ</button>
+        <button class="cyber-btn btn-red" style="margin-top:10px;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> ĐĂNG XUẤT</button>
     </div>
 
     <div id="admin-modal" class="modal-overlay" style="display:none;">
         <div class="modal-box" style="max-width: 500px;">
-            <div class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">×</div>
-            <div class="panel-title" style="color:var(--secondary); text-shadow: 0 0 10px var(--secondary);">XƯỞNG ĐÚC KEY VÀNG</div>
-            
-            <div style="background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--secondary); box-shadow: inset 0 0 15px rgba(255,215,0,0.2);">
-                <input type="text" id="custom-key-input" class="input-box" placeholder="Nhập tên Key (Để trống = Tự random)" style="margin-bottom: 15px; font-size: 13px;">
-                <select id="key-duration" class="input-box" style="margin-bottom: 10px;">
-                    <option value="1H">Gói 1 Giờ</option>
-                    <option value="1D">Gói 1 Ngày</option>
-                    <option value="3D">Gói 3 Ngày</option>
-                    <option value="30D">Gói 1 Tháng</option>
-                </select>
-                <button class="cyber-btn" onclick="adminCreateKey()"><i class="fas fa-hammer"></i> RÈN KEY MỚI</button>
-            </div>
-            <h3 style="margin: 15px 0; color: var(--secondary); text-align: left; font-family: 'Playfair Display';">KHO KEY ĐÃ CẤP</h3>
-            <div id="admin-keys" style="max-height: 250px; overflow-y: auto; text-align: left;"></div>
+            <div class="close-btn" style="position:absolute; top:10px; right:15px; color:#fff;" onclick="this.parentElement.parentElement.style.display='none'">×</div>
+            <h3 style="color:var(--secondary); margin-bottom:15px;">TẠO KEY MỚI</h3>
+            <input type="text" id="custom-key-input" class="input-box" placeholder="Tên Key (Trống = Random)">
+            <select id="key-duration" class="input-box"><option value="1H">1 Giờ</option><option value="1D">1 Ngày</option><option value="3D">3 Ngày</option><option value="30D">30 Ngày</option></select>
+            <button class="cyber-btn" onclick="adminCreateKey()">TẠO KEY</button>
+            <div id="admin-keys" style="margin-top:15px; text-align:left; max-height:200px; overflow-y:auto;"></div>
         </div>
     </div>
         <script>
         let currentKey = localStorage.getItem("royal_key") || ""; 
         let scanInterval; let phienCu = ""; let activeGame = ""; 
-        let isSpamming = false; let isPredicting = false; 
+        let isPredicting = false; 
 
         if(currentKey) { document.getElementById('auth-key').value = currentKey; verifyKey(true); }
 
         async function verifyKey(isAuto = false) {
-            if (isSpamming) return;
-            isSpamming = true; setTimeout(() => { isSpamming = false; }, 2000);
             let k = document.getElementById('auth-key').value.trim();
-            if(!k) { document.getElementById('auth-msg').innerText = "Vui lòng dâng lên Mã Key!"; return; }
-            if(!isAuto) { document.getElementById('auth-msg').innerText = "Đang kiểm chứng Hoàng Gia..."; document.getElementById('auth-msg').style.color = "orange"; }
+            if(!k) return document.getElementById('auth-msg').innerText = "Nhập Key vào!";
+            if(!isAuto) document.getElementById('auth-msg').innerText = "Đang kết nối V9 Matrix...";
             
             try {
                 let res = await fetch('/api/verify_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({key: k})});
@@ -190,142 +157,129 @@
                     currentKey = k; localStorage.setItem("royal_key", currentKey); 
                     document.getElementById('auth-wrapper').style.display = 'none'; 
                     document.getElementById('main-header').style.display = 'flex'; 
-                    document.getElementById('main-dashboard').style.display = 'grid';
+                    document.getElementById('main-dashboard').style.display = 'block';
                     document.getElementById('header-expire').innerText = json.expire;
-                    document.getElementById('btn-admin-panel').style.display = (json.role === "admin") ? 'block' : 'none';
+                    if(json.role === "admin") { document.getElementById('btn-admin').style.display = 'flex'; loadAdminData(); }
                 } else { 
-                    if(!isAuto) { document.getElementById('auth-msg').innerText = json.msg; document.getElementById('auth-msg').style.color = "red"; } 
+                    if(!isAuto) document.getElementById('auth-msg').innerText = json.msg;
                     else { localStorage.removeItem("royal_key"); currentKey = ""; }
                 }
-            } catch(e) { if(!isAuto) { document.getElementById('auth-msg').innerText = "Mất kết nối Server Hoàng Gia!"; document.getElementById('auth-msg').style.color = "red"; } }
+            } catch(e) { if(!isAuto) document.getElementById('auth-msg').innerText = "Lỗi kết nối Server!"; }
         }
 
         function logout() { 
-            localStorage.removeItem("royal_key"); currentKey = ""; activeGame = ""; clearInterval(scanInterval); isPredicting = false;
+            localStorage.removeItem("royal_key"); currentKey = ""; closeGame();
             document.getElementById('main-header').style.display = 'none'; document.getElementById('main-dashboard').style.display = 'none'; 
             document.getElementById('auth-wrapper').style.display = 'flex'; document.getElementById('auth-key').value = "";
-            document.getElementById('auth-msg').innerText = "Đã thoái vị. Vui lòng nhập Key mới."; document.getElementById('auth-msg').style.color = "var(--secondary)";
+            document.getElementById('auth-msg').innerText = "Đã thoát.";
         }
 
-        function openTool(gameTarget, titleName, url) {
-            activeGame = gameTarget; 
-            phienCu = ""; clearInterval(scanInterval); isPredicting = false;
-            document.getElementById('robo-mode-title').innerText = titleName;
-            document.getElementById('game-overlay').style.display = 'block';
-            if (url !== '') { document.getElementById('game-frame').src = url; }
+        function toggleMenu() { let m = document.getElementById('robo-menu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; }
 
-            // Giờ tất cả đều là TÀI XỈU
-            document.getElementById('tk-tai-label').innerText = "TÀI"; document.getElementById('tk-xiu-label').innerText = "XỈU";
+        // ĐỔI 5 TOOL VỚI LUỒNG API ĐỘC LẬP
+        function switchTool(gameId, toolName, url) {
+            document.getElementById('robo-menu').style.display = 'none';
+            if (url !== '') document.getElementById('game-frame').src = url;
             
-            document.getElementById('robo-subtitle').innerHTML = 'PHIÊN: <span id="robo-phien">...</span>';
-            document.getElementById('robo-kq').innerText = "SCANNING"; document.getElementById('robo-tyle').innerText = "Đang tải dữ liệu..."; document.getElementById('robo-thongke').style.display = 'none';
-            getSignalTX(); scanInterval = setInterval(getSignalTX, 2000); 
+            activeGame = gameId;
+            phienCu = ""; // Reset mã phiên cũ
+            isPredicting = false;
+            clearInterval(scanInterval);
+            
+            document.getElementById('game-overlay').style.display = 'block';
+            document.getElementById('robo-tool-name').innerText = toolName;
+            document.getElementById('robo-phien').innerText = "ĐANG TẢI...";
+            document.getElementById('robo-kq').innerText = "SCANNING";
+            document.getElementById('robo-tyle').innerText = "Đang kết nối API " + gameId + "...";
+            document.getElementById('robo-thongke').style.display = 'none';
+
+            // Xóc Đĩa thì đổi nhãn
+            if (gameId === 'lc79_xd') {
+                document.getElementById('tk-tai-label').innerText = "CHẴN"; document.getElementById('tk-xiu-label').innerText = "LẺ";
+            } else {
+                document.getElementById('tk-tai-label').innerText = "TÀI"; document.getElementById('tk-xiu-label').innerText = "XỈU";
+            }
+
+            getSignalTX();
+            scanInterval = setInterval(getSignalTX, 2000);
         }
 
-        function closeGame() { activeGame = ""; document.getElementById('game-overlay').style.display = 'none'; document.getElementById('game-frame').src = ''; clearInterval(scanInterval); isPredicting = false; }
-        function toggleRoboMenu() { let m = document.getElementById('robo-menu'); m.style.display = (m.style.display === 'none' || m.style.display === '') ? 'block' : 'none'; }
-        function changeRoboSize(scale) { document.getElementById('draggable-robot').style.transform = `scale(${scale})`; document.getElementById('robo-menu').style.display = 'none'; }
-
-        function switchRoboMode(mode) {
-            document.getElementById('robo-menu').style.display = 'none'; 
-            let title = "";
-            if (mode === 'betvip') title = 'BETVIP TÀI XỈU';
-            else if (mode === 'lc79') title = 'LC79 TÀI XỈU HŨ';
-            else if (mode === 'lc79_md5') title = 'LC79 TÀI XỈU MD5';
-            openTool(mode, title, '');
+        function closeGame() {
+            activeGame = ""; phienCu = ""; clearInterval(scanInterval); isPredicting = false;
+            document.getElementById('game-overlay').style.display = 'none';
+            document.getElementById('game-frame').src = '';
         }
 
         async function getSignalTX() {
-            if (isPredicting) return; 
+            if (isPredicting || !activeGame) return; 
             try {
                 let res = await fetch(`/api/scan?tool=${activeGame}&key=${currentKey}`); let json = await res.json();
                 if(json.status === "error") { 
-                    if(json.msg.includes("Chờ cầu mới")) return; 
-                    alert(json.msg); clearInterval(scanInterval); closeGame(); 
+                    if(json.msg.includes("Đang đồng bộ")) return; 
+                    alert(json.msg); closeGame(); 
                     if(json.msg.includes("hết hạn") || json.msg.includes("khóa")) logout();
                     return; 
                 }
+                
                 let data = json.data;
-                if(data.phien !== phienCu) {
-                    isPredicting = true; phienCu = data.phien; 
-                    document.getElementById('robo-phien').innerText = "#" + data.phien;
+                if(data.phien !== phienCu && data.phien !== "ĐANG TẢI...") {
+                    isPredicting = true; 
+                    phienCu = data.phien; 
                     
+                    document.getElementById('robo-phien').innerText = "#" + data.phien;
                     let el = document.getElementById('robo-kq'); let tyleEl = document.getElementById('robo-tyle');
                     
-                    el.innerText = "⏳ LOADING..."; el.style.color = "var(--secondary)";
-                    tyleEl.innerHTML = "Đợi bố chút... đang nâng cấp tool xịn!";
+                    el.innerText = "LOADING..."; el.style.color = "var(--secondary)";
+                    tyleEl.innerHTML = "V9 Matrix phân tích...";
                     document.getElementById('robo-thongke').style.display = 'none';
 
                     setTimeout(() => {
                         el.innerText = data.du_doan; 
+                        if (data.dao_cau) { tyleEl.innerHTML = "<span class='glow-green'>🔄 AUTO ĐẢO CẦU</span> | WIN: " + data.ti_le + "%"; } 
+                        else { tyleEl.innerText = "TỶ LỆ WIN: " + data.ti_le + "%"; }
                         
-                        if (data.dao_cau) {
-                            tyleEl.innerHTML = "<span class='glow-green'><i class='fas fa-sync-alt'></i> TỰ ĐẢO CẦU</span> | WIN: " + data.ti_le + "%";
-                        } else {
-                            tyleEl.innerText = "WIN: " + data.ti_le + "%";
-                        }
+                        el.style.color = (data.du_doan === "TÀI" || data.du_doan === "CHẴN") ? "#ff0055" : "#fff";
                         
-                        el.style.color = data.du_doan === "TÀI" ? "#ff4d4d" : "#fff";
-                        
-                        if(data.tong_tai !== undefined && data.tong_xiu !== undefined) {
+                        if(data.tong_chan !== undefined && data.tong_le !== undefined) {
                             document.getElementById('robo-thongke').style.display = 'flex';
-                            document.getElementById('tk-tai-label').innerText = "TÀI"; document.getElementById('tk-xiu-label').innerText = "XỈU";
+                            document.getElementById('tk-tai').innerText = data.tong_chan; document.getElementById('tk-xiu').innerText = data.tong_le;
+                        } else if(data.tong_tai !== undefined && data.tong_xiu !== undefined) {
+                            document.getElementById('robo-thongke').style.display = 'flex';
                             document.getElementById('tk-tai').innerText = data.tong_tai; document.getElementById('tk-xiu').innerText = data.tong_xiu;
                         }
                         isPredicting = false; 
-                    }, 5000);
+                    }, 4000);
                 }
             } catch (e) {}
         }
 
         async function loadAdminData() { 
-            document.getElementById('admin-modal').style.display = 'flex'; 
-            let res = await fetch(`/api/admin/list_keys?admin_key=${currentKey}`); 
-            let json = await res.json(); 
+            let res = await fetch(`/api/admin/list_keys?admin_key=${currentKey}`); let json = await res.json(); 
             if(json.status !== "success") return; 
-            
             let htmlKeys = ""; 
             json.keys.forEach(k => { 
-                let status = k[2] == 1 ? "<span style='color:red;'>BỊ KHÓA</span>" : "<span style='color:#00ff00;'>HOẠT ĐỘNG</span>";
-                let btn = k[2] == 0 
-                    ? `<button class="btn-sz" style="border-color:red; color:red;" onclick="actionKey('${k[0]}','ban')">KHÓA</button>` 
-                    : `<button class="btn-sz" style="border-color:#00ff00; color:#00ff00;" onclick="actionKey('${k[0]}','unban')">MỞ LẠI</button>`;
-                htmlKeys += `
-                    <div class="list-item" style="flex-direction:column; align-items:flex-start;">
-                        <div style="width:100%; display:flex; justify-content:space-between;">
-                            <b style="color:var(--accent); font-size:16px;">${k[0]}</b>${btn}
-                        </div>
-                        <div style="font-size:11px; margin-top:5px; color:#aaa;">HSD: ${k[1]}<br>Tình trạng: ${status}</div>
-                        <button class="btn-sz" style="width:100%; margin-top:8px; margin-left:0; border-color:var(--secondary);" onclick="actionKey('${k[0]}','delete')">XÓA KEY VÀNG</button>
-                    </div>`; 
+                let btn = k[2] == 0 ? `<button class="btn-sz" style="color:#ff0055; border-color:#ff0055;" onclick="actionKey('${k[0]}','ban')">KHÓA</button>` : `<button class="btn-sz" style="color:#00ffcc; border-color:#00ffcc;" onclick="actionKey('${k[0]}','unban')">MỞ</button>`;
+                htmlKeys += `<div style="border-bottom:1px solid #333; padding:10px 0;"><div style="display:flex; justify-content:space-between; align-items:center;"><b style="color:var(--secondary);">${k[0]}</b>${btn}</div><div style="font-size:10px; color:#888;">HSD: ${k[1]}</div><button class="btn-sz" style="width:100%; margin-top:5px;" onclick="actionKey('${k[0]}','delete')">XÓA BỎ</button></div>`; 
             }); 
-            document.getElementById('admin-keys').innerHTML = htmlKeys || "<i style='color:#888;'>Chưa rèn Key nào.</i>"; 
+            document.getElementById('admin-keys').innerHTML = htmlKeys || "<i style='color:#555;'>Trống.</i>"; 
         }
 
         async function adminCreateKey() {
-            let dur = document.getElementById('key-duration').value;
-            let customK = document.getElementById('custom-key-input') ? document.getElementById('custom-key-input').value.trim() : "";
-            let res = await fetch('/api/admin/create_key', { 
-                method: 'POST', headers: {'Content-Type':'application/json'}, 
-                body: JSON.stringify({admin_key: currentKey, duration: dur, custom_key: customK})
-            });
+            let dur = document.getElementById('key-duration').value; let customK = document.getElementById('custom-key-input').value.trim();
+            let res = await fetch('/api/admin/create_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: currentKey, duration: dur, custom_key: customK}) });
             let json = await res.json();
-            if(json.status === "success") {
-                prompt("Rèn Key thành công! Copy mã này ném cho khách:", json.new_key);
-                if(document.getElementById('custom-key-input')) document.getElementById('custom-key-input').value = ""; 
-                loadAdminData();
-            } else { alert("Lỗi: " + json.msg); }
+            if(json.status === "success") { prompt("Copy Key:", json.new_key); document.getElementById('custom-key-input').value = ""; loadAdminData(); } 
+            else alert("Lỗi: " + json.msg);
         }
 
         async function actionKey(target, act) { 
-            if(act === 'delete' && !confirm("Chắc chắn muốn HỦY DIỆT vĩnh viễn Key này?")) return;
-            await fetch('/api/admin/action_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: currentKey, target_key: target, action: act})}); 
-            loadAdminData(); 
+            if(act === 'delete' && !confirm("Xóa vĩnh viễn?")) return;
+            await fetch('/api/admin/action_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: currentKey, target_key: target, action: act})}); loadAdminData(); 
         }
 
         dragElement(document.getElementById("draggable-robot"));
         function dragElement(elmnt) {
-            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0; var img = elmnt.querySelector('.robo-img');
+            var pos1=0, pos2=0, pos3=0, pos4=0; var img = elmnt.querySelector('.robo-img');
             img.onmousedown = dragMouseDown; img.ontouchstart = dragTouchStart;
             function dragMouseDown(e) { e = e || window.event; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
             function dragTouchStart(e) { pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
