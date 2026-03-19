@@ -91,7 +91,7 @@ def scan_game():
         
     if not row: return jsonify({"status": "error", "msg": "Key không tồn tại!"})
     if row[1] == 1 and key != "adminvuakito": return jsonify({"status": "error", "msg": "Key này đã bị khóa!"})
-    if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and key != "adminvuakito": 
+    if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and key != "hungadmin": 
         return jsonify({"status": "error", "msg": "Key đã hết hạn!"})
 
     # 5 CỔNG CHÍNH THỨC CỦA BOSS
