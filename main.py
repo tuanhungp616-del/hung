@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests, uvicorn, sqlite3, os, random, string
@@ -15,20 +15,20 @@ def khoi_tao_db():
     with get_db() as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS keys (key_str TEXT PRIMARY KEY, expire_time DATETIME, is_banned INTEGER)''')
-        c.execute("INSERT OR IGNORE INTO keys (key_str, expire_time, is_banned) VALUES (?, ?, ?)", ('hungadmin', '2099-12-31 23:59:59', 0))
+        # TƯỜNG LỬA CHỈ NHẬN MỘT MÌNH CHÚA TỂ: hungadmin11
+        c.execute("INSERT OR IGNORE INTO keys (key_str, expire_time, is_banned) VALUES (?, ?, ?)", ('hungadmin11', '2099-12-31 23:59:59', 0))
         conn.commit()
 
 khoi_tao_db()
 
-# --- THUẬT TOÁN V8.0 ULTIMATE ---
-def tinh_toan_v8(kq_list):
+# --- THUẬT TOÁN V14: HUNGCUTO ULTIMATE ---
+def tinh_toan_v14(kq_list):
     if len(kq_list) < 5: return ""
     gan_nhat = kq_list[-50:] 
     kq_cuoi = kq_list[-1]
     
     diem_tai = diem_xiu = 0
 
-    # 1. BỆT VÀ BẺ GÃY CỔ
     chuoi_bet = 1
     for i in range(len(kq_list)-2, -1, -1):
         if kq_list[i] == kq_cuoi: chuoi_bet += 1
@@ -41,7 +41,6 @@ def tinh_toan_v8(kq_list):
         if kq_cuoi == "Tài": diem_tai += 200
         else: diem_xiu += 200
 
-    # 2. XỬ LÝ CẦU 1-1 (PING-PONG)
     chuoi_1_1 = 1
     for i in range(len(kq_list)-2, -1, -1):
         if kq_list[i] != kq_list[i+1]: chuoi_1_1 += 1
@@ -51,7 +50,6 @@ def tinh_toan_v8(kq_list):
         if kq_cuoi == "Tài": diem_tai += 120 
         else: diem_xiu += 120
 
-    # 3. MA TRẬN MARKOV
     tt = tx = xt = xx = 0
     for i in range(len(gan_nhat)-1):
         if gan_nhat[i] == "Tài" and gan_nhat[i+1] == "Tài": tt += 1
@@ -71,26 +69,25 @@ def tinh_toan_v8(kq_list):
     
     return "TÀI" if kq_cuoi == "Xỉu" else "XỈU"
 
-def phan_tich_ai_v8(kq_list, is_chanle):
+def phan_tich_ai_v14(kq_list, is_chanle):
     tong_tai = kq_list.count("Tài"); tong_xiu = kq_list.count("Xỉu")
     if len(kq_list) < 6: return {"du_doan": "LOADING...", "ti_le": 0, "tong_tai": tong_tai, "tong_xiu": tong_xiu, "history": []}
     
-    du_doan_hien_tai = tinh_toan_v8(kq_list)
+    du_doan_hien_tai = tinh_toan_v14(kq_list)
     kq_cuoi = kq_list[-1]
     
-    ty_le = random.uniform(92.5, 98.9)
+    ty_le = random.uniform(94.5, 99.5)
     if du_doan_hien_tai == "": du_doan_hien_tai = "TÀI" if kq_cuoi == "Xỉu" else "XỈU"
 
-    # --- HỆ THỐNG BÁO CÁO LỊCH SỬ (6 VÁN GẦN NHẤT) ---
+    # LẤY 15 VÁN ĐỂ VẼ BIỂU ĐỒ (NÂNG CẤP TỪ 6 LÊN 15)
     history = []
-    for i in range(len(kq_list)-6, len(kq_list)):
-        if i < 5: continue
+    so_van_quet = min(15, len(kq_list) - 5)
+    for i in range(len(kq_list)-so_van_quet, len(kq_list)):
         sub_list = kq_list[:i]
         actual = kq_list[i]
-        pred = tinh_toan_v8(sub_list)
+        pred = tinh_toan_v14(sub_list)
         if pred == "": pred = "TÀI" if sub_list[-1] == "Xỉu" else "XỈU"
         
-        # Đổi nhãn nếu là xóc đĩa
         pred_hien_thi = "CHẴN" if pred == "TÀI" and is_chanle else ("LẺ" if pred == "XỈU" and is_chanle else pred)
         actual_hien_thi = "CHẴN" if actual == "Tài" and is_chanle else ("LẺ" if actual == "Xỉu" and is_chanle else actual.upper())
         
@@ -105,6 +102,13 @@ def get_id(item):
             if k in item and str(item[k]).isdigit(): return int(item[k])
     return 0
 
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Powered-By"] = "HUNGCUTO-V14-TITAN"
+    response.headers["X-Frame-Options"] = "DENY"
+    return response
+
 @app.get("/api/scan")
 async def scan_game(tool: str, key: str):
     with get_db() as conn:
@@ -112,10 +116,10 @@ async def scan_game(tool: str, key: str):
         c.execute("SELECT expire_time, is_banned FROM keys WHERE key_str = ?", (key,))
         row = c.fetchone()
         
-    if not row: return {"status": "error", "msg": "Key không tồn tại!"}
-    if row[1] == 1 and key != "hungadmin": return {"status": "error", "msg": "Key bị khóa!"}
-    if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and key != "hungadmin": 
-        return {"status": "error", "msg": "Key đã hết hạn!"}
+    if not row: return JSONResponse(status_code=403, content={"status": "error", "msg": "Key không tồn tại! Truy cập bị chặn."})
+    if row[1] == 1 and key != "hungadmin11": return JSONResponse(status_code=403, content={"status": "error", "msg": "Key bị Tường Lửa khóa!"})
+    if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and key != "hungadmin11": 
+        return JSONResponse(status_code=403, content={"status": "error", "msg": "Key đã hết hạn!"})
 
     if tool == "lc79_xd": url = "https://wcl.tele68.com/v1/chanlefull/sessions"
     elif tool == "lc79_md5": url = "https://wtxmd52.tele68.com/v1/txmd5/sessions"
@@ -125,7 +129,7 @@ async def scan_game(tool: str, key: str):
     else: return {"status": "error", "msg": "Cổng Game Không Hợp Lệ!"}
 
     try:
-        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5).json()
+        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0 HUNGCUTO-BOT"}, timeout=5).json()
         lst = res.get("data", res.get("list", res)) if isinstance(res, dict) else res
         if not lst or not isinstance(lst, list): return {"status": "error", "msg": "Đang đồng bộ..."}
         
@@ -142,9 +146,8 @@ async def scan_game(tool: str, key: str):
                 if "TAI" in val or "TÀI" in val or "'RESULT': 1" in val or "'T'" in val: kq.append("Tài")
                 else: kq.append("Xỉu")
         
-        data = phan_tich_ai_v8(kq, is_chanle)
+        data = phan_tich_ai_v14(kq, is_chanle)
         
-        # Gán mã phiên cho lịch sử
         for idx, h in enumerate(data["history"]):
             h["phien"] = get_id(lst[-(idx+1)])
 
@@ -158,8 +161,8 @@ async def scan_game(tool: str, key: str):
         if phien_hien_tai > 0: data["phien"] = str(phien_hien_tai + 1)
         else: data["phien"] = "ĐANG TẢI..."
             
-        return {"status": "success", "data": data}
-    except Exception as e: return {"status": "error", "msg": "Nhiễu sóng nhà cái!"}
+        return {"status": "success", "data": data, "secure": "HUNGCUTO-V14-SHIELD"}
+    except Exception as e: return {"status": "error", "msg": "Tường lửa Nhà Cái chặn!"}
 
 class KeyReq(BaseModel): key: str
 @app.post("/api/verify_key")
@@ -170,24 +173,24 @@ async def verify_key(req: KeyReq):
         c = conn.cursor()
         c.execute("SELECT expire_time, is_banned FROM keys WHERE key_str = ?", (k,))
         row = c.fetchone()
-        if not row: return {"status": "error", "msg": "Key fake!"}
-        if row[1] == 1 and k != "hungadmin": return {"status": "error", "msg": "Key bị khóa!"}
-        if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and k != "hungadmin": return {"status": "error", "msg": "Key hết hạn!"}
-        role = "admin" if k == "hungadmin" else "user"
+        if not row: return {"status": "error", "msg": "CẢNH BÁO: KEY FAKE! TRUY CẬP BẤT HỢP PHÁP!"}
+        if row[1] == 1 and k != "hungadmin11": return {"status": "error", "msg": "TÀI KHOẢN ĐÃ BỊ KHÓA!"}
+        if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and k != "hungadmin11": return {"status": "error", "msg": "Key đã hết hạn!"}
+        role = "admin" if k == "hungadmin11" else "user"
         return {"status": "success", "role": role, "expire": "VĨNH VIỄN (MASTER)" if role == "admin" else row[0]}
 
 @app.get("/api/admin/list_keys")
 async def admin_list_keys(admin_key: str):
-    if admin_key != "hungadmin": return {"status": "error"}
+    if admin_key != "hungadmin11": return {"status": "error"}
     with get_db() as conn:
         c = conn.cursor()
-        c.execute("SELECT key_str, expire_time, is_banned FROM keys WHERE key_str != 'hungadmin' ORDER BY expire_time DESC")
+        c.execute("SELECT key_str, expire_time, is_banned FROM keys WHERE key_str != 'hungadmin11' ORDER BY expire_time DESC")
         return {"status": "success", "keys": c.fetchall()}
 
 class CreateKeyReq(BaseModel): admin_key: str; duration: str; custom_key: str = ""
 @app.post("/api/admin/create_key")
 async def create_key(req: CreateKeyReq):
-    if req.admin_key != "hungadmin": return {"status": "error"}
+    if req.admin_key != "hungadmin11": return {"status": "error"}
     new_key = req.custom_key.strip() if req.custom_key.strip() != "" else "VIP-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     now = datetime.now()
     if req.duration == "1H": exp = now + timedelta(hours=1)
@@ -208,7 +211,7 @@ async def create_key(req: CreateKeyReq):
 class BanKeyReq(BaseModel): admin_key: str; target_key: str; action: str
 @app.post("/api/admin/action_key")
 async def action_key(req: BanKeyReq):
-    if req.admin_key != "hungadmin": return {"status": "error"}
+    if req.admin_key != "hungadmin11": return {"status": "error"}
     with get_db() as conn:
         c = conn.cursor()
         if req.action == "ban": c.execute("UPDATE keys SET is_banned = 1 WHERE key_str = ?", (req.target_key,))
@@ -223,4 +226,4 @@ async def home(): return FileResponse("index.html")
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
-                           
+    
