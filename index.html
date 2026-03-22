@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HUNGCUTO APEX V15</title>
+    <title>HUNGCUTO SUPREME V16</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
     <style>
@@ -16,10 +16,6 @@
         header { height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; position: sticky; top:0; z-index: 100; background: #000; border-bottom: 2px solid var(--gold); box-shadow: 0 5px 20px rgba(255,215,0,0.1); }
         .logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); text-shadow: 0 0 10px var(--gold); display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .logo-img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--gold); }
-        
-        /* MÀN HÌNH MONITOR TRÊN HEADER */
-        .server-monitor { display: flex; gap: 10px; font-size: 10px; font-weight: 900; color: #aaa; text-align: right; }
-        .monitor-val { color: var(--cyan); text-shadow: 0 0 5px var(--cyan); }
         
         #auth-wrapper, .modal-overlay { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 999; backdrop-filter: blur(15px); background: rgba(0,0,0,0.9); }
         .auth-box { padding: 35px 25px; width: 90%; max-width: 380px; text-align: center; position: relative; }
@@ -38,28 +34,35 @@
         #game-frame { width: 100%; height: 100%; border: none; }
         .close-game-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--red); border: 2px solid var(--red); padding: 8px 12px; border-radius: 8px; font-weight: 900; z-index: 2001; cursor:pointer;}
         
-        /* CỤM ROBOT V15 */
-        #draggable-robot { position: absolute; top: 25%; left: 5%; z-index: 2005; display: flex; align-items: center; }
-        .robo-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); box-shadow: 0 0 20px var(--gold); cursor: grab; z-index: 2; margin-right: -15px; background: #000; }
-        .robo-dialog { padding: 15px; text-align: center; width: 230px; position: relative; z-index: 1; border: 2px solid var(--gold); border-radius: 12px; background: rgba(5,5,5,0.95); }
+        /* SA BÀN ROBOT V16: TRÁI - GIỮA - PHẢI */
+        #draggable-robot { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); z-index: 2005; width: 340px; }
+        .robo-dialog { padding: 15px; width: 100%; position: relative; z-index: 1; border: 2px solid var(--gold); border-radius: 15px; background: rgba(10,5,15,0.95); display: flex; flex-direction: column; align-items: center; }
         
-        .badge-red { background: var(--red); color: #fff; font-weight: 900; font-size: 10px; padding: 3px 8px; border-radius: 5px; margin-bottom: 5px; display: inline-block; box-shadow: 0 0 10px var(--red); }
-        .phien-text { font-size: 11px; color: #fff; font-weight: bold; }
-        .kq-text { font-family: 'Playfair Display', serif; font-size: 32px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.8); margin: 2px 0; }
-        .advice-text { color: var(--cyan); font-size: 11px; font-weight: 900; text-transform: uppercase; border-top: 1px dashed #333; padding-top: 5px; margin-top: 5px; animation: flash 1s infinite;}
-        @keyframes flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .header-phien { width: 100%; text-align: center; font-size: 14px; font-weight: 900; color: #fff; background: rgba(255,215,0,0.1); padding: 5px; border-radius: 8px; border-bottom: 1px solid var(--gold); margin-bottom: 15px; letter-spacing: 2px;}
+        .phien-id { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
 
-        /* KPI & BIỂU ĐỒ */
-        .kpi-box { display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px solid #333; padding-top: 8px; }
-        .kpi-item { font-size: 9px; font-weight: bold; color: #888; text-align:center; }
-        .kpi-val { font-size: 13px; color: #fff; }
-        .kpi-win { color: #00ffcc; text-shadow: 0 0 5px #00ffcc; }
-        .kpi-lose { color: var(--red); text-shadow: 0 0 5px var(--red); }
+        .battle-board { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 5px; }
         
-        .chart-container { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 25px; margin-top: 8px; }
-        .chart-bar { width: 7px; border-radius: 2px; }
-        .bar-win { background: #00ffcc; box-shadow: 0 0 5px #00ffcc; }
-        .bar-lose { background: var(--red); box-shadow: 0 0 5px var(--red); }
+        /* CỘT TÀI BÊN TRÁI */
+        .side-box { width: 70px; height: 90px; border-radius: 12px; border: 2px solid #333; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: #555; background: rgba(0,0,0,0.8); transition: 0.3s; opacity: 0.5; }
+        .side-tai.active { opacity: 1; color: var(--red); border-color: var(--red); background: rgba(255,42,42,0.15); box-shadow: 0 0 25px rgba(255,42,42,0.8), inset 0 0 15px rgba(255,42,42,0.5); text-shadow: 0 0 10px var(--red); transform: scale(1.05); }
+        
+        /* CỘT XỈU BÊN PHẢI */
+        .side-xiu.active { opacity: 1; color: var(--cyan); border-color: var(--cyan); background: rgba(0,255,255,0.15); box-shadow: 0 0 25px rgba(0,255,255,0.8), inset 0 0 15px rgba(0,255,255,0.5); text-shadow: 0 0 10px var(--cyan); transform: scale(1.05); }
+
+        /* ROBOT TRUNG TÂM */
+        .center-hub { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; width: 120px; }
+        .robo-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--gold); box-shadow: 0 0 20px var(--gold); background: #000; z-index: 5;}
+        
+        /* VÒNG ĐẾM NGƯỢC 15S DƯỚI CHÂN ROBOT */
+        .countdown-ring { margin-top: 10px; font-size: 18px; font-family: 'Courier New', Courier, monospace; font-weight: 900; color: #00ffcc; text-shadow: 0 0 10px #00ffcc; background: rgba(0,255,204,0.1); border: 1px solid #00ffcc; padding: 2px 15px; border-radius: 20px; display: none; animation: pulse-neon 1s infinite;}
+        @keyframes pulse-neon { 0%, 100% { box-shadow: 0 0 5px #00ffcc; } 50% { box-shadow: 0 0 15px #00ffcc; } }
+
+        .advice-text { color: var(--gold); font-size: 11px; font-weight: 900; text-transform: uppercase; margin-top: 15px; background: rgba(255,215,0,0.1); padding: 5px 15px; border-radius: 5px; width: 100%; text-align: center; letter-spacing: 1px;}
+        
+        /* MÀN HÌNH THEO DÕI PING */
+        .server-monitor { display: flex; gap: 10px; font-size: 10px; font-weight: 900; color: #aaa; text-align: right; }
+        .monitor-val { color: var(--cyan); text-shadow: 0 0 5px var(--cyan); }
 
         .setup-kpi-panel { background: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; border: 1px solid var(--gold); margin-bottom: 20px; }
         .kpi-input { width: 50px; background: #111; border: 1px solid var(--gold); color: #fff; padding: 4px; text-align: center; font-weight: bold; border-radius: 4px;}
@@ -67,41 +70,41 @@
         #stealth-overlay { display: none; position: fixed; inset: 0; z-index: 9999; background: #fff; }
         #stealth-frame { width: 100%; height: 100%; border: none; }
         
-        #victory-screen { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.95); z-index: 50; border-radius: 10px; flex-direction:column; justify-content:center; align-items:center; }
+        #victory-screen { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.95); z-index: 50; border-radius: 12px; flex-direction:column; justify-content:center; align-items:center; }
         .victory-text { color: var(--gold); font-family: 'Playfair Display'; font-size: 18px; font-weight: 900; text-align: center; text-shadow: 0 0 20px var(--gold); }
         
-        /* CÔNG TẮC GIỌNG NÓI */
         .voice-toggle { position: absolute; top: 10px; right: 10px; color: var(--gold); font-size: 18px; cursor: pointer; z-index: 2001;}
     </style>
 </head>
 <body>
 
-    <div id="stealth-overlay">
-        <iframe id="stealth-frame" src="https://vnexpress.net"></iframe>
-    </div>
+    <div id="stealth-overlay"><iframe id="stealth-frame" src="https://vnexpress.net"></iframe></div>
 
     <div id="game-overlay">
-        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-times"></i></button>
+        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-times"></i> ĐÓNG</button>
         <i class="fas fa-volume-up voice-toggle" id="btn-voice" onclick="toggleVoice()"></i>
         <iframe id="game-frame" src=""></iframe>
+        
         <div id="draggable-robot">
-            <img class="robo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png">
             <div class="robo-dialog glass">
                 <div id="victory-screen">
                     <div class="victory-text"><i class="fas fa-trophy"></i><br>ĐẠT KPI CHỐT LỜI</div>
                 </div>
                 
-                <div class="badge-red" id="robo-tool-name">BETVIP</div>
-                <div class="phien-text">PHIÊN: <span id="robo-phien" style="color:var(--gold);">ĐANG TẢI...</span></div>
-                <div class="kq-text" id="robo-kq"><i class="fas fa-satellite-dish" style="font-size:20px; color:var(--gold);"></i></div>
-                <div class="advice-text" id="robo-advice">KẾT NỐI V15 APEX...</div>
+                <div class="header-phien">MÃ PHIÊN: <span id="robo-phien" class="phien-id">ĐANG TẢI...</span></div>
                 
-                <div class="chart-container" id="robo-chart"></div>
-
-                <div class="kpi-box">
-                    <div class="kpi-item">THẮNG<br><span class="kpi-val kpi-win" id="live-win">0</span> / <span id="target-win-show">5</span></div>
-                    <div class="kpi-item">THUA<br><span class="kpi-val kpi-lose" id="live-lose">0</span> / <span id="target-lose-show">3</span></div>
+                <div class="battle-board">
+                    <div class="side-box side-tai" id="box-tai">TÀI</div>
+                    
+                    <div class="center-hub">
+                        <img class="robo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png">
+                        <div class="countdown-ring" id="timer-15s">15s</div>
+                    </div>
+                    
+                    <div class="side-box side-xiu" id="box-xiu">XỈU</div>
                 </div>
+                
+                <div class="advice-text" id="robo-advice"><i class="fas fa-satellite-dish"></i> ĐANG QUÉT API...</div>
             </div>
         </div>
     </div>
@@ -109,11 +112,11 @@
     <div id="auth-wrapper">
         <div class="auth-box glass">
             <div class="logo" style="justify-content:center; margin-bottom:15px; font-size:2.5rem;"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png" style="width:60px; height:60px;"></div>
-            <div style="font-family:'Playfair Display'; font-size:1.8rem; color:var(--gold); margin-bottom:5px; font-weight:900;">HUNGCUTO APEX</div>
-            <div style="font-size: 11px; color: #888; margin-bottom: 25px; letter-spacing: 3px;">V15 PREDATOR EDITION</div>
+            <div style="font-family:'Playfair Display'; font-size:1.8rem; color:var(--gold); margin-bottom:5px; font-weight:900;">HUNGCUTO SUPREME</div>
+            <div style="font-size: 11px; color: #888; margin-bottom: 25px; letter-spacing: 3px;">V16 PREDATOR EDITION</div>
             
             <input type="password" id="auth-key" class="input-box" placeholder="NHẬP KEY BẢO MẬT...">
-            <button class="btn" onclick="verifyKey()"><i class="fas fa-fingerprint"></i> KÍCH HOẠT</button>
+            <button class="btn" onclick="verifyKey()"><i class="fas fa-fingerprint"></i> KÍCH HOẠT HỆ THỐNG</button>
             <div id="auth-msg" style="margin-top:10px; color:var(--red); font-weight:bold;"></div>
         </div>
     </div>
@@ -166,21 +169,19 @@
             <div id="admin-keys" style="margin-top:15px; text-align:left; max-height:200px; overflow-y:auto;"></div>
         </div>
     </div>
-        <script>
+    <script>
         let currentKey = localStorage.getItem("royal_key") || ""; 
         let scanInterval; let phienCu = ""; let activeGame = ""; 
         let isPredicting = false; 
+        let countdownTimer; // Biến đồng hồ 15s
         
         let targetWin = 5, targetLose = 3, currentWin = 0, currentLose = 0, isLockKpi = false;
-        let isVoiceOn = true; // Bật giọng nói mặc định
+        let isVoiceOn = true;
 
-        // HỆ THỐNG GIỌNG NÓI AI (VOICE ORACLE)
         function speak(text) {
             if(!isVoiceOn) return;
             let msg = new SpeechSynthesisUtterance(text);
-            msg.lang = 'vi-VN';
-            msg.rate = 1.1; // Tốc độ nói hơi nhanh cho ngầu
-            msg.pitch = 1.0;
+            msg.lang = 'vi-VN'; msg.rate = 1.1; msg.pitch = 1.0;
             window.speechSynthesis.speak(msg);
         }
 
@@ -190,7 +191,6 @@
             if(isVoiceOn) speak("Đã bật âm thanh AI");
         }
 
-        // LIVE MONITOR (Fake Ping & User)
         setInterval(() => {
             document.getElementById('fake-ping').innerText = Math.floor(Math.random() * (45 - 12 + 1) + 12) + "ms";
             let curUser = parseInt(document.getElementById('fake-user').innerText.replace(/,/g, ''));
@@ -198,14 +198,10 @@
             document.getElementById('fake-user').innerText = curUser.toLocaleString();
         }, 3000);
 
-        // STEALTH MODE
         let stealthClicks = 0;
         function toggleStealth() {
             stealthClicks++;
-            if(stealthClicks >= 3) {
-                document.getElementById('stealth-overlay').style.display = 'block';
-                stealthClicks = 0;
-            }
+            if(stealthClicks >= 3) { document.getElementById('stealth-overlay').style.display = 'block'; stealthClicks = 0; }
             setTimeout(() => stealthClicks = 0, 2000);
         }
         document.getElementById('stealth-overlay').addEventListener('click', function(e) {
@@ -233,7 +229,7 @@
                         document.getElementById('main-header').style.display = 'flex'; 
                         document.getElementById('main-dashboard').style.display = 'block';
                         if(json.role === "admin") { document.getElementById('btn-admin').style.display = 'block'; loadAdminData(); }
-                        if(!isAuto) speak("Đăng nhập thành công, kính chào ông trùm.");
+                        if(!isAuto) speak("Đăng nhập thành công");
                     } else { 
                         if(!isAuto) document.getElementById('auth-msg').innerText = json.msg;
                         else { localStorage.removeItem("royal_key"); currentKey = ""; }
@@ -246,36 +242,60 @@
             localStorage.removeItem("royal_key"); currentKey = ""; closeGame();
             document.getElementById('main-header').style.display = 'none'; document.getElementById('main-dashboard').style.display = 'none'; 
             document.getElementById('auth-wrapper').style.display = 'flex'; document.getElementById('auth-key').value = "";
-            document.getElementById('auth-msg').innerText = "";
         }
 
         function switchTool(gameId, toolName, url) {
             targetWin = parseInt(document.getElementById('setup-win').value) || 5;
             targetLose = parseInt(document.getElementById('setup-lose').value) || 3;
-            document.getElementById('target-win-show').innerText = targetWin;
-            document.getElementById('target-lose-show').innerText = targetLose;
             currentWin = 0; currentLose = 0; isLockKpi = false;
-            document.getElementById('live-win').innerText = "0"; document.getElementById('live-lose').innerText = "0";
             document.getElementById('victory-screen').style.display = 'none';
-            document.getElementById('robo-chart').innerHTML = "";
 
             if (url !== '') document.getElementById('game-frame').src = url;
             activeGame = gameId; phienCu = ""; isPredicting = false; clearInterval(scanInterval);
+            clearInterval(countdownTimer); document.getElementById('timer-15s').style.display = 'none';
             
             document.getElementById('game-overlay').style.display = 'block';
-            document.getElementById('robo-tool-name').innerText = toolName;
-            document.getElementById('robo-phien').innerText = "TẢI...";
-            document.getElementById('robo-kq').innerHTML = '<i class="fas fa-satellite-dish"></i>';
-            document.getElementById('robo-advice').innerText = "KẾT NỐI API...";
-
-            speak("Đã mở hệ thống " + toolName);
+            document.getElementById('robo-phien').innerText = "ĐANG TẢI...";
+            document.getElementById('robo-advice').innerText = "KẾT NỐI API " + toolName + "...";
+            
+            // Đổi nhãn TÀI/CHẴN
+            document.getElementById('box-tai').innerText = (gameId === 'lc79_xd') ? "CHẴN" : "TÀI";
+            document.getElementById('box-xiu').innerText = (gameId === 'lc79_xd') ? "LẺ" : "XỈU";
+            
+            resetBoxes(); // Tắt đèn 2 bên
+            speak("Đã mở " + toolName);
             getSignalTX(); scanInterval = setInterval(getSignalTX, 2000);
         }
 
         function closeGame() {
-            activeGame = ""; phienCu = ""; clearInterval(scanInterval); isPredicting = false;
+            activeGame = ""; phienCu = ""; clearInterval(scanInterval); clearInterval(countdownTimer); isPredicting = false;
             document.getElementById('game-overlay').style.display = 'none';
             document.getElementById('game-frame').src = '';
+        }
+        
+        function resetBoxes() {
+            document.getElementById('box-tai').classList.remove('active');
+            document.getElementById('box-xiu').classList.remove('active');
+        }
+
+        function start15sTimer() {
+            clearInterval(countdownTimer);
+            let timeLeft = 15;
+            let timerEl = document.getElementById('timer-15s');
+            timerEl.style.display = 'block';
+            timerEl.innerText = timeLeft + "s";
+            
+            countdownTimer = setInterval(() => {
+                timeLeft--;
+                if(timeLeft >= 0) {
+                    timerEl.innerText = timeLeft + "s";
+                } else {
+                    clearInterval(countdownTimer);
+                    timerEl.style.display = 'none';
+                    resetBoxes(); // Tắt đèn 2 bên khi hết thời gian vào tiền
+                    document.getElementById('robo-advice').innerHTML = '<i class="fas fa-spinner fa-spin"></i> CHỜ VÁN MỚI...';
+                }
+            }, 1000);
         }
 
         async function getSignalTX() {
@@ -284,7 +304,7 @@
                 let res = await fetch(`/api/scan?tool=${activeGame}&key=${currentKey}`); let json = await res.json();
                 if(json.status === "error") { 
                     if(json.msg.includes("đồng bộ")) return; 
-                    alert("CẢNH BÁO: " + json.msg); closeGame(); 
+                    alert("LỖI: " + json.msg); closeGame(); 
                     if(json.msg.includes("hết hạn") || json.msg.includes("chặn")) logout();
                     return; 
                 }
@@ -296,55 +316,43 @@
                     if(phienCu !== "" && data.history && data.history.length > 0) {
                         let latestResult = data.history[0];
                         if(latestResult.phien == phienCu && latestResult.du_doan !== "CHỜ CẦU") {
-                            if(latestResult.status === "WIN") { currentWin++; document.getElementById('live-win').innerText = currentWin; }
-                            else { currentLose++; document.getElementById('live-lose').innerText = currentLose; }
-                            
-                            if(currentWin >= targetWin) {
+                            if(latestResult.status === "WIN") currentWin++; else currentLose++;
+                            if(currentWin >= targetWin || currentLose >= targetLose) {
                                 isLockKpi = true; document.getElementById('victory-screen').style.display = 'flex';
-                                speak("Mục tiêu hoàn thành, xin hãy dừng lại để bảo toàn lợi nhuận."); return;
-                            } else if (currentLose >= targetLose) {
-                                isLockKpi = true; document.getElementById('victory-screen').style.display = 'flex';
-                                document.querySelector('.victory-text').innerHTML = '<i class="fas fa-times-circle" style="color:red;"></i><br>CẮT LỖ THÀNH CÔNG<br>DỪNG LẠI NGAY!';
-                                speak("Đã chạm ngưỡng cắt lỗ, hệ thống tạm khóa."); return;
+                                speak("Mục tiêu hoàn thành. Đã khóa hệ thống."); return;
                             }
                         }
                     }
 
                     phienCu = data.phien; 
+                    document.getElementById('robo-phien').innerText = data.phien; // Update ID trên đỉnh
                     
-                    document.getElementById('robo-phien').innerText = "#" + data.phien;
-                    let el = document.getElementById('robo-kq'); 
-                    let advEl = document.getElementById('robo-advice');
-                    
-                    el.innerHTML = '<i class="fas fa-cog fa-spin" style="color:var(--cyan); font-size:24px;"></i>';
-                    advEl.innerText = "PHÂN TÍCH V15...";
-
-                    if(data.history && data.history.length > 0) {
-                        let htmlChart = "";
-                        let chartData = data.history.slice(0,15).reverse();
-                        chartData.forEach((h) => {
-                            if(h.du_doan === "CHỜ CẦU") return;
-                            let height = h.status === "WIN" ? 15 : 8; 
-                            let barClass = h.status === "WIN" ? "bar-win" : "bar-lose";
-                            htmlChart += `<div class="chart-bar ${barClass}" style="height:${height}px;"></div>`;
-                        });
-                        document.getElementById('robo-chart').innerHTML = htmlChart;
-                    }
+                    resetBoxes();
+                    document.getElementById('timer-15s').style.display = 'none';
+                    clearInterval(countdownTimer);
+                    document.getElementById('robo-advice').innerHTML = '<i class="fas fa-cog fa-spin"></i> V16 PHÂN TÍCH...';
 
                     setTimeout(() => {
-                        el.innerText = data.du_doan; 
-                        advEl.innerText = data.loi_khuyen;
+                        let result = data.du_doan;
+                        document.getElementById('robo-advice').innerText = "TỶ LỆ " + data.ti_le + "% | " + data.loi_khuyen;
                         
-                        if(data.du_doan === "CHỜ CẦU") {
-                            el.style.color = "#FFD700";
-                            speak("Cầu loạn, nằm im chờ.");
+                        if(result === "CHỜ CẦU") {
+                            speak("Cầu loạn, chờ ván sau.");
                         } else {
-                            el.style.color = (data.du_doan === "TÀI" || data.du_doan === "CHẴN") ? "#ff2a2a" : "#fff";
-                            speak("Đánh " + data.du_doan + ". " + data.loi_khuyen);
+                            // SÁNG ĐÈN CỘT BÊN TRÁI HOẶC PHẢI
+                            if(result === "TÀI" || result === "CHẴN") {
+                                document.getElementById('box-tai').classList.add('active');
+                            } else {
+                                document.getElementById('box-xiu').classList.add('active');
+                            }
+                            speak("Đánh " + result);
+                            
+                            // CHẠY ĐỒNG HỒ 15S VÀO TIỀN
+                            start15sTimer();
                         }
                         
                         isPredicting = false; 
-                    }, 3500);
+                    }, 3000);
                 }
             } catch (e) {}
         }
@@ -372,10 +380,9 @@
             if(act === 'delete' && !confirm("Xóa vĩnh viễn?")) return;
             await fetch('/api/admin/action_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: currentKey, target_key: target, action: act})}); loadAdminData(); 
         }
-
         dragElement(document.getElementById("draggable-robot"));
         function dragElement(elmnt) {
-            var pos1=0, pos2=0, pos3=0, pos4=0; var img = elmnt.querySelector('.robo-img');
+            var pos1=0, pos2=0, pos3=0, pos4=0; var img = elmnt.querySelector('.robo-dialog'); // Kéo thả cả cục sa bàn
             img.onmousedown = dragMouseDown; img.ontouchstart = dragTouchStart;
             function dragMouseDown(e) { e = e || window.event; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
             function dragTouchStart(e) { pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
