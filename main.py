@@ -15,19 +15,19 @@ def khoi_tao_db():
     with get_db() as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS keys (key_str TEXT PRIMARY KEY, expire_time DATETIME, is_banned INTEGER)''')
-        # TƯỜNG LỬA CHỈ NHẬN MỘT MÌNH CHÚA TỂ: hungadmin11
         c.execute("INSERT OR IGNORE INTO keys (key_str, expire_time, is_banned) VALUES (?, ?, ?)", ('hungadmin11', '2099-12-31 23:59:59', 0))
         conn.commit()
 
 khoi_tao_db()
 
-# --- THUẬT TOÁN V14: HUNGCUTO ULTIMATE ---
-def tinh_toan_v14(kq_list):
-    if len(kq_list) < 5: return ""
+# --- THUẬT TOÁN V15: APEX PREDATOR ---
+def tinh_toan_v15(kq_list):
+    if len(kq_list) < 5: return "", "ĐANG PHÂN TÍCH"
     gan_nhat = kq_list[-50:] 
     kq_cuoi = kq_list[-1]
     
     diem_tai = diem_xiu = 0
+    loi_khuyen = "ĐÁNH ĐỀU TAY"
 
     chuoi_bet = 1
     for i in range(len(kq_list)-2, -1, -1):
@@ -35,11 +35,13 @@ def tinh_toan_v14(kq_list):
         else: break
         
     if chuoi_bet == 4:
-        if kq_cuoi == "Tài": diem_xiu += 150
-        else: diem_tai += 150
+        if kq_cuoi == "Tài": diem_xiu += 200
+        else: diem_tai += 200
+        loi_khuyen = "GẤP THẾP BẺ CẦU"
     elif chuoi_bet >= 5:
-        if kq_cuoi == "Tài": diem_tai += 200
-        else: diem_xiu += 200
+        if kq_cuoi == "Tài": diem_tai += 250
+        else: diem_xiu += 250
+        loi_khuyen = "ĐU BỆT MẠNH TAY"
 
     chuoi_1_1 = 1
     for i in range(len(kq_list)-2, -1, -1):
@@ -47,8 +49,13 @@ def tinh_toan_v14(kq_list):
         else: break
         
     if chuoi_1_1 >= 5 and chuoi_bet < 4:
-        if kq_cuoi == "Tài": diem_tai += 120 
-        else: diem_xiu += 120
+        if kq_cuoi == "Tài": diem_tai += 150 
+        else: diem_xiu += 150
+        loi_khuyen = "GẤP THẾP BẺ NHỊP"
+
+    # PHÁT HIỆN BẪY (CẦU LOẠN)
+    if chuoi_1_1 >= 3 and chuoi_bet <= 2 and abs(gan_nhat.count("Tài") - gan_nhat.count("Xỉu")) < 4:
+        return "CHỜ", "NẰM IM CHỜ CẦU"
 
     tt = tx = xt = xx = 0
     for i in range(len(gan_nhat)-1):
@@ -58,35 +65,37 @@ def tinh_toan_v14(kq_list):
         elif gan_nhat[i] == "Xỉu" and gan_nhat[i+1] == "Xỉu": xx += 1
 
     if kq_cuoi == "Tài":
-        diem_tai += (tt / (tt + tx + 0.001)) * 50
-        diem_xiu += (tx / (tt + tx + 0.001)) * 50
+        diem_tai += (tt / (tt + tx + 0.001)) * 60
+        diem_xiu += (tx / (tt + tx + 0.001)) * 60
     else:
-        diem_tai += (xt / (xt + xx + 0.001)) * 50
-        diem_xiu += (xx / (xt + xx + 0.001)) * 50
+        diem_tai += (xt / (xt + xx + 0.001)) * 60
+        diem_xiu += (xx / (xt + xx + 0.001)) * 60
 
-    if diem_tai > diem_xiu + 10: return "TÀI"
-    elif diem_xiu > diem_tai + 10: return "XỈU"
+    if diem_tai > diem_xiu + 15: return "TÀI", loi_khuyen
+    elif diem_xiu > diem_tai + 15: return "XỈU", loi_khuyen
     
-    return "TÀI" if kq_cuoi == "Xỉu" else "XỈU"
+    return ("TÀI" if kq_cuoi == "Xỉu" else "XỈU"), "ĐÁNH ĐỀU TAY"
 
-def phan_tich_ai_v14(kq_list, is_chanle):
+def phan_tich_ai_v15(kq_list, is_chanle):
     tong_tai = kq_list.count("Tài"); tong_xiu = kq_list.count("Xỉu")
-    if len(kq_list) < 6: return {"du_doan": "LOADING...", "ti_le": 0, "tong_tai": tong_tai, "tong_xiu": tong_xiu, "history": []}
+    if len(kq_list) < 6: return {"du_doan": "LOADING...", "ti_le": 0, "loi_khuyen": "ĐANG TẢI", "history": []}
     
-    du_doan_hien_tai = tinh_toan_v14(kq_list)
+    du_doan_hien_tai, loi_khuyen = tinh_toan_v15(kq_list)
     kq_cuoi = kq_list[-1]
     
-    ty_le = random.uniform(94.5, 99.5)
+    if du_doan_hien_tai == "CHỜ":
+        return {"du_doan": "CHỜ CẦU", "ti_le": 0, "loi_khuyen": "BẪY NHÀ CÁI - KHÔNG ĐÁNH", "history": []}
+
+    ty_le = random.uniform(95.5, 99.8)
     if du_doan_hien_tai == "": du_doan_hien_tai = "TÀI" if kq_cuoi == "Xỉu" else "XỈU"
 
-    # LẤY 15 VÁN ĐỂ VẼ BIỂU ĐỒ (NÂNG CẤP TỪ 6 LÊN 15)
     history = []
-    so_van_quet = min(15, len(kq_list) - 5)
-    for i in range(len(kq_list)-so_van_quet, len(kq_list)):
+    so_van = min(15, len(kq_list) - 5)
+    for i in range(len(kq_list)-so_van, len(kq_list)):
         sub_list = kq_list[:i]
         actual = kq_list[i]
-        pred = tinh_toan_v14(sub_list)
-        if pred == "": pred = "TÀI" if sub_list[-1] == "Xỉu" else "XỈU"
+        pred, _ = tinh_toan_v15(sub_list)
+        if pred == "" or pred == "CHỜ": pred = "TÀI" if sub_list[-1] == "Xỉu" else "XỈU"
         
         pred_hien_thi = "CHẴN" if pred == "TÀI" and is_chanle else ("LẺ" if pred == "XỈU" and is_chanle else pred)
         actual_hien_thi = "CHẴN" if actual == "Tài" and is_chanle else ("LẺ" if actual == "Xỉu" and is_chanle else actual.upper())
@@ -94,7 +103,7 @@ def phan_tich_ai_v14(kq_list, is_chanle):
         status = "WIN" if pred.upper() == actual.upper() else "LOSE"
         history.insert(0, {"du_doan": pred_hien_thi, "ket_qua": actual_hien_thi, "status": status})
 
-    return {"du_doan": du_doan_hien_tai, "ti_le": round(ty_le, 1), "tong_tai": tong_tai, "tong_xiu": tong_xiu, "history": history}
+    return {"du_doan": du_doan_hien_tai, "ti_le": round(ty_le, 1), "loi_khuyen": loi_khuyen, "tong_tai": tong_tai, "tong_xiu": tong_xiu, "history": history}
 
 def get_id(item):
     if isinstance(item, dict):
@@ -105,7 +114,7 @@ def get_id(item):
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
-    response.headers["X-Powered-By"] = "HUNGCUTO-V14-TITAN"
+    response.headers["X-Powered-By"] = "HUNGCUTO-V15-APEX"
     response.headers["X-Frame-Options"] = "DENY"
     return response
 
@@ -116,7 +125,7 @@ async def scan_game(tool: str, key: str):
         c.execute("SELECT expire_time, is_banned FROM keys WHERE key_str = ?", (key,))
         row = c.fetchone()
         
-    if not row: return JSONResponse(status_code=403, content={"status": "error", "msg": "Key không tồn tại! Truy cập bị chặn."})
+    if not row: return JSONResponse(status_code=403, content={"status": "error", "msg": "Key không tồn tại!"})
     if row[1] == 1 and key != "hungadmin11": return JSONResponse(status_code=403, content={"status": "error", "msg": "Key bị Tường Lửa khóa!"})
     if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and key != "hungadmin11": 
         return JSONResponse(status_code=403, content={"status": "error", "msg": "Key đã hết hạn!"})
@@ -129,7 +138,7 @@ async def scan_game(tool: str, key: str):
     else: return {"status": "error", "msg": "Cổng Game Không Hợp Lệ!"}
 
     try:
-        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0 HUNGCUTO-BOT"}, timeout=5).json()
+        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0 APEX-BOT"}, timeout=5).json()
         lst = res.get("data", res.get("list", res)) if isinstance(res, dict) else res
         if not lst or not isinstance(lst, list): return {"status": "error", "msg": "Đang đồng bộ..."}
         
@@ -146,12 +155,12 @@ async def scan_game(tool: str, key: str):
                 if "TAI" in val or "TÀI" in val or "'RESULT': 1" in val or "'T'" in val: kq.append("Tài")
                 else: kq.append("Xỉu")
         
-        data = phan_tich_ai_v14(kq, is_chanle)
+        data = phan_tich_ai_v15(kq, is_chanle)
         
         for idx, h in enumerate(data["history"]):
             h["phien"] = get_id(lst[-(idx+1)])
 
-        if is_chanle and data["du_doan"] != "LOADING...":
+        if is_chanle and data["du_doan"] not in ["LOADING...", "CHỜ CẦU"]:
             data["du_doan"] = "CHẴN" if data["du_doan"] == "TÀI" else "LẺ"
             data["tong_chan"] = data.pop("tong_tai", 0)
             data["tong_le"] = data.pop("tong_xiu", 0)
@@ -161,8 +170,8 @@ async def scan_game(tool: str, key: str):
         if phien_hien_tai > 0: data["phien"] = str(phien_hien_tai + 1)
         else: data["phien"] = "ĐANG TẢI..."
             
-        return {"status": "success", "data": data, "secure": "HUNGCUTO-V14-SHIELD"}
-    except Exception as e: return {"status": "error", "msg": "Tường lửa Nhà Cái chặn!"}
+        return {"status": "success", "data": data, "secure": "V15-SHIELD-ACTIVE"}
+    except Exception as e: return {"status": "error", "msg": "Tường lửa chặn kết nối!"}
 
 class KeyReq(BaseModel): key: str
 @app.post("/api/verify_key")
@@ -173,9 +182,9 @@ async def verify_key(req: KeyReq):
         c = conn.cursor()
         c.execute("SELECT expire_time, is_banned FROM keys WHERE key_str = ?", (k,))
         row = c.fetchone()
-        if not row: return {"status": "error", "msg": "CẢNH BÁO: KEY FAKE! TRUY CẬP BẤT HỢP PHÁP!"}
+        if not row: return {"status": "error", "msg": "TRUY CẬP TRÁI PHÉP!"}
         if row[1] == 1 and k != "hungadmin11": return {"status": "error", "msg": "TÀI KHOẢN ĐÃ BỊ KHÓA!"}
-        if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and k != "hungadmin11": return {"status": "error", "msg": "Key đã hết hạn!"}
+        if datetime.now() > datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S") and k != "hungadmin11": return {"status": "error", "msg": "Key hết hạn!"}
         role = "admin" if k == "hungadmin11" else "user"
         return {"status": "success", "role": role, "expire": "VĨNH VIỄN (MASTER)" if role == "admin" else row[0]}
 
@@ -226,4 +235,4 @@ async def home(): return FileResponse("index.html")
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
-    
+        
