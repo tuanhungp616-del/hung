@@ -3,78 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HUNGCUTO ULTIMATE V14</title>
+    <title>HUNGCUTO APEX V15</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --vip-gold: #FFD700; --vip-red: #dc143c; --bg-dark: #0a0505; --panel: rgba(20, 5, 5, 0.9); --glass-border: rgba(255, 215, 0, 0.3); }
+        :root { --gold: #FFD700; --red: #ff2a2a; --bg: #070707; --panel: rgba(15, 15, 15, 0.95); --cyan: #00ffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Nunito', sans-serif; background: radial-gradient(circle at center, #2a0000 0%, var(--bg-dark) 100%); color: #fff; overflow-x: hidden; min-height: 100vh; }
+        body { font-family: 'Nunito', sans-serif; background: radial-gradient(circle at top, #1a0000 0%, var(--bg) 100%); color: #fff; overflow-x: hidden; min-height: 100vh; }
         
-        .glass-panel { background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); }
+        .glass { background: var(--panel); border: 1px solid rgba(255,215,0,0.2); border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
         
-        header { height: 75px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; position: sticky; top:0; z-index: 100; background: rgba(10,0,0,0.9); border-bottom: 2px solid var(--vip-gold); box-shadow: 0 5px 20px rgba(255,215,0,0.2); }
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--vip-gold); text-shadow: 0 0 15px var(--vip-gold); display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .logo-img { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--vip-gold); }
+        header { height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; position: sticky; top:0; z-index: 100; background: #000; border-bottom: 2px solid var(--gold); box-shadow: 0 5px 20px rgba(255,215,0,0.1); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); text-shadow: 0 0 10px var(--gold); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .logo-img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--gold); }
         
-        .report-btn { background: linear-gradient(45deg, #FFD700, #DAA520); color: #000; padding: 8px 12px; border-radius: 8px; font-weight: 900; font-size: 12px; cursor: pointer; box-shadow: 0 0 15px rgba(255,215,0,0.5); display: flex; align-items: center; gap: 5px; text-transform: uppercase; border: none;}
+        /* MÀN HÌNH MONITOR TRÊN HEADER */
+        .server-monitor { display: flex; gap: 10px; font-size: 10px; font-weight: 900; color: #aaa; text-align: right; }
+        .monitor-val { color: var(--cyan); text-shadow: 0 0 5px var(--cyan); }
         
         #auth-wrapper, .modal-overlay { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 999; backdrop-filter: blur(15px); background: rgba(0,0,0,0.9); }
-        .auth-box { padding: 35px 25px; width: 90%; max-width: 380px; text-align: center; border: 2px solid var(--vip-gold); position: relative; overflow: hidden; }
-        .auth-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, var(--vip-gold)); animation: rotate 4s linear infinite; z-index: -1; opacity: 0.3; }
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .auth-box { padding: 35px 25px; width: 90%; max-width: 380px; text-align: center; position: relative; }
         
         #main-dashboard { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
-        .cate-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--vip-gold); margin: 20px 0 10px; text-transform: uppercase; border-left: 4px solid var(--vip-red); padding-left: 10px; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
+        .cate-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); margin: 15px 0 10px; text-transform: uppercase; border-left: 3px solid var(--red); padding-left: 8px; }
         
-        .cyber-btn { padding: 15px; border: 1px solid var(--vip-gold); border-radius: 8px; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; color: #000; width: 100%; margin-bottom: 12px; background: linear-gradient(90deg, #FFD700, #DAA520); transition: 0.3s; text-transform: uppercase; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
-        .cyber-btn:active { transform: scale(0.95); }
-        .btn-dark { background: transparent; color: var(--vip-gold); border: 1px solid var(--vip-gold); box-shadow: none; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .input-box { width: 100%; background: rgba(0,0,0,0.8); border: 1px solid var(--vip-gold); border-radius: 8px; color: var(--vip-gold); padding: 14px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; letter-spacing: 2px; }
+        .btn { padding: 14px; border: 1px solid var(--gold); border-radius: 8px; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; color: #000; width: 100%; margin-bottom: 12px; background: linear-gradient(90deg, #FFD700, #DAA520); transition: 0.2s; text-transform: uppercase; box-shadow: 0 0 15px rgba(255,215,0,0.3); }
+        .btn:active { transform: scale(0.95); }
+        .btn-dark { background: #0a0a0a; color: var(--gold); box-shadow: none; }
+        .btn-red { background: var(--red); border-color: var(--red); color: #fff; box-shadow: 0 0 15px rgba(255,42,42,0.4); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-box { width: 100%; background: #000; border: 1px solid var(--gold); border-radius: 8px; color: var(--gold); padding: 12px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; letter-spacing: 1px; }
 
-        /* KẾT CẤU KÉP: GAME BÊN TRÁI, ROBOT BÊN PHẢI */
         #game-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: #000; }
         #game-frame { width: 100%; height: 100%; border: none; }
-        .close-game-btn { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.8); color: var(--vip-red); border: 2px solid var(--vip-red); padding: 8px 15px; border-radius: 8px; font-weight: 900; z-index: 2001; cursor:pointer;}
+        .close-game-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--red); border: 2px solid var(--red); padding: 8px 12px; border-radius: 8px; font-weight: 900; z-index: 2001; cursor:pointer;}
         
+        /* CỤM ROBOT V15 */
         #draggable-robot { position: absolute; top: 25%; left: 5%; z-index: 2005; display: flex; align-items: center; }
-        .robo-img { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--vip-gold); box-shadow: 0 0 25px var(--vip-gold); cursor: grab; z-index: 2; margin-right: -15px; background: #000; }
+        .robo-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); box-shadow: 0 0 20px var(--gold); cursor: grab; z-index: 2; margin-right: -15px; background: #000; }
+        .robo-dialog { padding: 15px; text-align: center; width: 230px; position: relative; z-index: 1; border: 2px solid var(--gold); border-radius: 12px; background: rgba(5,5,5,0.95); }
         
-        .robo-dialog { padding: 15px; text-align: center; width: 220px; position: relative; z-index: 1; border: 2px solid var(--vip-gold); border-radius: 15px; background: rgba(10,5,5,0.95); }
-        
-        .active-tool-badge { background: var(--vip-red); color: #fff; font-weight: 900; font-size: 10px; padding: 3px 8px; border-radius: 5px; margin-bottom: 5px; display: inline-block; box-shadow: 0 0 10px var(--vip-red); }
-        .phien-text { font-size: 12px; color: #fff; margin-bottom: 5px; font-weight: bold; }
-        .kq-text { font-family: 'Playfair Display', serif; font-size: 32px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.8); margin: 5px 0; }
-        .tyle-text { color: var(--vip-gold); font-size: 12px; font-weight: 900;}
+        .badge-red { background: var(--red); color: #fff; font-weight: 900; font-size: 10px; padding: 3px 8px; border-radius: 5px; margin-bottom: 5px; display: inline-block; box-shadow: 0 0 10px var(--red); }
+        .phien-text { font-size: 11px; color: #fff; font-weight: bold; }
+        .kq-text { font-family: 'Playfair Display', serif; font-size: 32px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.8); margin: 2px 0; }
+        .advice-text { color: var(--cyan); font-size: 11px; font-weight: 900; text-transform: uppercase; border-top: 1px dashed #333; padding-top: 5px; margin-top: 5px; animation: flash 1s infinite;}
+        @keyframes flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 
-        /* BẢNG CHỐT LỜI CẮT LỖ (AUTO KPI) */
-        .kpi-box { display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px dashed var(--vip-gold); padding-top: 10px; }
-        .kpi-item { font-size: 10px; font-weight: bold; color: #aaa; text-align:center; }
-        .kpi-val { font-size: 14px; color: #fff; }
+        /* KPI & BIỂU ĐỒ */
+        .kpi-box { display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px solid #333; padding-top: 8px; }
+        .kpi-item { font-size: 9px; font-weight: bold; color: #888; text-align:center; }
+        .kpi-val { font-size: 13px; color: #fff; }
         .kpi-win { color: #00ffcc; text-shadow: 0 0 5px #00ffcc; }
-        .kpi-lose { color: #ff3333; text-shadow: 0 0 5px #ff3333; }
-
-        /* BIỂU ĐỒ CHART MINI */
-        .chart-container { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 30px; margin-top: 10px; border-top: 1px solid #333; padding-top: 5px; }
-        .chart-bar { width: 8px; border-radius: 2px; }
+        .kpi-lose { color: var(--red); text-shadow: 0 0 5px var(--red); }
+        
+        .chart-container { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 25px; margin-top: 8px; }
+        .chart-bar { width: 7px; border-radius: 2px; }
         .bar-win { background: #00ffcc; box-shadow: 0 0 5px #00ffcc; }
-        .bar-lose { background: #ff3333; box-shadow: 0 0 5px #ff3333; }
+        .bar-lose { background: var(--red); box-shadow: 0 0 5px var(--red); }
 
-        /* BẢNG CÀI ĐẶT MỤC TIÊU */
-        .setup-kpi-panel { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid var(--vip-gold); margin-bottom: 20px; }
-        .kpi-input { width: 60px; background: #000; border: 1px solid var(--vip-gold); color: #fff; padding: 5px; text-align: center; font-weight: bold; border-radius: 5px;}
+        .setup-kpi-panel { background: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; border: 1px solid var(--gold); margin-bottom: 20px; }
+        .kpi-input { width: 50px; background: #111; border: 1px solid var(--gold); color: #fff; padding: 4px; text-align: center; font-weight: bold; border-radius: 4px;}
 
-        /* CHẾ ĐỘ ẨN DANH (STEALTH MODE) */
         #stealth-overlay { display: none; position: fixed; inset: 0; z-index: 9999; background: #fff; }
         #stealth-frame { width: 100%; height: 100%; border: none; }
         
-        .secure-scan { color: #00ffcc; font-size: 12px; font-weight: bold; margin-top: 10px; display: none; }
+        #victory-screen { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.95); z-index: 50; border-radius: 10px; flex-direction:column; justify-content:center; align-items:center; }
+        .victory-text { color: var(--gold); font-family: 'Playfair Display'; font-size: 18px; font-weight: 900; text-align: center; text-shadow: 0 0 20px var(--gold); }
         
-        /* MÀN HÌNH CHỐT LỜI */
-        #victory-screen { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.9); z-index: 50; border-radius: 15px; flex-direction:column; justify-content:center; align-items:center; }
-        .victory-text { color: var(--vip-gold); font-family: 'Playfair Display'; font-size: 20px; font-weight: 900; text-align: center; text-shadow: 0 0 20px var(--vip-gold); animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        /* CÔNG TẮC GIỌNG NÓI */
+        .voice-toggle { position: absolute; top: 10px; right: 10px; color: var(--gold); font-size: 18px; cursor: pointer; z-index: 2001;}
     </style>
 </head>
 <body>
@@ -84,19 +81,20 @@
     </div>
 
     <div id="game-overlay">
-        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-times"></i> ĐÓNG</button>
+        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-times"></i></button>
+        <i class="fas fa-volume-up voice-toggle" id="btn-voice" onclick="toggleVoice()"></i>
         <iframe id="game-frame" src=""></iframe>
         <div id="draggable-robot">
             <img class="robo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png">
-            <div class="robo-dialog glass-panel">
+            <div class="robo-dialog glass">
                 <div id="victory-screen">
-                    <div class="victory-text"><i class="fas fa-trophy"></i><br>ĐÃ ĐẠT CHỈ TIÊU<br>HÃY DỪNG LẠI!</div>
+                    <div class="victory-text"><i class="fas fa-trophy"></i><br>ĐẠT KPI CHỐT LỜI</div>
                 </div>
                 
-                <div class="active-tool-badge" id="robo-tool-name">BETVIP</div>
-                <div class="phien-text">PHIÊN: <span id="robo-phien" style="color:var(--vip-gold);">ĐANG TẢI...</span></div>
-                <div class="kq-text" id="robo-kq"><i class="fas fa-shield-alt" style="font-size:20px; color:var(--vip-gold);"></i></div>
-                <div class="tyle-text" id="robo-tyle">Bảo mật HUNGCUTO...</div>
+                <div class="badge-red" id="robo-tool-name">BETVIP</div>
+                <div class="phien-text">PHIÊN: <span id="robo-phien" style="color:var(--gold);">ĐANG TẢI...</span></div>
+                <div class="kq-text" id="robo-kq"><i class="fas fa-satellite-dish" style="font-size:20px; color:var(--gold);"></i></div>
+                <div class="advice-text" id="robo-advice">KẾT NỐI V15 APEX...</div>
                 
                 <div class="chart-container" id="robo-chart"></div>
 
@@ -109,60 +107,62 @@
     </div>
 
     <div id="auth-wrapper">
-        <div class="auth-box glass-panel">
-            <div class="logo" style="justify-content:center; margin-bottom:15px; font-size:2rem;"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"></div>
-            <div style="font-family:'Playfair Display'; font-size:1.6rem; color:var(--vip-gold); margin-bottom:10px; font-weight:900;">HUNGCUTO ULTIMATE</div>
-            <div style="font-size: 10px; color: #aaa; margin-bottom: 20px; letter-spacing: 2px;">V14 SECURE CONNECTION <i class="fas fa-lock" style="color:#00ffcc;"></i></div>
+        <div class="auth-box glass">
+            <div class="logo" style="justify-content:center; margin-bottom:15px; font-size:2.5rem;"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png" style="width:60px; height:60px;"></div>
+            <div style="font-family:'Playfair Display'; font-size:1.8rem; color:var(--gold); margin-bottom:5px; font-weight:900;">HUNGCUTO APEX</div>
+            <div style="font-size: 11px; color: #888; margin-bottom: 25px; letter-spacing: 3px;">V15 PREDATOR EDITION</div>
             
-            <input type="text" id="auth-key" class="input-box" placeholder="NHẬP KEY BẢO MẬT...">
-            <button class="cyber-btn" onclick="verifyKey()"><i class="fas fa-fingerprint"></i> ĐĂNG NHẬP HỆ THỐNG</button>
-            
-            <div class="secure-scan" id="secure-scan"><i class="fas fa-spinner fa-spin"></i> Đang quét mã hóa tường lửa...</div>
-            <div id="auth-msg" style="margin-top:10px; color:var(--vip-red); font-weight:bold;"></div>
+            <input type="password" id="auth-key" class="input-box" placeholder="NHẬP KEY BẢO MẬT...">
+            <button class="btn" onclick="verifyKey()"><i class="fas fa-fingerprint"></i> KÍCH HOẠT</button>
+            <div id="auth-msg" style="margin-top:10px; color:var(--red); font-weight:bold;"></div>
         </div>
     </div>
 
     <header id="main-header" style="display:none;">
         <div class="logo" onclick="toggleStealth()"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"> HUNGCUTO</div>
-        <div class="report-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> THOÁT</div>
+        <div class="server-monitor">
+            <div>PING<br><span class="monitor-val" id="fake-ping">12ms</span></div>
+            <div>USER<br><span class="monitor-val" id="fake-user">1,402</span></div>
+            <div style="color:var(--red); cursor:pointer;" onclick="logout()"><i class="fas fa-power-off" style="font-size:16px; margin-top:5px;"></i></div>
+        </div>
     </header>
 
     <div id="main-dashboard">
         <div class="setup-kpi-panel">
-            <div class="cate-title" style="margin-top:0; font-size:1rem;"><i class="fas fa-robot"></i> CÀI ĐẶT CHỐT LỜI / CẮT LỖ</div>
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:bold;">
+            <div class="cate-title" style="margin-top:0; font-size:1rem;"><i class="fas fa-robot"></i> CÀI ĐẶT AUTO KPI (CHỐT LỜI/LỖ)</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:bold; color:#aaa;">
                 <div>DỪNG KHI THẮNG: <input type="number" id="setup-win" class="kpi-input" value="5"> VÁN</div>
                 <div>DỪNG KHI THUA: <input type="number" id="setup-lose" class="kpi-input" value="3"> VÁN</div>
             </div>
         </div>
 
-        <div class="glass-panel" style="padding: 15px; margin-bottom: 20px;">
-            <div class="cate-title"><i class="fas fa-crown"></i> HỆ THỐNG BETVIP</div>
+        <div class="glass" style="padding: 15px; margin-bottom: 15px;">
+            <div class="cate-title"><i class="fas fa-crown"></i> CỔNG BETVIP</div>
             <div class="grid-2">
-                <button class="cyber-btn" onclick="switchTool('betvip_tx', 'BETVIP TÀI XỈU', 'https://play.betvip.fit/')">TÀI XỈU HŨ</button>
-                <button class="cyber-btn btn-dark" onclick="switchTool('betvip_md5', 'BETVIP MD5', 'https://play.betvip.fit/')">TÀI XỈU MD5</button>
+                <button class="btn" onclick="switchTool('betvip_tx', 'BETVIP TÀI XỈU', 'https://play.betvip.fit/')">TÀI XỈU HŨ</button>
+                <button class="btn btn-dark" onclick="switchTool('betvip_md5', 'BETVIP MD5', 'https://play.betvip.fit/')">TÀI XỈU MD5</button>
             </div>
         </div>
         
-        <div class="glass-panel" style="padding: 15px;">
-            <div class="cate-title"><i class="fas fa-gem"></i> HỆ THỐNG LC79.BET</div>
+        <div class="glass" style="padding: 15px;">
+            <div class="cate-title"><i class="fas fa-gem"></i> CỔNG LC79.BET</div>
             <div class="grid-2" style="margin-bottom: 10px;">
-                <button class="cyber-btn" onclick="switchTool('lc79_tx', 'LC79 TÀI XỈU', 'https://lc79.bet')">TÀI XỈU HŨ</button>
-                <button class="cyber-btn btn-dark" onclick="switchTool('lc79_md5', 'LC79 MD5', 'https://lc79.bet')">TÀI XỈU MD5</button>
+                <button class="btn" onclick="switchTool('lc79_tx', 'LC79 TÀI XỈU', 'https://lc79.bet')">TÀI XỈU HŨ</button>
+                <button class="btn btn-dark" onclick="switchTool('lc79_md5', 'LC79 MD5', 'https://lc79.bet')">TÀI XỈU MD5</button>
             </div>
-            <button class="cyber-btn" onclick="switchTool('lc79_xd', 'LC79 XÓC ĐĨA', 'https://lc79.bet')" style="background: linear-gradient(90deg, #dc143c, #800000); color: #fff; border:none;">XÓC ĐĨA CHẴN LẺ</button>
+            <button class="btn btn-red" onclick="switchTool('lc79_xd', 'LC79 XÓC ĐĨA', 'https://lc79.bet')">XÓC ĐĨA CHẴN LẺ</button>
         </div>
         
-        <button class="cyber-btn btn-dark" id="btn-admin" style="display:none; margin-top:20px; border-color:#00ffcc; color:#00ffcc;" onclick="document.getElementById('admin-modal').style.display='flex'"><i class="fas fa-cogs"></i> QUẢN LÝ KEY (HUNGCUTO)</button>
+        <button class="btn btn-dark" id="btn-admin" style="display:none; margin-top:20px; border-color:var(--cyan); color:var(--cyan);" onclick="document.getElementById('admin-modal').style.display='flex'"><i class="fas fa-cogs"></i> QUẢN LÝ KEY</button>
     </div>
 
     <div id="admin-modal" class="modal-overlay" style="display:none;">
-        <div class="modal-box glass-panel" style="max-width: 500px;">
-            <div class="close-game-btn" style="top:10px; right:15px; left:auto;" onclick="this.parentElement.parentElement.style.display='none'">×</div>
-            <h3 style="color:var(--vip-gold); margin-bottom:15px;">TẠO CHÌA KHÓA VIP</h3>
+        <div class="modal-box glass" style="max-width: 400px; padding:20px;">
+            <div style="position:absolute; top:10px; right:15px; color:#fff; font-size:20px; font-weight:bold; cursor:pointer;" onclick="this.parentElement.parentElement.style.display='none'">×</div>
+            <h3 style="color:var(--gold); margin-bottom:15px;">TẠO CHÌA KHÓA VIP</h3>
             <input type="text" id="custom-key-input" class="input-box" placeholder="Tên Key (Trống = Random)">
             <select id="key-duration" class="input-box"><option value="1H">1 Giờ</option><option value="1D">1 Ngày</option><option value="3D">3 Ngày</option><option value="30D">30 Ngày</option></select>
-            <button class="cyber-btn" onclick="adminCreateKey()">CẤP QUYỀN KEY</button>
+            <button class="btn" onclick="adminCreateKey()">CẤP QUYỀN KEY</button>
             <div id="admin-keys" style="margin-top:15px; text-align:left; max-height:200px; overflow-y:auto;"></div>
         </div>
     </div>
@@ -171,34 +171,34 @@
         let scanInterval; let phienCu = ""; let activeGame = ""; 
         let isPredicting = false; 
         
-        // Biến số đếm KPI
-        let targetWin = 5, targetLose = 3;
-        let currentWin = 0, currentLose = 0;
-        let isLockKpi = false;
+        let targetWin = 5, targetLose = 3, currentWin = 0, currentLose = 0, isLockKpi = false;
+        let isVoiceOn = true; // Bật giọng nói mặc định
 
-        // Âm thanh Radar Tàu Ngầm bằng Web Audio API siêu mượt
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playBeep(type) {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            let osc = audioCtx.createOscillator();
-            let gainNode = audioCtx.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
-            if(type === 'scan') { // Tiếng radar tít tít
-                osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-            } else if (type === 'victory') { // Tiếng chuông báo chốt lời
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(1500, audioCtx.currentTime + 0.2);
-                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.6);
-            }
+        // HỆ THỐNG GIỌNG NÓI AI (VOICE ORACLE)
+        function speak(text) {
+            if(!isVoiceOn) return;
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'vi-VN';
+            msg.rate = 1.1; // Tốc độ nói hơi nhanh cho ngầu
+            msg.pitch = 1.0;
+            window.speechSynthesis.speak(msg);
         }
 
-        // Chế độ tàng hình (Bấm 3 lần vào logo)
+        function toggleVoice() {
+            isVoiceOn = !isVoiceOn;
+            document.getElementById('btn-voice').className = isVoiceOn ? "fas fa-volume-up voice-toggle" : "fas fa-volume-mute voice-toggle";
+            if(isVoiceOn) speak("Đã bật âm thanh AI");
+        }
+
+        // LIVE MONITOR (Fake Ping & User)
+        setInterval(() => {
+            document.getElementById('fake-ping').innerText = Math.floor(Math.random() * (45 - 12 + 1) + 12) + "ms";
+            let curUser = parseInt(document.getElementById('fake-user').innerText.replace(/,/g, ''));
+            curUser += Math.floor(Math.random() * 5) - 2;
+            document.getElementById('fake-user').innerText = curUser.toLocaleString();
+        }, 3000);
+
+        // STEALTH MODE
         let stealthClicks = 0;
         function toggleStealth() {
             stealthClicks++;
@@ -208,11 +208,8 @@
             }
             setTimeout(() => stealthClicks = 0, 2000);
         }
-        
-        // Thoát chế độ ẩn danh bằng cách click 3 lần vào gốc dưới bên phải
         document.getElementById('stealth-overlay').addEventListener('click', function(e) {
-            let w = window.innerWidth, h = window.innerHeight;
-            if(e.clientX > w - 100 && e.clientY > h - 100) {
+            if(e.clientX > window.innerWidth - 100 && e.clientY > window.innerHeight - 100) {
                 stealthClicks++;
                 if(stealthClicks >= 3) { this.style.display = 'none'; stealthClicks = 0; }
                 setTimeout(() => stealthClicks = 0, 2000);
@@ -223,33 +220,25 @@
 
         async function verifyKey(isAuto = false) {
             let k = document.getElementById('auth-key').value.trim();
-            if(!k) return document.getElementById('auth-msg').innerText = "Vui lòng nhập Key HUNGCUTO!";
-            
-            if(!isAuto) {
-                document.getElementById('auth-msg').innerText = "";
-                document.getElementById('secure-scan').style.display = "block";
-            }
+            if(!k) return document.getElementById('auth-msg').innerText = "Nhập Key bảo mật!";
+            if(!isAuto) document.getElementById('auth-msg').innerText = "Đang quét mã hóa...";
             
             setTimeout(async () => {
                 try {
                     let res = await fetch('/api/verify_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({key: k})});
                     let json = await res.json();
-                    document.getElementById('secure-scan').style.display = "none";
-                    
                     if (json.status === "success") {
                         currentKey = k; localStorage.setItem("royal_key", currentKey); 
                         document.getElementById('auth-wrapper').style.display = 'none'; 
                         document.getElementById('main-header').style.display = 'flex'; 
                         document.getElementById('main-dashboard').style.display = 'block';
-                        if(json.role === "admin") { document.getElementById('btn-admin').style.display = 'flex'; loadAdminData(); }
+                        if(json.role === "admin") { document.getElementById('btn-admin').style.display = 'block'; loadAdminData(); }
+                        if(!isAuto) speak("Đăng nhập thành công, kính chào ông trùm.");
                     } else { 
                         if(!isAuto) document.getElementById('auth-msg').innerText = json.msg;
                         else { localStorage.removeItem("royal_key"); currentKey = ""; }
                     }
-                } catch(e) { 
-                    document.getElementById('secure-scan').style.display = "none";
-                    if(!isAuto) document.getElementById('auth-msg').innerText = "Lỗi Firewall Server!"; 
-                }
+                } catch(e) { if(!isAuto) document.getElementById('auth-msg').innerText = "Mất kết nối máy chủ!"; }
             }, 1000);
         }
 
@@ -257,11 +246,10 @@
             localStorage.removeItem("royal_key"); currentKey = ""; closeGame();
             document.getElementById('main-header').style.display = 'none'; document.getElementById('main-dashboard').style.display = 'none'; 
             document.getElementById('auth-wrapper').style.display = 'flex'; document.getElementById('auth-key').value = "";
-            document.getElementById('auth-msg').innerText = "Đã thoát chế độ VIP.";
+            document.getElementById('auth-msg').innerText = "";
         }
 
         function switchTool(gameId, toolName, url) {
-            // Lấy KPI thiết lập
             targetWin = parseInt(document.getElementById('setup-win').value) || 5;
             targetLose = parseInt(document.getElementById('setup-lose').value) || 3;
             document.getElementById('target-win-show').innerText = targetWin;
@@ -277,8 +265,10 @@
             document.getElementById('game-overlay').style.display = 'block';
             document.getElementById('robo-tool-name').innerText = toolName;
             document.getElementById('robo-phien').innerText = "TẢI...";
-            document.getElementById('robo-kq').innerHTML = '<i class="fas fa-shield-alt"></i>';
+            document.getElementById('robo-kq').innerHTML = '<i class="fas fa-satellite-dish"></i>';
+            document.getElementById('robo-advice').innerText = "KẾT NỐI API...";
 
+            speak("Đã mở hệ thống " + toolName);
             getSignalTX(); scanInterval = setInterval(getSignalTX, 2000);
         }
 
@@ -294,8 +284,8 @@
                 let res = await fetch(`/api/scan?tool=${activeGame}&key=${currentKey}`); let json = await res.json();
                 if(json.status === "error") { 
                     if(json.msg.includes("đồng bộ")) return; 
-                    alert("HUNGCUTO: " + json.msg); closeGame(); 
-                    if(json.msg.includes("hết hạn") || json.msg.includes("Tường Lửa")) logout();
+                    alert("CẢNH BÁO: " + json.msg); closeGame(); 
+                    if(json.msg.includes("hết hạn") || json.msg.includes("chặn")) logout();
                     return; 
                 }
                 
@@ -303,39 +293,38 @@
                 if(data.phien !== phienCu && data.phien !== "ĐANG TẢI...") {
                     isPredicting = true; 
                     
-                    // XỬ LÝ KPI TỪ PHIÊN TRƯỚC BẰNG LỊCH SỬ
                     if(phienCu !== "" && data.history && data.history.length > 0) {
                         let latestResult = data.history[0];
-                        if(latestResult.phien == phienCu) {
+                        if(latestResult.phien == phienCu && latestResult.du_doan !== "CHỜ CẦU") {
                             if(latestResult.status === "WIN") { currentWin++; document.getElementById('live-win').innerText = currentWin; }
                             else { currentLose++; document.getElementById('live-lose').innerText = currentLose; }
                             
-                            // Check dừng máy
-                            if(currentWin >= targetWin || currentLose >= targetLose) {
-                                isLockKpi = true;
-                                document.getElementById('victory-screen').style.display = 'flex';
-                                playBeep('victory');
-                                return;
+                            if(currentWin >= targetWin) {
+                                isLockKpi = true; document.getElementById('victory-screen').style.display = 'flex';
+                                speak("Mục tiêu hoàn thành, xin hãy dừng lại để bảo toàn lợi nhuận."); return;
+                            } else if (currentLose >= targetLose) {
+                                isLockKpi = true; document.getElementById('victory-screen').style.display = 'flex';
+                                document.querySelector('.victory-text').innerHTML = '<i class="fas fa-times-circle" style="color:red;"></i><br>CẮT LỖ THÀNH CÔNG<br>DỪNG LẠI NGAY!';
+                                speak("Đã chạm ngưỡng cắt lỗ, hệ thống tạm khóa."); return;
                             }
                         }
                     }
 
                     phienCu = data.phien; 
-                    playBeep('scan'); // Phát âm thanh quét
                     
                     document.getElementById('robo-phien').innerText = "#" + data.phien;
-                    let el = document.getElementById('robo-kq'); let tyleEl = document.getElementById('robo-tyle');
+                    let el = document.getElementById('robo-kq'); 
+                    let advEl = document.getElementById('robo-advice');
                     
-                    el.innerHTML = '<i class="fas fa-fingerprint" style="color:var(--vip-gold); font-size:24px;"></i>';
-                    tyleEl.innerText = "Giải mã AI...";
+                    el.innerHTML = '<i class="fas fa-cog fa-spin" style="color:var(--cyan); font-size:24px;"></i>';
+                    advEl.innerText = "PHÂN TÍCH V15...";
 
-                    // VẼ BIỂU ĐỒ CHART
                     if(data.history && data.history.length > 0) {
                         let htmlChart = "";
-                        // Lấy 15 ván, đảo ngược lại để ván cũ bên trái, ván mới bên phải
                         let chartData = data.history.slice(0,15).reverse();
-                        chartData.forEach((h, index) => {
-                            let height = 5 + (index * 1.5); // Hiệu ứng lượn sóng nhẹ
+                        chartData.forEach((h) => {
+                            if(h.du_doan === "CHỜ CẦU") return;
+                            let height = h.status === "WIN" ? 15 : 8; 
                             let barClass = h.status === "WIN" ? "bar-win" : "bar-lose";
                             htmlChart += `<div class="chart-bar ${barClass}" style="height:${height}px;"></div>`;
                         });
@@ -344,10 +333,18 @@
 
                     setTimeout(() => {
                         el.innerText = data.du_doan; 
-                        tyleEl.innerText = "TỶ LỆ WIN: " + data.ti_le + "%";
-                        el.style.color = (data.du_doan === "TÀI" || data.du_doan === "CHẴN") ? "#ff3333" : "#fff";
+                        advEl.innerText = data.loi_khuyen;
+                        
+                        if(data.du_doan === "CHỜ CẦU") {
+                            el.style.color = "#FFD700";
+                            speak("Cầu loạn, nằm im chờ.");
+                        } else {
+                            el.style.color = (data.du_doan === "TÀI" || data.du_doan === "CHẴN") ? "#ff2a2a" : "#fff";
+                            speak("Đánh " + data.du_doan + ". " + data.loi_khuyen);
+                        }
+                        
                         isPredicting = false; 
-                    }, 4000);
+                    }, 3500);
                 }
             } catch (e) {}
         }
@@ -357,8 +354,8 @@
             if(json.status !== "success") return; 
             let htmlKeys = ""; 
             json.keys.forEach(k => { 
-                let btn = k[2] == 0 ? `<button class="cyber-btn" style="padding:5px; font-size:10px; margin:0; border-color:#ff3333; color:#ff3333; background:transparent;" onclick="actionKey('${k[0]}','ban')">KHÓA</button>` : `<button class="cyber-btn" style="padding:5px; font-size:10px; margin:0; border-color:#00ffcc; color:#00ffcc; background:transparent;" onclick="actionKey('${k[0]}','unban')">MỞ</button>`;
-                htmlKeys += `<div style="border-bottom:1px solid rgba(255,215,0,0.2); padding:10px 0;"><div style="display:flex; justify-content:space-between; align-items:center;"><b style="color:var(--vip-gold);">${k[0]}</b>${btn}</div><div style="font-size:10px; color:#aaa;">HSD: ${k[1]}</div><button class="cyber-btn" style="padding:5px; font-size:10px; margin-top:5px; width:100%; border-color:#555; background:transparent; color:#fff;" onclick="actionKey('${k[0]}','delete')">XÓA BỎ</button></div>`; 
+                let btn = k[2] == 0 ? `<button class="btn" style="padding:4px; font-size:10px; margin:0; width:50px; border-color:var(--red); color:var(--red); background:none;" onclick="actionKey('${k[0]}','ban')">KHÓA</button>` : `<button class="btn" style="padding:4px; font-size:10px; margin:0; width:50px; border-color:var(--cyan); color:var(--cyan); background:none;" onclick="actionKey('${k[0]}','unban')">MỞ</button>`;
+                htmlKeys += `<div style="border-bottom:1px solid rgba(255,215,0,0.2); padding:10px 0;"><div style="display:flex; justify-content:space-between; align-items:center;"><b style="color:var(--gold);">${k[0]}</b>${btn}</div><div style="font-size:10px; color:#aaa;">HSD: ${k[1]}</div><button class="btn" style="padding:4px; font-size:10px; margin-top:5px; width:100%; border-color:#555; background:none; color:#fff;" onclick="actionKey('${k[0]}','delete')">XÓA</button></div>`; 
             }); 
             document.getElementById('admin-keys').innerHTML = htmlKeys || "<i style='color:#555;'>Trống.</i>"; 
         }
@@ -367,7 +364,7 @@
             let dur = document.getElementById('key-duration').value; let customK = document.getElementById('custom-key-input').value.trim();
             let res = await fetch('/api/admin/create_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: currentKey, duration: dur, custom_key: customK}) });
             let json = await res.json();
-            if(json.status === "success") { prompt("Copy Key HUNGCUTO:", json.new_key); document.getElementById('custom-key-input').value = ""; loadAdminData(); } 
+            if(json.status === "success") { prompt("Copy Key:", json.new_key); document.getElementById('custom-key-input').value = ""; loadAdminData(); } 
             else alert("Lỗi: " + json.msg);
         }
 
