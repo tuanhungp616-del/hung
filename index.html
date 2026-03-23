@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HUNGCUTO NANO V17</title>
+    <title>HUNGCUTO V18 GOD MODE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #FFD700; --red: #ff2a2a; --bg: #070707; --panel: rgba(15, 15, 15, 0.9); --cyan: #00ffff; }
+        :root { --gold: #FFD700; --red: #ff2a2a; --bg: #070707; --panel: rgba(10, 5, 15, 0.9); --cyan: #00ffff; --matrix: #0f0;}
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Nunito', sans-serif; background: #000; color: #fff; overflow-x: hidden; min-height: 100vh; }
         
         .glass { background: var(--panel); border: 1px solid rgba(255,215,0,0.3); border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.9); backdrop-filter: blur(5px);}
         
-        header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; background: #000; border-bottom: 2px solid var(--gold); }
+        /* RADAR ĐA CỔNG CHẠY TRÊN CÙNG */
+        .radar-bar { width: 100%; background: #111; color: var(--gold); font-size: 10px; font-weight: bold; padding: 3px 0; border-bottom: 1px solid var(--red); display: flex; align-items: center;}
+        .radar-bar marquee { width: 100%; }
+
+        header { height: 50px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; background: #000; border-bottom: 2px solid var(--gold); }
         .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .logo-img { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--gold); }
         
         #auth-wrapper, .modal-overlay { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 999; background: rgba(0,0,0,0.95); }
         .auth-box { padding: 25px 20px; width: 90%; max-width: 320px; text-align: center; }
@@ -31,20 +34,27 @@
 
         #game-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: #000; }
         #game-frame { width: 100%; height: 100%; border: none; }
-        .close-game-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--red); border: 2px solid var(--red); padding: 5px 10px; border-radius: 6px; font-weight: 900; z-index: 2001; cursor:pointer; font-size: 12px;}
+        .close-game-btn { position: absolute; top: 35px; left: 10px; background: rgba(0,0,0,0.8); color: var(--red); border: 2px solid var(--red); padding: 5px 10px; border-radius: 6px; font-weight: 900; z-index: 2001; cursor:pointer; font-size: 12px;}
         
-        /* BẢNG LỊCH SỬ GÓC TRÁI (DƯỚI NÚT THOÁT) */
-        #left-history-panel { position: absolute; top: 50px; left: 10px; width: 130px; background: rgba(5,5,10,0.85); border: 1px solid var(--gold); border-radius: 8px; padding: 8px; z-index: 2001; font-size: 9px; max-height: 200px; overflow-y: auto; pointer-events: none; }
-        .hist-title { color: var(--gold); font-weight: 900; text-align: center; border-bottom: 1px dashed var(--gold); padding-bottom: 3px; margin-bottom: 5px; font-size: 10px;}
+        /* LỊCH SỬ GÓC TRÁI */
+        #left-history-panel { position: absolute; top: 75px; left: 10px; width: 130px; background: rgba(5,5,10,0.85); border: 1px solid var(--gold); border-radius: 8px; padding: 8px; z-index: 2001; font-size: 9px; max-height: 200px; overflow-y: auto; pointer-events: none; }
+        .hist-title { color: var(--gold); font-weight: 900; text-align: center; border-bottom: 1px dashed var(--gold); padding-bottom: 3px; margin-bottom: 5px;}
         .hist-row { display: flex; justify-content: space-between; margin-bottom: 3px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2px;}
-        .hist-win { color: #00ffcc; font-weight: bold;}
-        .hist-lose { color: var(--red); font-weight: bold;}
+        .hist-win { color: #00ffcc; font-weight: bold;} .hist-lose { color: var(--red); font-weight: bold;}
 
-        /* SA BÀN ROBOT NANO (THU NHỎ LẠI) */
-        #draggable-robot { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); z-index: 2005; width: 240px; }
+        /* CHAT VIP GÓC PHẢI */
+        #vip-chat-panel { position: absolute; top: 75px; right: 10px; width: 140px; background: rgba(5,5,10,0.85); border: 1px solid var(--cyan); border-radius: 8px; padding: 8px; z-index: 2001; display: flex; flex-direction: column; }
+        .chat-title { color: var(--cyan); font-weight: 900; text-align: center; border-bottom: 1px solid var(--cyan); padding-bottom: 3px; font-size: 10px;}
+        .chat-messages { flex: 1; overflow-y: hidden; font-size: 9px; color: #ccc; margin-top: 5px; min-height: 80px;}
+        .chat-msg { margin-bottom: 4px; line-height: 1.2;}
+        .user-boss { color: var(--gold); font-weight: bold; }
+        .user-mem { color: var(--cyan); font-weight: bold; }
+
+        /* SA BÀN ROBOT NANO */
+        #draggable-robot { position: absolute; top: 25%; left: 50%; transform: translateX(-50%); z-index: 2005; width: 240px; }
         .robo-dialog { padding: 10px; width: 100%; position: relative; z-index: 1; border: 2px solid var(--gold); border-radius: 10px; background: rgba(10,5,15,0.95); display: flex; flex-direction: column; align-items: center; }
         
-        .header-phien { font-size: 12px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: 1px;}
+        .header-phien { font-size: 12px; font-weight: 900; color: #fff; margin-bottom: 5px; letter-spacing: 1px;}
         .phien-id { color: var(--gold); }
 
         .battle-board { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0; }
@@ -56,9 +66,12 @@
         .center-hub { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; width: 80px; }
         .robo-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--gold); box-shadow: 0 0 10px var(--gold); background: #000; z-index: 5;}
         
-        .countdown-ring { margin-top: 5px; font-size: 14px; font-family: 'Courier New'; font-weight: 900; color: #00ffcc; text-shadow: 0 0 5px #00ffcc; background: rgba(0,255,204,0.1); border: 1px solid #00ffcc; padding: 2px 10px; border-radius: 10px; display: none;}
+        .countdown-ring { margin-top: 5px; font-size: 14px; font-family: 'Share Tech Mono', monospace; font-weight: 900; color: #00ffcc; text-shadow: 0 0 5px #00ffcc; background: rgba(0,255,204,0.1); border: 1px solid #00ffcc; padding: 2px 10px; border-radius: 10px; display: none;}
+        
+        /* BẢNG BẺ KHÓA MD5 */
+        .md5-cracker { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--matrix); text-align: center; margin-top: 5px; height: 12px; overflow: hidden; display: none; text-shadow: 0 0 5px var(--matrix);}
 
-        .advice-text { color: var(--gold); font-size: 10px; font-weight: 900; text-transform: uppercase; margin-top: 8px; width: 100%; text-align: center;}
+        .advice-text { color: var(--gold); font-size: 10px; font-weight: 900; text-transform: uppercase; margin-top: 5px; width: 100%; text-align: center;}
         
         .kpi-inline { display: flex; justify-content: space-between; width: 100%; font-size: 9px; font-weight: bold; color: #aaa; margin-top: 5px; border-top: 1px dashed #444; padding-top: 5px;}
         .kpi-win { color: #00ffcc; } .kpi-lose { color: var(--red); }
@@ -71,7 +84,7 @@
         
         #victory-screen { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.95); z-index: 50; border-radius: 10px; flex-direction:column; justify-content:center; align-items:center; }
         .victory-text { color: var(--gold); font-family: 'Playfair Display'; font-size: 16px; font-weight: 900; text-align: center; }
-        .voice-toggle { position: absolute; top: 10px; right: 10px; color: var(--gold); font-size: 16px; cursor: pointer; z-index: 2001;}
+        .voice-toggle { position: absolute; top: 35px; right: 10px; color: var(--gold); font-size: 16px; cursor: pointer; z-index: 2001;}
     </style>
 </head>
 <body>
@@ -79,12 +92,28 @@
     <div id="stealth-overlay"><iframe id="stealth-frame" src="https://vnexpress.net"></iframe></div>
 
     <div id="game-overlay">
+        <div class="radar-bar">
+            <i class="fas fa-satellite-dish" style="margin:0 10px; color:var(--red); animation: flash 1s infinite;"></i>
+            <marquee scrollamount="4">
+                🚨 RADA HỆ THỐNG V18: BETVIP TÀI XỈU (BỆT 4 TÀI) - LC79 MD5 (CẦU 1-1 ỔN ĐỊNH) - LC79 XÓC ĐĨA (CHU KỲ CHẴN) - CHỜ TÍN HIỆU...
+            </marquee>
+        </div>
+
         <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-times"></i> ĐÓNG</button>
         <i class="fas fa-volume-up voice-toggle" id="btn-voice" onclick="toggleVoice()"></i>
         
         <div id="left-history-panel">
-            <div class="hist-title">LỊCH SỬ AI</div>
+            <div class="hist-title">LỊCH SỬ AI V18</div>
             <div id="left-history-content"><i style="color:#777;">Đang tải...</i></div>
+        </div>
+
+        <div id="vip-chat-panel">
+            <div class="chat-title"><i class="fas fa-users"></i> VIP LOUNGE</div>
+            <div class="chat-messages" id="chat-box">
+                <div class="chat-msg"><span class="user-boss">[CHỦ TỊCH] Hưng:</span> Anh em chú ý vào đều tay nhé!</div>
+                <div class="chat-msg"><span class="user-mem">VIP_User99:</span> Ok sếp ơi.</div>
+                <div class="chat-msg"><span class="user-mem">HoangGia:</span> Theo sếp húp no luôn!</div>
+            </div>
         </div>
 
         <iframe id="game-frame" src=""></iframe>
@@ -104,7 +133,9 @@
                     <div class="side-box side-xiu" id="box-xiu">XỈU</div>
                 </div>
                 
-                <div class="advice-text" id="robo-advice"><i class="fas fa-sync fa-spin"></i> KẾT NỐI...</div>
+                <div class="md5-cracker" id="md5-screen">Decrypting Hash...</div>
+
+                <div class="advice-text" id="robo-advice"><i class="fas fa-sync fa-spin"></i> KẾT NỐI V18...</div>
                 
                 <div class="kpi-inline">
                     <span>W: <span class="kpi-win" id="live-win">0</span>/<span id="target-win-show">5</span></span>
@@ -117,8 +148,8 @@
     <div id="auth-wrapper">
         <div class="auth-box glass">
             <div class="logo" style="justify-content:center; margin-bottom:10px; font-size:2rem;"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png" style="width:50px; height:50px;"></div>
-            <div style="font-family:'Playfair Display'; font-size:1.5rem; color:var(--gold); font-weight:900;">HUNGCUTO NANO</div>
-            <div style="font-size: 9px; color: #888; margin-bottom: 20px; letter-spacing: 2px;">V17 COMPACT EDITION</div>
+            <div style="font-family:'Playfair Display'; font-size:1.5rem; color:var(--gold); font-weight:900;">HUNGCUTO V18</div>
+            <div style="font-size: 9px; color: #888; margin-bottom: 20px; letter-spacing: 2px;">GOD MODE EDITION</div>
             
             <input type="password" id="auth-key" class="input-box" placeholder="NHẬP KEY: hungadmin11">
             <button class="btn" onclick="verifyKey()"><i class="fas fa-fingerprint"></i> KÍCH HOẠT</button>
@@ -127,7 +158,7 @@
     </div>
 
     <header id="main-header" style="display:none;">
-        <div class="logo" onclick="toggleStealth()"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"> V17 NANO</div>
+        <div class="logo" onclick="toggleStealth()"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"> V18 GOD MODE</div>
         <div style="color:var(--red); cursor:pointer; font-weight:bold; font-size:12px;" onclick="logout()"><i class="fas fa-power-off"></i> THOÁT</div>
     </header>
 
@@ -170,10 +201,10 @@
             <div id="admin-keys" style="margin-top:10px; text-align:left; max-height:150px; overflow-y:auto;"></div>
         </div>
     </div>
-    <script>
+        <script>
         let currentKey = localStorage.getItem("royal_key") || ""; 
         let scanInterval; let phienCu = ""; let activeGame = ""; 
-        let isPredicting = false; let countdownTimer;
+        let isPredicting = false; let countdownTimer; let md5Interval;
         let targetWin = 5, targetLose = 3, currentWin = 0, currentLose = 0, isLockKpi = false;
         let isVoiceOn = true;
 
@@ -204,6 +235,35 @@
             }
         });
 
+        // GIẢ LẬP HACK MD5
+        function startMD5Cracker() {
+            let md5El = document.getElementById('md5-screen');
+            md5El.style.display = 'block';
+            let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+            md5Interval = setInterval(() => {
+                let str = "0x" + Array.from({length: 12}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+                md5El.innerText = "Hash: " + str;
+            }, 50);
+        }
+        function stopMD5Cracker() {
+            clearInterval(md5Interval);
+            document.getElementById('md5-screen').style.display = 'none';
+        }
+
+        // GIẢ LẬP CHAT VIP TỰ ĐỘNG CHẠY
+        setInterval(() => {
+            let msgs = [
+                "Chuẩn bị bẻ cầu anh em ơi!", "Sếp phán quá chuẩn", "Húp trọn tay này", "Đu bệt thôi!", "Tín hiệu xanh kìa", "Vào nhẹ tay thăm dò nha"
+            ];
+            let chatBox = document.getElementById('chat-box');
+            let newMsg = document.createElement('div');
+            newMsg.className = "chat-msg";
+            newMsg.innerHTML = `<span class="user-mem">VIP_Khach${Math.floor(Math.random()*90)+10}:</span> ${msgs[Math.floor(Math.random()*msgs.length)]}`;
+            chatBox.appendChild(newMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            if(chatBox.children.length > 5) chatBox.removeChild(chatBox.firstChild);
+        }, 8000);
+
         if(currentKey) { document.getElementById('auth-key').value = currentKey; verifyKey(true); }
 
         async function verifyKey(isAuto = false) {
@@ -221,7 +281,7 @@
                         document.getElementById('main-header').style.display = 'flex'; 
                         document.getElementById('main-dashboard').style.display = 'block';
                         if(json.role === "admin") { document.getElementById('btn-admin').style.display = 'block'; loadAdminData(); }
-                        if(!isAuto) speak("Vào hệ thống");
+                        if(!isAuto) speak("Truy cập chế độ siêu cấp V18");
                     } else { 
                         if(!isAuto) document.getElementById('auth-msg').innerText = json.msg;
                         else { localStorage.removeItem("royal_key"); currentKey = ""; }
@@ -247,11 +307,11 @@
 
             if (url !== '') document.getElementById('game-frame').src = url;
             activeGame = gameId; phienCu = ""; isPredicting = false; clearInterval(scanInterval);
-            clearInterval(countdownTimer); document.getElementById('timer-15s').style.display = 'none';
+            clearInterval(countdownTimer); document.getElementById('timer-15s').style.display = 'none'; stopMD5Cracker();
             
             document.getElementById('game-overlay').style.display = 'block';
             document.getElementById('robo-phien').innerText = "ĐANG TẢI...";
-            document.getElementById('robo-advice').innerText = "KẾT NỐI API...";
+            document.getElementById('robo-advice').innerText = "KẾT NỐI API V18...";
             document.getElementById('left-history-content').innerHTML = '<i style="color:#777;">Đang lấy dữ liệu...</i>';
             
             document.getElementById('box-tai').innerText = (gameId === 'lc79_xd') ? "CHẴN" : "TÀI";
@@ -263,7 +323,7 @@
         }
 
         function closeGame() {
-            activeGame = ""; phienCu = ""; clearInterval(scanInterval); clearInterval(countdownTimer); isPredicting = false;
+            activeGame = ""; phienCu = ""; clearInterval(scanInterval); clearInterval(countdownTimer); stopMD5Cracker(); isPredicting = false;
             document.getElementById('game-overlay').style.display = 'none';
             document.getElementById('game-frame').src = '';
         }
@@ -308,7 +368,7 @@
                     
                     if(phienCu !== "" && data.history && data.history.length > 0) {
                         let latestResult = data.history[0];
-                        if(latestResult.phien == phienCu && latestResult.du_doan !== "CHỜ") {
+                        if(latestResult.phien == phienCu && latestResult.du_doan !== "CHỜ CẦU") {
                             if(latestResult.status === "WIN") { currentWin++; document.getElementById('live-win').innerText = currentWin;}
                             else { currentLose++; document.getElementById('live-lose').innerText = currentLose; }
                             
@@ -322,12 +382,11 @@
                     phienCu = data.phien; 
                     document.getElementById('robo-phien').innerText = data.phien; 
                     
-                    // CẬP NHẬT BẢNG LỊCH SỬ GÓC TRÁI (Lấy 8 ván gần nhất)
                     if(data.history && data.history.length > 0) {
                         let htmlHist = "";
                         let histToDisplay = data.history.slice(0, 8);
                         histToDisplay.forEach(h => {
-                            if(h.du_doan === "CHỜ") return;
+                            if(h.du_doan === "CHỜ CẦU") return;
                             let colorClass = h.status === "WIN" ? "hist-win" : "hist-lose";
                             htmlHist += `<div class="hist-row"><span>#${h.phien.toString().slice(-4)}</span> <span>${h.du_doan}</span> <span class="${colorClass}">${h.status}</span></div>`;
                         });
@@ -338,12 +397,16 @@
                     document.getElementById('timer-15s').style.display = 'none';
                     clearInterval(countdownTimer);
                     document.getElementById('robo-advice').innerText = "AI ĐANG TÍNH...";
+                    
+                    // Nếu cổng có chữ md5 thì bật hiệu ứng crack
+                    if(activeGame.includes('md5')) startMD5Cracker();
 
                     setTimeout(() => {
+                        stopMD5Cracker();
                         let result = data.du_doan;
-                        document.getElementById('robo-advice').innerText = data.ti_le + "% | " + data.loi_khuyen;
+                        document.getElementById('robo-advice').innerText = data.loi_khuyen;
                         
-                        if(result === "CHỜ") {
+                        if(result === "CHỜ CẦU") {
                             speak("Cầu loạn, nằm im.");
                         } else {
                             if(result === "TÀI" || result === "CHẴN") document.getElementById('box-tai').classList.add('active');
@@ -352,7 +415,7 @@
                             start15sTimer();
                         }
                         isPredicting = false; 
-                    }, 3000);
+                    }, 3500);
                 }
             } catch (e) {}
         }
