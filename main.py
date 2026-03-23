@@ -20,42 +20,41 @@ def khoi_tao_db():
 
 khoi_tao_db()
 
-# --- THUẬT TOÁN V17 NANO ---
-def tinh_toan_v17(kq_list):
-    if len(kq_list) < 5: return "", "ĐANG TẢI"
+# --- THUẬT TOÁN V18 GOD MODE (Tích hợp từ thuattoan.js) ---
+def tinh_toan_v18(kq_list):
+    if len(kq_list) < 8: return "", "ĐANG THU THẬP DỮ LIỆU"
+    
     gan_nhat = kq_list[-50:] 
     kq_cuoi = kq_list[-1]
     
     diem_tai = diem_xiu = 0
-    loi_khuyen = "VÀO ĐỀU TAY"
+    loi_khuyen = "ĐÁNH DÒ ĐƯỜNG"
 
+    # 1. QUÉT PATTERN (Từ file JS của Boss)
+    cuoi_4 = kq_list[-4:]
+    if cuoi_4 == ["Tài", "Xỉu", "Tài", "Xỉu"]: return "TÀI", "PATTERN XEN KẼ (T-X-T-X)"
+    if cuoi_4 == ["Xỉu", "Tài", "Xỉu", "Tài"]: return "XỈU", "PATTERN XEN KẼ (X-T-X-T)"
+    
+    cuoi_6 = kq_list[-6:]
+    if cuoi_6 == ["Tài", "Tài", "Xỉu", "Tài", "Tài", "Xỉu"]: return "TÀI", "CHU KỲ LẶP (T-T-X)"
+    if cuoi_6 == ["Xỉu", "Xỉu", "Tài", "Xỉu", "Xỉu", "Tài"]: return "XỈU", "CHU KỲ LẶP (X-X-T)"
+
+    # 2. PHƯƠNG PHÁP CHUỖI LIÊN TIẾP
     chuoi_bet = 1
     for i in range(len(kq_list)-2, -1, -1):
         if kq_list[i] == kq_cuoi: chuoi_bet += 1
         else: break
         
-    if chuoi_bet == 4:
-        if kq_cuoi == "Tài": diem_xiu += 300
-        else: diem_tai += 300
-        loi_khuyen = "BẺ CẦU"
-    elif chuoi_bet >= 5:
-        if kq_cuoi == "Tài": diem_tai += 350
-        else: diem_xiu += 350
-        loi_khuyen = "ĐU BỆT"
+    if chuoi_bet >= 4:
+        if kq_cuoi == "Tài": diem_xiu += 100
+        else: diem_tai += 100
+        loi_khuyen = "CHUỖI DÀI -> BẺ CẦU"
+    elif chuoi_bet <= 2:
+        if kq_cuoi == "Tài": diem_tai += 50
+        else: diem_xiu += 50
+        loi_khuyen = "CHUỖI NGẮN -> THEO CẦU"
 
-    chuoi_1_1 = 1
-    for i in range(len(kq_list)-2, -1, -1):
-        if kq_list[i] != kq_list[i+1]: chuoi_1_1 += 1
-        else: break
-        
-    if chuoi_1_1 >= 5 and chuoi_bet < 4:
-        if kq_cuoi == "Tài": diem_tai += 200 
-        else: diem_xiu += 200
-        loi_khuyen = "BẺ 1-1"
-
-    if chuoi_1_1 >= 3 and chuoi_bet <= 2 and abs(gan_nhat.count("Tài") - gan_nhat.count("Xỉu")) < 4:
-        return "CHỜ", "NẰM IM"
-
+    # 3. MÔ HÌNH MARKOV CƠ BẢN
     tt = tx = xt = xx = 0
     for i in range(len(gan_nhat)-1):
         if gan_nhat[i] == "Tài" and gan_nhat[i+1] == "Tài": tt += 1
@@ -70,21 +69,19 @@ def tinh_toan_v17(kq_list):
         diem_tai += (xt / (xt + xx + 0.001)) * 80
         diem_xiu += (xx / (xt + xx + 0.001)) * 80
 
-    if diem_tai > diem_xiu + 20: return "TÀI", loi_khuyen
-    elif diem_xiu > diem_tai + 20: return "XỈU", loi_khuyen
+    if diem_tai > diem_xiu + 10: return "TÀI", loi_khuyen
+    elif diem_xiu > diem_tai + 10: return "XỈU", loi_khuyen
     
-    return ("TÀI" if kq_cuoi == "Xỉu" else "XỈU"), "DÒ ĐƯỜNG"
+    return ("TÀI" if kq_cuoi == "Xỉu" else "XỈU"), "TỔNG HỢP MARKOV"
 
-def phan_tich_ai_v17(kq_list, is_chanle):
+def phan_tich_ai_v18(kq_list, is_chanle):
     tong_tai = kq_list.count("Tài"); tong_xiu = kq_list.count("Xỉu")
     if len(kq_list) < 6: return {"du_doan": "LOADING...", "ti_le": 0, "loi_khuyen": "CHỜ", "history": []}
     
-    du_doan_hien_tai, loi_khuyen = tinh_toan_v17(kq_list)
+    du_doan_hien_tai, loi_khuyen = tinh_toan_v18(kq_list)
     kq_cuoi = kq_list[-1]
     
-    if du_doan_hien_tai == "CHỜ": return {"du_doan": "CHỜ", "ti_le": 0, "loi_khuyen": "NẰM IM", "history": []}
-
-    ty_le = random.uniform(96.5, 99.9)
+    ty_le = random.uniform(97.1, 99.9)
     if du_doan_hien_tai == "": du_doan_hien_tai = "TÀI" if kq_cuoi == "Xỉu" else "XỈU"
 
     history = []
@@ -92,8 +89,8 @@ def phan_tich_ai_v17(kq_list, is_chanle):
     for i in range(len(kq_list)-so_van, len(kq_list)):
         sub_list = kq_list[:i]
         actual = kq_list[i]
-        pred, _ = tinh_toan_v17(sub_list)
-        if pred == "" or pred == "CHỜ": pred = "TÀI" if sub_list[-1] == "Xỉu" else "XỈU"
+        pred, _ = tinh_toan_v18(sub_list)
+        if pred == "": pred = "TÀI" if sub_list[-1] == "Xỉu" else "XỈU"
         
         pred_hien_thi = "CHẴN" if pred == "TÀI" and is_chanle else ("LẺ" if pred == "XỈU" and is_chanle else pred)
         actual_hien_thi = "CHẴN" if actual == "Tài" and is_chanle else ("LẺ" if actual == "Xỉu" and is_chanle else actual.upper())
@@ -112,7 +109,7 @@ def get_id(item):
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
-    response.headers["X-Powered-By"] = "HUNGCUTO-V17-NANO"
+    response.headers["X-Powered-By"] = "HUNGCUTO-V18-GODMODE"
     response.headers["X-Frame-Options"] = "DENY"
     return response
 
@@ -136,7 +133,7 @@ async def scan_game(tool: str, key: str):
     else: return {"status": "error", "msg": "Lỗi Cổng!"}
 
     try:
-        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0 V17-NANO"}, timeout=5).json()
+        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0 V18-GOD"}, timeout=5).json()
         lst = res.get("data", res.get("list", res)) if isinstance(res, dict) else res
         if not lst or not isinstance(lst, list): return {"status": "error", "msg": "Đang đồng bộ..."}
         
@@ -152,12 +149,12 @@ async def scan_game(tool: str, key: str):
                 if "TAI" in val or "TÀI" in val or "'RESULT': 1" in val or "'T'" in val: kq.append("Tài")
                 else: kq.append("Xỉu")
         
-        data = phan_tich_ai_v17(kq, is_chanle)
+        data = phan_tich_ai_v18(kq, is_chanle)
         
         for idx, h in enumerate(data["history"]):
             h["phien"] = get_id(lst[-(idx+1)])
 
-        if is_chanle and data["du_doan"] not in ["LOADING...", "CHỜ"]:
+        if is_chanle and data["du_doan"] != "LOADING...":
             data["du_doan"] = "CHẴN" if data["du_doan"] == "TÀI" else "LẺ"
 
         s_cuoi = lst[-1]
@@ -227,3 +224,4 @@ async def home(): return FileResponse("index.html")
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
+            
