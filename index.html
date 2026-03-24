@@ -3,134 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>V22 MAX LEVEL</title>
+    <title>V31 GOD EMPEROR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #FFD700; --red: #ff003c; --bg: #030303; --panel: rgba(10, 10, 10, 0.85); --cyan: #00ffff; --matrix: #0f0;}
+        :root { --gold: #FFD700; --red: #ff003c; --bg: #050505; --panel: rgba(5, 5, 5, 0.95); --cyan: #00ffff; --matrix: #0f0; --white: #fff;}
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Nunito', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; min-height: 100vh; position: relative; }
         
-        #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3; }
-        .glass { background: var(--panel); border: 1px solid rgba(255,215,0,0.2); border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.9); backdrop-filter: blur(8px);}
-        .radar-bar { width: 100%; background: #000; color: var(--gold); font-size: 10px; font-weight: bold; padding: 4px 0; border-bottom: 1px solid var(--gold); display: flex; align-items: center; box-shadow: 0 2px 10px rgba(255,215,0,0.2);}
+        #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.35; }
+        .glass { background: var(--panel); border: 1px solid rgba(0,255,255,0.3); border-radius: 12px; box-shadow: 0 0 25px rgba(0,255,255,0.15); backdrop-filter: blur(10px);}
         
-        header { height: 50px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; background: rgba(0,0,0,0.8); border-bottom: 1px solid var(--gold); }
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); display: flex; align-items: center; gap: 8px; cursor: pointer;}
-        .nav-tabs { display: flex; justify-content: space-around; background: rgba(0,0,0,0.8); border-bottom: 1px solid #333; padding: 10px 0;}
-        .nav-item { font-size: 11px; font-weight: bold; color: #888; cursor: pointer; text-transform: uppercase; transition: 0.3s;}
-        .nav-item.active { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); border-bottom: 2px solid var(--cyan); padding-bottom: 5px;}
+        .radar-bar { width: 100%; background: #000; color: var(--matrix); font-family: 'Share Tech Mono'; font-size: 11px; font-weight: bold; padding: 5px 0; border-bottom: 1px solid var(--matrix); display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,255,0,0.3);}
+        
+        header { height: 50px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--cyan); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cyan); display: flex; align-items: center; gap: 8px; text-shadow: 0 0 15px var(--cyan);}
+        
+        .nav-tabs { display: flex; justify-content: space-around; background: rgba(0,0,0,0.95); border-bottom: 1px solid #333; padding: 10px 0;}
+        .nav-item { font-size: 12px; font-weight: bold; color: #666; cursor: pointer; text-transform: uppercase; transition: 0.3s;}
+        .nav-item.active { color: var(--gold); text-shadow: 0 0 8px var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 5px;}
 
         .view-section { display: none; padding: 15px; max-width: 500px; margin: 0 auto; animation: fadeIn 0.4s;}
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         #auth-wrapper { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 999; background: rgba(0,0,0,0.95); }
-        .auth-box { padding: 30px 20px; width: 90%; max-width: 320px; text-align: center; border: 1px solid var(--cyan); box-shadow: 0 0 30px rgba(0,255,255,0.2);}
+        .auth-box { padding: 30px 20px; width: 90%; max-width: 320px; text-align: center; border: 2px solid var(--gold); box-shadow: 0 0 40px rgba(255,215,0,0.3); border-radius: 15px;}
 
-        .cate-title { font-size: 1rem; color: var(--gold); margin: 10px 0; text-transform: uppercase; border-left: 3px solid var(--red); padding-left: 8px; font-family: 'Playfair Display';}
-        .btn { padding: 12px; border: 1px solid var(--gold); border-radius: 6px; cursor: pointer; font-family: 'Nunito'; font-size: 12px; font-weight: 900; color: #000; width: 100%; margin-bottom: 10px; background: linear-gradient(90deg, #FFD700, #DAA520); text-transform: uppercase; transition: 0.2s;}
+        .cate-title { font-size: 1rem; color: var(--cyan); margin: 10px 0; text-transform: uppercase; border-left: 3px solid var(--cyan); padding-left: 8px; font-family: 'Playfair Display';}
+        .btn { padding: 12px; border: 1px solid var(--cyan); border-radius: 8px; cursor: pointer; font-family: 'Nunito'; font-size: 12px; font-weight: 900; color: #000; width: 100%; margin-bottom: 10px; background: linear-gradient(90deg, #00ffff, #0088ff); text-transform: uppercase; transition: 0.2s; box-shadow: 0 0 15px rgba(0,255,255,0.4);}
         .btn:active { transform: scale(0.95); }
-        .btn-dark { background: #111; color: var(--gold); }
-        .btn-red { background: linear-gradient(90deg, #ff003c, #990000); border-color: var(--red); color: #fff; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .input-box { width: 100%; background: #050505; border: 1px solid #333; border-radius: 6px; color: var(--cyan); padding: 12px; text-align: center; margin-bottom: 15px; font-weight: bold; font-family: 'Share Tech Mono'; letter-spacing: 2px;}
+        .btn-dark { background: #111; color: var(--cyan); box-shadow: none; border-color:#333;}
+        .btn-red { background: linear-gradient(90deg, #ff003c, #990000); border-color: var(--red); color: #fff; box-shadow: 0 0 15px rgba(255,0,60,0.4);}
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-box { width: 100%; background: #050505; border: 1px solid #444; border-radius: 8px; color: var(--gold); padding: 14px; text-align: center; margin-bottom: 15px; font-weight: bold; font-family: 'Share Tech Mono'; letter-spacing: 2px;}
 
-        #game-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: #000; }
+        #game-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: #000; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
         #game-frame { width: 100%; height: 100%; border: none; }
-        .close-game-btn { position: absolute; top: 35px; left: 10px; background: rgba(0,0,0,0.8); color: var(--red); border: 1px solid var(--red); padding: 5px 10px; border-radius: 6px; font-weight: 900; z-index: 2001; cursor:pointer; font-size: 11px;}
         
-        /* AUTO-BOT GÓC TRÁI (Đã gỡ bỏ Lịch Sử) */
-        #auto-bot-panel { position: absolute; top: 70px; left: 10px; width: 150px; background: rgba(10,5,15,0.9); border: 1px solid var(--cyan); border-radius: 8px; padding: 8px; z-index: 2001; font-family: 'Share Tech Mono'; }
-        .bot-title { color: var(--cyan); font-weight: 900; text-align: center; border-bottom: 1px solid var(--cyan); font-size: 10px; padding-bottom:3px; margin-bottom:5px;}
-        .bot-bal { font-size: 14px; color: var(--gold); text-align: center; font-weight: bold; margin-bottom: 5px; text-shadow: 0 0 5px var(--gold);}
-        .bot-status { font-size: 9px; color: #aaa; margin-bottom: 5px; line-height: 1.3;}
-        .bot-log { font-size: 8px; color: var(--matrix); border-top: 1px dashed #444; padding-top: 5px; margin-top: 5px;}
-
-        /* SA BÀN ROBOT GIỮA */
-        #draggable-robot { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); z-index: 2005; width: 230px; }
-        .robo-dialog { padding: 10px; width: 100%; position: relative; z-index: 1; border: 2px solid var(--gold); border-radius: 12px; background: rgba(5,5,5,0.95); display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 30px rgba(255,215,0,0.15);}
-        .header-phien { font-size: 11px; font-weight: 900; color: #ccc; margin-bottom: 5px; letter-spacing: 1px;}
-        .battle-board { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0; }
-        .side-box { width: 45px; height: 55px; border-radius: 8px; border: 1px solid #333; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Playfair Display'; font-size: 14px; font-weight: 900; color: #444; background: rgba(0,0,0,0.9); opacity: 0.5; transition: 0.2s;}
-        .side-tai.active { opacity: 1; color: var(--red); border-color: var(--red); background: rgba(255,0,60,0.2); box-shadow: 0 0 15px rgba(255,0,60,0.8); text-shadow: 0 0 5px var(--red); transform: scale(1.05); }
-        .side-xiu.active { opacity: 1; color: var(--cyan); border-color: var(--cyan); background: rgba(0,255,255,0.2); box-shadow: 0 0 15px rgba(0,255,255,0.8); text-shadow: 0 0 5px var(--cyan); transform: scale(1.05); }
-        .center-hub { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; width: 75px; }
-        .robo-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--gold); box-shadow: 0 0 15px var(--gold); background: #000; z-index: 5;}
-        .countdown-ring { margin-top: 5px; font-size: 12px; font-family: 'Share Tech Mono'; font-weight: 900; color: var(--matrix); text-shadow: 0 0 5px var(--matrix); background: rgba(0,255,0,0.1); border: 1px solid var(--matrix); padding: 2px 10px; border-radius: 10px; display: none;}
-        .md5-cracker { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--matrix); text-align: center; margin-top: 5px; height: 12px; overflow: hidden; display: none; text-shadow: 0 0 5px var(--matrix);}
-        .advice-text { color: var(--gold); font-size: 10px; font-weight: 900; text-transform: uppercase; margin-top: 5px; width: 100%; text-align: center;}
+        .close-game-btn { position: absolute; top: 40px; left: 10px; background: rgba(0,0,0,0.9); color: var(--red); border: 1px solid var(--red); padding: 6px 12px; border-radius: 6px; font-weight: 900; z-index: 2001; cursor:pointer; font-size: 11px;}
         
-        .kpi-inline { display: flex; justify-content: space-between; width: 100%; font-size: 9px; font-weight: bold; color: #888; margin-top: 5px; border-top: 1px dashed #333; padding-top: 5px;}
-        .kpi-win { color: var(--matrix); } .kpi-lose { color: var(--red); }
-        .setup-kpi-panel { background: rgba(0,0,0,0.8); padding: 10px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px; }
-        .kpi-input { width: 40px; background: #000; border: 1px solid var(--gold); color: #fff; padding: 2px; text-align: center; font-weight: bold; border-radius: 4px; font-size:10px;}
+        .drag-handle { width: 100%; text-align: center; color: #666; font-size: 18px; padding-bottom: 5px; cursor: grab; border-bottom: 1px dashed #333; margin-bottom: 10px;}
+        .drag-handle:active { cursor: grabbing; color: var(--cyan); }
 
-        #victory-screen { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.95); z-index: 50; border-radius: 10px; flex-direction:column; justify-content:center; align-items:center; }
-        .victory-text { color: var(--gold); font-family: 'Playfair Display'; font-size: 16px; font-weight: 900; text-align: center; }
-        .voice-toggle { position: absolute; top: 35px; right: 10px; color: var(--gold); font-size: 16px; cursor: pointer; z-index: 2001;}
+        #bridge-detect-panel { position: absolute; top: 40px; right: 10px; width: 160px; background: rgba(5,5,5,0.95); border: 1px solid var(--cyan); border-radius: 10px; padding: 10px; z-index: 2001; font-family: 'Share Tech Mono'; box-shadow: 0 0 20px rgba(0,255,255,0.2);}
+        .bridge-title { color: var(--cyan); font-weight: 900; text-align: center; font-size: 11px; margin-bottom:8px; letter-spacing: 1px;}
+        .bridge-name { font-size: 12px; color: var(--gold); font-weight: bold; text-align: center; line-height: 1.4; text-shadow: 0 0 8px var(--gold); animation: pulse 1.5s infinite;}
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-        #stealth-overlay { display: none; position: fixed; inset: 0; z-index: 9999; background: #fff; }
-        #stealth-frame { width: 100%; height: 100%; border: none; }
+        #draggable-robot { position: absolute; top: 35%; left: 50%; transform: translateX(-50%); z-index: 2005; width: 250px; }
+        .robo-dialog { padding: 12px 15px 15px 15px; width: 100%; position: relative; z-index: 1; border: 2px solid var(--cyan); border-radius: 15px; background: rgba(5,5,5,0.98); display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 50px rgba(0,255,255,0.25);}
+        
+        .header-phien { font-size: 13px; font-weight: 900; color: #fff; margin-bottom: 12px; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 5px; width:100%; text-align:center;}
+        .phien-id { color: var(--gold); text-shadow: 0 0 8px var(--gold);}
+
+        .battle-board { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0; margin-bottom: 10px;}
+        
+        .side-box { width: 55px; height: 65px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Playfair Display'; font-size: 18px; font-weight: 900; color: #555; background: rgba(0,0,0,0.9); opacity: 0.4; transition: 0.3s;}
+        .side-tai.active { opacity: 1; color: var(--red); border-color: var(--red); background: rgba(255,0,60,0.15); box-shadow: 0 0 25px rgba(255,0,60,0.8); text-shadow: 0 0 10px var(--red); transform: scale(1.1); }
+        .side-xiu.active { opacity: 1; color: var(--cyan); border-color: var(--cyan); background: rgba(0,255,255,0.15); box-shadow: 0 0 25px rgba(0,255,255,0.8); text-shadow: 0 0 10px var(--cyan); transform: scale(1.1); }
+        .side-chan.active { opacity: 1; color: var(--red); border-color: var(--red); background: rgba(255,0,60,0.15); box-shadow: 0 0 25px rgba(255,0,60,0.8); text-shadow: 0 0 10px var(--red); transform: scale(1.1); }
+        .side-le.active { opacity: 1; color: var(--white); border-color: var(--white); background: rgba(255,255,255,0.15); box-shadow: 0 0 25px rgba(255,255,255,0.8); text-shadow: 0 0 10px var(--white); transform: scale(1.1); }
+
+        .center-hub { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; width: 85px; }
+        .robo-img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--cyan); box-shadow: 0 0 20px var(--cyan); background: #000; z-index: 5;}
+        
+        .countdown-ring { margin-top: -10px; font-size: 14px; font-family: 'Share Tech Mono'; font-weight: 900; background: rgba(0,0,0,0.9); border: 1px solid #444; padding: 4px 15px; border-radius: 12px; display: none; z-index:10;}
+
+        .confidence-container { width: 100%; background: #111; border-radius: 10px; height: 14px; margin-top: 5px; position: relative; border: 1px solid #333; overflow: hidden; display: none;}
+        .confidence-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), var(--red)); transition: width 1s ease-in-out; }
+        .confidence-text { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); font-size: 10px; font-family: 'Share Tech Mono'; font-weight: bold; color: #fff; text-shadow: 0 0 3px #000;}
+
+        .advice-text { color: var(--cyan); font-size: 12px; font-weight: 900; text-transform: uppercase; margin-top: 8px; width: 100%; text-align: center; letter-spacing: 1px; font-family: 'Share Tech Mono';}
+        .voice-toggle { position: absolute; top: 40px; left: 90px; color: var(--cyan); font-size: 18px; cursor: pointer; z-index: 2001; text-shadow: 0 0 10px var(--cyan);}
+        .fake-ip { position: absolute; top: 12px; right: 15px; color: var(--matrix); font-family: 'Share Tech Mono'; font-size: 9px; animation: blink 2s infinite;}
+        @keyframes blink { 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
     <canvas id="matrix-canvas"></canvas>
-    
-    <div id="stealth-overlay"><iframe id="stealth-frame" src="https://vnexpress.net"></iframe></div>
 
     <div id="game-overlay">
-        <div class="radar-bar"><marquee scrollamount="4">V22 MAX LEVEL ACTIVE | QUÉT CẦU NHỊP 1-2-1 | BẮT NHỊP NGHIÊNG 5-2 | DỮ LIỆU ĐANG TẢI...</marquee></div>
-        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-sign-out-alt"></i> THOÁT GAME</button>
+        <div class="radar-bar">
+            <i class="fas fa-satellite-dish" style="margin:0 10px; color:var(--matrix);"></i>
+            <marquee scrollamount="5">V31.1 GOD EMPEROR | TỐC CHIẾN VÁN ĐẦU | CHỐNG LAG NHÀ CÁI | KỶ LUẬT 10 GIÂY THỜI GIAN VÀNG...</marquee>
+            <div class="fake-ip" id="fake-ip">IP: 192.168.1.1</div>
+        </div>
+
+        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-sign-out-alt"></i> THOÁT</button>
         <i class="fas fa-volume-up voice-toggle" id="btn-voice" onclick="toggleVoice()"></i>
         
-        <div id="auto-bot-panel">
-            <div class="bot-title"><i class="fas fa-robot"></i> AUTO-BET V22</div>
-            <div class="bot-bal" id="bot-balance">10,000,000đ</div>
-            <div class="bot-status" id="bot-status">Chờ lệnh Lõi V22...</div>
-            <div class="bot-log" id="bot-log">Log: Đã khởi động Bot.</div>
+        <div id="bridge-detect-panel">
+            <div id="bridge-detect-panel-header" class="drag-handle"><i class="fas fa-arrows-alt"></i> BẢNG CẦU</div>
+            <div class="bridge-title"><i class="fas fa-crosshairs"></i> V31 RADAR</div>
+            <div class="bridge-name" id="bridge-name">SYSTEM BOOTING...</div>
         </div>
 
         <iframe id="game-frame" src=""></iframe>
         
         <div id="draggable-robot">
             <div class="robo-dialog glass">
-                <div id="victory-screen"><div class="victory-text"><i class="fas fa-gem"></i><br>ĐẠT KPI CHỐT LỜI</div></div>
-                <div class="header-phien">ID: <span id="robo-phien" style="color:var(--cyan);">...</span></div>
+                <div id="draggable-robot-header" class="drag-handle"><i class="fas fa-grip-lines"></i> DI CHUYỂN TOOL</div>
+                <div class="header-phien">PHIÊN: <span id="robo-phien" class="phien-id">...</span></div>
+                
                 <div class="battle-board">
                     <div class="side-box side-tai" id="box-tai">TÀI</div>
                     <div class="center-hub">
                         <img class="robo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png">
-                        <div class="countdown-ring" id="timer-15s">15s</div>
+                        <div class="countdown-ring" id="timer-15s">10s</div>
                     </div>
                     <div class="side-box side-xiu" id="box-xiu">XỈU</div>
                 </div>
-                <div class="md5-cracker" id="md5-screen">Decrypting Hash...</div>
-                <div class="advice-text" id="robo-advice"><i class="fas fa-circle-notch fa-spin"></i> SYNCING V22 CORE...</div>
-                <div class="kpi-inline">
-                    <span>WIN: <span class="kpi-win" id="live-win">0</span>/<span id="target-win-show">5</span></span>
-                    <span>LOSE: <span class="kpi-lose" id="live-lose">0</span>/<span id="target-lose-show">3</span></span>
+                
+                <div class="confidence-container" id="conf-bar-box">
+                    <div class="confidence-bar" id="conf-bar-fill"></div>
+                    <div class="confidence-text" id="conf-text">WIN RATE</div>
                 </div>
+
+                <div class="advice-text" id="robo-advice"><i class="fas fa-cog fa-spin"></i> SYNCING V31 CORE...</div>
             </div>
         </div>
     </div>
 
     <div id="auth-wrapper">
         <div class="auth-box glass">
-            <div class="logo" style="justify-content:center; margin-bottom:10px; font-size:2.2rem;"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png" style="width:55px; height:55px; border-color:var(--cyan);"></div>
-            <div style="font-family:'Playfair Display'; font-size:1.6rem; color:var(--cyan); font-weight:900; text-shadow:0 0 10px var(--cyan);">V22 MAX LEVEL</div>
-            <div style="font-size: 9px; color: #888; margin-bottom: 20px; letter-spacing: 2px;">ACCESS BY KEY ONLY</div>
+            <div class="logo" style="justify-content:center; margin-bottom:15px; font-size:2.8rem;"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png" style="width:75px; height:75px; border-color:var(--cyan);"></div>
+            <div style="font-family:'Playfair Display'; font-size:1.8rem; color:var(--cyan); font-weight:900; text-shadow:0 0 20px var(--cyan);">V31 ULTIMATE</div>
+            <div style="font-size: 10px; color: #aaa; margin-bottom: 25px; letter-spacing: 4px; font-family:'Share Tech Mono';">GOD OF GAMBLERS</div>
             
-            <input type="password" id="login-key" class="input-box" placeholder="NHẬP MÃ KEY VIP...">
-            <button class="btn" style="background:linear-gradient(90deg, #00ffff, #0088ff); color:#000;" onclick="verifyKeyBtn()"><i class="fas fa-key"></i> KÍCH HOẠT HỆ THỐNG</button>
-            <div id="login-msg" style="margin-top:5px; color:var(--red); font-size:11px; font-weight:bold;"></div>
+            <input type="password" id="login-key" class="input-box" placeholder="NHẬP MÃ KEY V31...">
+            <button class="btn" onclick="verifyKeyBtn()"><i class="fas fa-fingerprint"></i> KÍCH HOẠT QUYỀN LỰC</button>
+            <div id="login-msg" style="margin-top:10px; color:var(--red); font-size:12px; font-weight:bold;"></div>
         </div>
     </div>
 
     <div id="main-app" style="display:none;">
         <header>
-            <div class="logo" onclick="toggleStealth()"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"> SÀN V22</div>
-            <div style="color:var(--red); cursor:pointer; font-weight:bold; font-size:12px;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> THOÁT</div>
+            <div class="logo"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"> BẢNG ĐIỀU KHIỂN</div>
+            <div style="color:var(--red); cursor:pointer; font-weight:bold; font-size:13px;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> THOÁT</div>
         </header>
 
         <div class="nav-tabs">
@@ -140,44 +151,35 @@
         </div>
 
         <div id="view-tool" class="view-section active">
-            <div class="setup-kpi-panel">
-                <div class="cate-title" style="margin-top:0; font-size:11px;"><i class="fas fa-bullseye"></i> AUTO KPI & BOT SETTINGS</div>
-                <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa; margin-bottom:5px;">
-                    <div>CHỐT LỜI (VÁN): <input type="number" id="setup-win" class="kpi-input" value="5"></div>
-                    <div>CẮT LỖ (VÁN): <input type="number" id="setup-lose" class="kpi-input" value="3"></div>
-                </div>
-                <div style="font-size:10px; color:var(--cyan); text-align:center; border-top:1px dashed #444; padding-top:5px; margin-top:5px;">Vốn ảo Bot: 10M | Cược nền: 100K | Tự động Gấp thếp</div>
-            </div>
-
-            <div class="glass" style="padding: 10px; margin-bottom: 12px;">
-                <div class="cate-title" style="font-size:12px;">HỆ THỐNG BETVIP</div>
+            <div class="glass" style="padding: 15px; margin-bottom: 15px;">
+                <div class="cate-title" style="font-size:13px;"><i class="fas fa-dice"></i> HỆ THỐNG BETVIP</div>
                 <div class="grid-2">
                     <button class="btn" onclick="startAiTool('betvip_tx', 'BETVIP TÀI XỈU', 'https://play.betvip.fit/')">TÀI XỈU HŨ</button>
                     <button class="btn btn-dark" onclick="startAiTool('betvip_md5', 'BETVIP MD5', 'https://play.betvip.fit/')">TÀI XỈU MD5</button>
                 </div>
             </div>
             
-            <div class="glass" style="padding: 10px;">
-                <div class="cate-title" style="font-size:12px;">HỆ THỐNG LC79.BET</div>
-                <div class="grid-2" style="margin-bottom: 8px;">
+            <div class="glass" style="padding: 15px;">
+                <div class="cate-title" style="font-size:13px;"><i class="fas fa-globe"></i> HỆ THỐNG LC79.BET</div>
+                <div class="grid-2" style="margin-bottom: 10px;">
                     <button class="btn" onclick="startAiTool('lc79_tx', 'LC79 TÀI XỈU', 'https://lc79.bet')">TÀI XỈU HŨ</button>
                     <button class="btn btn-dark" onclick="startAiTool('lc79_md5', 'LC79 MD5', 'https://lc79.bet')">TÀI XỈU MD5</button>
                 </div>
-                <button class="btn btn-red" onclick="startAiTool('lc79_xd', 'LC79 XÓC ĐĨA', 'https://lc79.bet')">XÓC ĐĨA CHẴN LẺ</button>
+                <button class="btn btn-red" onclick="startAiTool('lc79_xd', 'LC79 XÓC ĐĨA', 'https://lc79.bet')"><i class="fas fa-coins"></i> XÓC ĐĨA CHẴN LẺ</button>
             </div>
         </div>
 
         <div id="view-profile" class="view-section">
-            <div class="glass" style="padding: 20px; text-align:center;">
-                <div style="font-size:50px; color:var(--gold); margin-bottom:10px;"><i class="fas fa-shield-alt"></i></div>
-                <h3 style="color:#fff; margin-bottom: 20px;">TRẠNG THÁI BẢO MẬT</h3>
+            <div class="glass" style="padding: 25px; text-align:center;">
+                <div style="font-size:60px; color:var(--gold); margin-bottom:15px;"><i class="fas fa-shield-alt"></i></div>
+                <h3 style="color:#fff; margin-bottom: 25px;">THÔNG TIN BẢO MẬT V31</h3>
                 <div style="background:rgba(0,0,0,0.8); border:1px solid #333; padding:15px; border-radius:8px; margin-bottom:15px;">
-                    <div style="font-size:10px; color:#aaa; margin-bottom:5px;">MÃ KEY ĐANG DÙNG</div>
-                    <div style="font-size:16px; color:var(--cyan); font-family:'Share Tech Mono'; font-weight:bold; letter-spacing:1px;" id="prof-key">...</div>
+                    <div style="font-size:11px; color:#aaa; margin-bottom:8px;">MÃ KEY ĐANG DÙNG</div>
+                    <div style="font-size:18px; color:var(--cyan); font-family:'Share Tech Mono'; font-weight:bold; letter-spacing:1px;" id="prof-key">...</div>
                 </div>
                 <div style="background:rgba(0,0,0,0.8); border:1px solid #333; padding:15px; border-radius:8px;">
-                    <div style="font-size:10px; color:#aaa; margin-bottom:5px;">THỜI GIAN HẾT HẠN</div>
-                    <div style="font-size:14px; color:var(--red); font-family:'Share Tech Mono'; font-weight:bold;" id="prof-expire">...</div>
+                    <div style="font-size:11px; color:#aaa; margin-bottom:8px;">THỜI GIAN HẾT HẠN</div>
+                    <div style="font-size:16px; color:var(--red); font-family:'Share Tech Mono'; font-weight:bold;" id="prof-expire">...</div>
                 </div>
             </div>
         </div>
@@ -196,17 +198,16 @@
                 <div id="admin-keys" style="max-height:250px; overflow-y:auto;"></div>
             </div>
         </div>
-                        </div>
-                    <script>
-        // MƯA MA TRẬN
+    </div>
+        <script>
         const canvas = document.getElementById('matrix-canvas'); const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*'.split('');
-        const fontSize = 12; const columns = canvas.width / fontSize;
+        const fontSize = 14; const columns = canvas.width / fontSize;
         const drops = []; for(let x = 0; x < columns; x++) drops[x] = 1;
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0f0'; ctx.font = fontSize + 'px Share Tech Mono';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0ff'; ctx.font = fontSize + 'px Share Tech Mono'; 
             for(let i = 0; i < drops.length; i++) {
                 const text = letters[Math.floor(Math.random() * letters.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -216,14 +217,15 @@
         }
         setInterval(drawMatrix, 40);
 
-        let currentKey = localStorage.getItem("v22_key") || ""; 
+        setInterval(()=> {
+            document.getElementById('fake-ip').innerText = "IP: " + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255);
+        }, 1500);
+
+        let currentKey = localStorage.getItem("v31_key") || ""; 
         let currentRole = ""; let keyExpire = "";
         let scanInterval; let phienCu = ""; let activeGame = ""; 
-        let isPredicting = false; let countdownTimer; let md5Interval;
-        let targetWin = 5, targetLose = 3, currentWin = 0, currentLose = 0, isLockKpi = false;
+        let isPredicting = false; let countdownTimer; 
         let isVoiceOn = true;
-
-        let botBalance = 10000000; let baseBet = 100000; let currentBet = baseBet; let lastBotPred = "";
 
         function speak(text) { if(isVoiceOn) { let msg = new SpeechSynthesisUtterance(text); msg.lang = 'vi-VN'; msg.rate = 1.1; window.speechSynthesis.speak(msg); } }
         function toggleVoice() { isVoiceOn = !isVoiceOn; document.getElementById('btn-voice').className = isVoiceOn ? "fas fa-volume-up voice-toggle" : "fas fa-volume-mute voice-toggle"; }
@@ -234,19 +236,6 @@
             if(viewId === 'view-admin') { loadAdminKeys(); } 
         }
 
-        // CHẾ ĐỘ ẨN DANH
-        let stealthClicks = 0;
-        function toggleStealth() {
-            stealthClicks++; if(stealthClicks >= 3) { document.getElementById('stealth-overlay').style.display = 'block'; stealthClicks = 0; }
-            setTimeout(() => stealthClicks = 0, 2000);
-        }
-        document.getElementById('stealth-overlay').addEventListener('click', function(e) {
-            if(e.clientX > window.innerWidth - 100 && e.clientY > window.innerHeight - 100) {
-                stealthClicks++; if(stealthClicks >= 3) { this.style.display = 'none'; stealthClicks = 0; }
-                setTimeout(() => stealthClicks = 0, 2000);
-            }
-        });
-
         if(currentKey) { document.getElementById('login-key').value = currentKey; verifyKeyProcess(currentKey, true); }
 
         function verifyKeyBtn() {
@@ -255,22 +244,16 @@
             verifyKeyProcess(k, false);
         }
 
-        // ==========================================
-        // 🚀 BACKDOOR: NHẬP ĐÚNG LÀ PHI THẲNG VÀO TOOL
-        // ==========================================
         async function verifyKeyProcess(k, isAuto) {
             let msg = document.getElementById('login-msg');
-            
             if (k === "hungki98vip") {
-                currentKey = k; currentRole = "admin"; keyExpire = "VĨNH VIỄN (MAX LEVEL)";
-                localStorage.setItem("v22_key", currentKey);
-                document.getElementById('auth-wrapper').style.display = 'none'; 
-                document.getElementById('main-app').style.display = 'block'; 
-                document.getElementById('prof-key').innerText = currentKey;
-                document.getElementById('prof-expire').innerText = keyExpire;
+                currentKey = k; currentRole = "admin"; keyExpire = "VĨNH VIỄN (GOD MODE)";
+                localStorage.setItem("v31_key", currentKey);
+                document.getElementById('auth-wrapper').style.display = 'none'; document.getElementById('main-app').style.display = 'block'; 
+                document.getElementById('prof-key').innerText = currentKey; document.getElementById('prof-expire').innerText = keyExpire;
                 document.getElementById('tab-admin').style.display = 'block';
                 switchView('view-tool', document.querySelectorAll('.nav-item')[0]);
-                if(!isAuto) speak("Đã mở khóa toàn bộ sức mạnh V22.");
+                if(!isAuto) speak("Đã mở khóa quyền lực tối cao.");
                 return; 
             }
 
@@ -278,130 +261,205 @@
             try {
                 let res = await fetch('/api/verify_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({key: k})});
                 let json = await res.json();
-                
                 if (json.status === "success") {
                     currentKey = k; currentRole = json.role; keyExpire = json.expire;
-                    localStorage.setItem("v22_key", currentKey);
+                    localStorage.setItem("v31_key", currentKey);
                     document.getElementById('auth-wrapper').style.display = 'none'; document.getElementById('main-app').style.display = 'block'; 
                     document.getElementById('prof-key').innerText = currentKey; document.getElementById('prof-expire').innerText = keyExpire;
                     switchView('view-tool', document.querySelectorAll('.nav-item')[0]);
-                    if(!isAuto) speak("Xác thực thành công. Cửa đã mở.");
+                    if(!isAuto) speak("Xác thực thành công. Hệ thống sẵn sàng.");
                 } else { 
-                    if(!isAuto) msg.innerText = "❌ " + json.msg; else localStorage.removeItem("v22_key"); 
+                    if(!isAuto) msg.innerText = "❌ " + json.msg; else localStorage.removeItem("v31_key"); 
                 }
             } catch(err) { if(!isAuto) msg.innerText = "⚠️ LỖI MẠNG! KHÔNG THỂ KẾT NỐI MÁY CHỦ."; }
         }
 
-        function logout() { localStorage.removeItem("v22_key"); location.reload(); }
+        function logout() { localStorage.removeItem("v31_key"); location.reload(); }
 
         async function startAiTool(gameId, toolName, url) {
             let k = document.getElementById('login-key').value.trim() || currentKey;
+            
+            if (url !== '') document.getElementById('game-frame').src = url;
+            document.getElementById('game-overlay').style.display = 'block';
+            document.getElementById('robo-phien').innerText = "ĐANG TẢI...";
+            document.getElementById('bridge-name').innerText = "CHECKING KEY...";
+            document.getElementById('robo-advice').innerHTML = '<i class="fas fa-shield-alt"></i> ĐANG MỞ KHOÁ TƯỜNG LỬA...';
+            document.getElementById('conf-bar-box').style.display = 'none';
+
+            let boxTai = document.getElementById('box-tai'); let boxXiu = document.getElementById('box-xiu');
+            if (gameId === 'lc79_xd') {
+                boxTai.innerText = "CHẴN"; boxXiu.innerText = "LẺ";
+                boxTai.className = "side-box side-chan"; boxXiu.className = "side-box side-le";
+            } else {
+                boxTai.innerText = "TÀI"; boxXiu.innerText = "XỈU";
+                boxTai.className = "side-box side-tai"; boxXiu.className = "side-box side-xiu";
+            }
+            resetBoxes();
+
             if (k !== 'hungki98vip') {
                 let res = await fetch('/api/verify_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({key: k})});
                 let json = await res.json();
-                if(json.status !== "success") { alert(json.msg); logout(); return; }
+                if(json.status !== "success") { alert(json.msg); closeGame(); logout(); return; }
             }
             
-            targetWin = parseInt(document.getElementById('setup-win').value) || 5; targetLose = parseInt(document.getElementById('setup-lose').value) || 3;
-            document.getElementById('target-win-show').innerText = targetWin; document.getElementById('target-lose-show').innerText = targetLose;
-            currentWin = 0; currentLose = 0; isLockKpi = false; document.getElementById('live-win').innerText = "0"; document.getElementById('live-lose').innerText = "0";
-            document.getElementById('victory-screen').style.display = 'none';
+            activeGame = gameId; 
+            phienCu = "START_SESSION"; 
+            isPredicting = false; 
+            clearInterval(scanInterval); clearInterval(countdownTimer); 
             
-            botBalance = 10000000; currentBet = baseBet; lastBotPred = "";
-            document.getElementById('bot-balance').innerText = botBalance.toLocaleString() + "đ";
-            document.getElementById('bot-status').innerText = "Chờ lệnh từ Lõi V22..."; document.getElementById('bot-log').innerText = "Log: Khởi chạy Bot.";
-
-            if (url !== '') document.getElementById('game-frame').src = url;
-            activeGame = gameId; phienCu = ""; isPredicting = false; clearInterval(scanInterval); clearInterval(countdownTimer); stopMD5Cracker();
+            document.getElementById('bridge-name').innerText = "ĐANG ĐỒNG BỘ V31...";
+            document.getElementById('robo-advice').innerHTML = '<i class="fas fa-cog fa-spin"></i> SYNCING V31 CORE...';
             
-            document.getElementById('game-overlay').style.display = 'block';
-            document.getElementById('robo-phien').innerText = "ĐANG TẢI...";
-            document.getElementById('robo-advice').innerHTML = '<i class="fas fa-cog fa-spin"></i> SYNCING...';
-            document.getElementById('box-tai').innerText = (gameId === 'lc79_xd') ? "CHẴN" : "TÀI"; document.getElementById('box-xiu').innerText = (gameId === 'lc79_xd') ? "LẺ" : "XỈU";
-            
-            resetBoxes(); speak("Đã mở kết nối " + toolName);
+            speak("Kích hoạt giao thức " + toolName);
             getSignalTX(); scanInterval = setInterval(getSignalTX, 2000);
         }
 
-        function startMD5Cracker() {
-            let md5El = document.getElementById('md5-screen'); md5El.style.display = 'block'; let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
-            md5Interval = setInterval(() => { md5El.innerText = "Hash: 0x" + Array.from({length: 12}, () => chars[Math.floor(Math.random() * chars.length)]).join(''); }, 50);
-        }
-        function stopMD5Cracker() { clearInterval(md5Interval); document.getElementById('md5-screen').style.display = 'none'; }
-
-        function closeGame() { activeGame = ""; phienCu = ""; clearInterval(scanInterval); clearInterval(countdownTimer); stopMD5Cracker(); isPredicting = false; document.getElementById('game-overlay').style.display = 'none'; document.getElementById('game-frame').src = ''; }
+        function closeGame() { activeGame = ""; phienCu = ""; clearInterval(scanInterval); clearInterval(countdownTimer); isPredicting = false; document.getElementById('game-overlay').style.display = 'none'; document.getElementById('game-frame').src = ''; }
         function resetBoxes() { document.getElementById('box-tai').classList.remove('active'); document.getElementById('box-xiu').classList.remove('active'); }
 
-        function start15sTimer() {
-            clearInterval(countdownTimer); let timeLeft = 15; let timerEl = document.getElementById('timer-15s'); timerEl.style.display = 'block'; timerEl.innerText = timeLeft + "s";
+        function startBetTimer() {
+            let betTime = 15; 
+            let timerEl = document.getElementById('timer-15s'); 
+            timerEl.style.display = 'block';
+            timerEl.style.color = '#00ffcc'; timerEl.style.borderColor = '#00ffcc';
+            timerEl.innerText = "VÀO TIỀN: " + betTime + "s";
+            
             countdownTimer = setInterval(() => {
-                timeLeft--; if(timeLeft >= 0) timerEl.innerText = timeLeft + "s";
-                else { clearInterval(countdownTimer); timerEl.style.display = 'none'; resetBoxes(); document.getElementById('robo-advice').innerText = "CHỜ VÁN MỚI..."; }
+                betTime--; 
+                if(betTime > 0) {
+                    timerEl.innerText = "VÀO TIỀN: " + betTime + "s";
+                } else { 
+                    clearInterval(countdownTimer); 
+                    resetBoxes(); 
+                    timerEl.style.color = '#ff003c'; timerEl.style.borderColor = '#ff003c';
+                    timerEl.innerText = "ĐỢI HẾT PHIÊN";
+                    document.getElementById('robo-advice').innerText = "ĐÃ KHÓA LỆNH. CHỜ MỞ BÁT MỚI..."; 
+                    document.getElementById('bridge-name').innerText = "CHỜ NHÀ CÁI...";
+                    document.getElementById('conf-bar-box').style.display = 'none';
+                    isPredicting = false; 
+                }
+            }, 1000);
+        }
+
+        function runHashEffect(timerEl, waitTime, data) {
+            let hexChars = "0123456789ABCDEF";
+            timerEl.style.display = 'block';
+            timerEl.style.color = '#ff003c'; timerEl.style.borderColor = '#ff003c';
+            
+            clearInterval(countdownTimer);
+            countdownTimer = setInterval(() => {
+                waitTime--;
+                if(waitTime > 0) {
+                    timerEl.innerText = "ĐỢI: " + waitTime + "s";
+                    let randomHash = "0x" + Array.from({length: 8}, () => hexChars[Math.floor(Math.random() * 16)]).join('');
+                    document.getElementById('bridge-name').innerText = "DECRYPTING: " + randomHash;
+                } else {
+                    clearInterval(countdownTimer);
+                    
+                    let result = data.du_doan; 
+                    document.getElementById('bridge-name').innerText = data.loi_khuyen;
+                    
+                    document.getElementById('conf-bar-box').style.display = 'block';
+                    document.getElementById('conf-bar-fill').style.width = data.ti_le + "%";
+                    document.getElementById('conf-text').innerText = "WIN RATE: " + data.ti_le + "%";
+                    
+                    if(result === "CHỜ CẦU" || result === "CHỜ") {
+                        speak("Cầu loạn, tạm nghỉ.");
+                        document.getElementById('robo-advice').innerText = "HỦY LỆNH, BẢO TOÀN VỐN";
+                        timerEl.style.color = '#ff003c'; timerEl.style.borderColor = '#ff003c';
+                        timerEl.innerText = "ĐỢI HẾT PHIÊN";
+                        isPredicting = false;
+                    } else {
+                        if(result === "TÀI" || result === "CHẴN") document.getElementById('box-tai').classList.add('active'); 
+                        else document.getElementById('box-xiu').classList.add('active');
+                        
+                        document.getElementById('robo-advice').innerText = "CHỐT KÈO: " + result;
+                        speak("Đánh " + result); 
+                        startBetTimer(); 
+                    }
+                }
             }, 1000);
         }
 
         async function getSignalTX() {
-            if (isPredicting || !activeGame || isLockKpi) return; 
+            if (isPredicting || !activeGame) return; 
             try {
-                let res = await fetch(`/api/scan?tool=${activeGame}&key=${currentKey}`); let json = await res.json();
+                let res = await fetch(`/api/scan?tool=${activeGame}&key=${currentKey}`); 
+                let json = await res.json();
+                
                 if(json.status === "error") { 
-                    if(json.msg.includes("đồng bộ")) return; 
-                    alert("SYSTEM: " + json.msg); closeGame(); 
+                    if(json.msg.includes("đồng bộ")) {
+                        document.getElementById('robo-advice').innerText = "ĐANG LẤY MẪU DỮ LIỆU MỚI...";
+                        return; 
+                    }
+                    alert("LỖI HỆ THỐNG: " + json.msg); closeGame(); 
                     if(json.msg.includes("hết hạn") || json.msg.includes("khóa")) logout();
                     return; 
                 }
                 
                 let data = json.data;
+                
                 if(data.phien !== phienCu && data.phien !== "ĐANG TẢI...") {
                     isPredicting = true; 
+                    let isFirstRun = (phienCu === "START_SESSION");
+                    phienCu = data.phien; 
+                    document.getElementById('robo-phien').innerText = data.phien; 
+                    resetBoxes(); 
                     
-                    if(phienCu !== "" && lastBotPred !== "" && lastBotPred !== "CHỜ CẦU") {
-                        let actual = data.kq_cuoi; 
-                        if (actual) {
-                            if(lastBotPred === actual) {
-                                currentWin++; document.getElementById('live-win').innerText = currentWin;
-                                botBalance += currentBet; document.getElementById('bot-log').innerText = `Log: Thắng +${currentBet.toLocaleString()}đ`; currentBet = baseBet; 
-                            } else {
-                                currentLose++; document.getElementById('live-lose').innerText = currentLose;
-                                botBalance -= currentBet; document.getElementById('bot-log').innerText = `Log: Thua -${currentBet.toLocaleString()}đ`; currentBet *= 2; 
-                            }
-                            document.getElementById('bot-balance').innerText = botBalance.toLocaleString() + "đ";
-                            
-                            if(currentWin >= targetWin || currentLose >= targetLose) {
-                                isLockKpi = true; document.getElementById('victory-screen').style.display = 'flex'; speak("Chốt lãi thành công. Ngắt kết nối."); return;
-                            }
-                        }
-                    }
-
-                    phienCu = data.phien; document.getElementById('robo-phien').innerText = data.phien; 
-
-                    resetBoxes(); document.getElementById('timer-15s').style.display = 'none'; clearInterval(countdownTimer);
-                    document.getElementById('robo-advice').innerText = "CALCULATING..."; document.getElementById('bot-status').innerText = "Đang phân tích lệnh mới...";
-                    if(activeGame.includes('md5')) startMD5Cracker();
-
-                    setTimeout(() => {
-                        stopMD5Cracker();
-                        let result = data.du_doan; document.getElementById('robo-advice').innerText = data.loi_khuyen; lastBotPred = result;
-                        if(result === "CHỜ CẦU") {
-                            speak("Phát hiện bẫy. Hủy lệnh."); document.getElementById('bot-status').innerText = "Hủy lệnh do cầu loạn.";
+                    if (isFirstRun) {
+                        let result = data.du_doan; 
+                        document.getElementById('bridge-name').innerText = data.loi_khuyen;
+                        document.getElementById('conf-bar-box').style.display = 'block';
+                        document.getElementById('conf-bar-fill').style.width = data.ti_le + "%";
+                        document.getElementById('conf-text').innerText = "WIN RATE: " + data.ti_le + "%";
+                        
+                        if(result === "CHỜ CẦU" || result === "CHỜ" || result === "LOADING...") {
+                            speak("Đang chờ dữ liệu.");
+                            document.getElementById('robo-advice').innerText = "VUI LÒNG ĐỢI VÁN SAU...";
+                            let timerEl = document.getElementById('timer-15s');
+                            timerEl.style.display = 'block'; timerEl.style.color = '#ff003c'; timerEl.style.borderColor = '#ff003c';
+                            timerEl.innerText = "ĐỢI HẾT PHIÊN";
+                            isPredicting = false;
                         } else {
-                            if(result === "TÀI" || result === "CHẴN") document.getElementById('box-tai').classList.add('active'); else document.getElementById('box-xiu').classList.add('active');
+                            if(result === "TÀI" || result === "CHẴN") document.getElementById('box-tai').classList.add('active'); 
+                            else document.getElementById('box-xiu').classList.add('active');
+                            
+                            document.getElementById('robo-advice').innerText = "CHỐT KÈO: " + result;
                             speak("Đánh " + result); 
-                            document.getElementById('bot-status').innerHTML = `Vào lệnh: <b style="color:var(--cyan)">${result}</b><br>Tiền cược: <b style="color:var(--gold)">${currentBet.toLocaleString()}đ</b>`;
-                            start15sTimer();
+                            startBetTimer(); 
                         }
-                        isPredicting = false; 
-                    }, 3500);
+                    } else {
+                        document.getElementById('robo-advice').innerText = "AI ĐANG TÍNH TOÁN...";
+                        document.getElementById('conf-bar-box').style.display = 'none';
+                        runHashEffect(document.getElementById('timer-15s'), 10, data);
+                    }
                 }
-            } catch (e) {}
+            } catch (e) {
+                document.getElementById('robo-advice').innerHTML = '<i class="fas fa-exclamation-triangle"></i> LỖI KẾT NỐI, ĐANG THỬ LẠI...';
+            }
         }
+
+        function makeDraggable(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            var header = document.getElementById(elmnt.id + "-header");
+            if (header) { header.onmousedown = dragMouseDown; header.ontouchstart = dragTouchStart; } 
+            else { elmnt.onmousedown = dragMouseDown; elmnt.ontouchstart = dragTouchStart; }
+            function dragMouseDown(e) { e = e || window.event; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
+            function dragTouchStart(e) { pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
+            function elementDrag(e) { e = e || window.event; e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
+            function elementTouchDrag(e) { e.preventDefault(); pos1 = pos3 - e.touches[0].clientX; pos2 = pos4 - e.touches[0].clientY; pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
+            function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
+        }
+
+        makeDraggable(document.getElementById("draggable-robot"));
+        makeDraggable(document.getElementById("bridge-detect-panel"));
 
         async function loadAdminKeys() { 
             let res = await fetch(`/api/admin/list_keys?admin_key=hungki98vip`); let json = await res.json(); 
             if(json.status !== "success") return; 
             let htmlKeys = ""; 
             json.keys.forEach(k => { 
-                let btn = k[2] == 0 ? `<button class="btn" style="padding:4px; font-size:10px; margin:0; width:50px; border-color:var(--red); color:var(--red); background:none;" onclick="actionKey('${k[0]}','ban')">KHÓA</button>` : `<button class="btn" style="padding:4px; font-size:10px; margin:0; width:50px; border-color:var(--cyan); color:var(--cyan); background:none;" onclick="actionKey('${k[0]}','unban')">MỞ LẠI</button>`;
+                let btn = k[2] == 0 ? `<button class="btn" style="padding:4px; font-size:10px; margin:0; width:50px; border-color:var(--red); color:var(--red); background:none;" onclick="actionKey('${k[0]}','ban')">KHÓA</button>` : `<button class="btn" style="padding:4px; font-size:10px; margin:0; width:50px; border-color:var(--cyan); color:var(--cyan); background:none;" onclick="actionKey('${k[0]}','unban')">MỞ</button>`;
                 htmlKeys += `<div style="border-bottom:1px solid #222; padding:8px 0;"><div style="display:flex; justify-content:space-between; align-items:center;"><b style="color:var(--gold); font-size:12px;">${k[0]}</b>${btn}</div><div style="font-size:10px; color:#888; margin-top:3px;">EXP: ${k[1]}</div><button class="btn" style="padding:4px; font-size:10px; margin-top:5px; width:100%; border-color:#555; background:none; color:#fff;" onclick="actionKey('${k[0]}','delete')">XÓA BỎ VĨNH VIỄN</button></div>`; 
             }); 
             document.getElementById('admin-keys').innerHTML = htmlKeys || "<i style='color:#555;'>Chưa có Key nào.</i>"; 
@@ -411,27 +469,12 @@
             let dur = document.getElementById('key-duration').value; let customK = document.getElementById('custom-key-input').value.trim();
             let res = await fetch('/api/admin/create_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: 'hungki98vip', duration: dur, custom_key: customK}) });
             let json = await res.json(); 
-            if(json.status === "success") { 
-                prompt("TẠO KEY THÀNH CÔNG. COPY MÃ NÀY GIAO CHO KHÁCH:", json.new_key); 
-                document.getElementById('custom-key-input').value = ""; loadAdminKeys(); 
-            } else alert("Lỗi: " + json.msg);
+            if(json.status === "success") { prompt("TẠO KEY THÀNH CÔNG. COPY MÃ NÀY GIAO CHO KHÁCH:", json.new_key); document.getElementById('custom-key-input').value = ""; loadAdminKeys(); } else alert("Lỗi: " + json.msg);
         }
 
         async function actionKey(target, act) { 
             if(act === 'delete' && !confirm("Bạn có chắc muốn xóa vĩnh viễn Key này không?")) return;
-            await fetch('/api/admin/action_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: 'hungki98vip', target_key: target, action: act})}); 
-            loadAdminKeys(); 
-        }
-
-        dragElement(document.getElementById("draggable-robot"));
-        function dragElement(elmnt) {
-            var pos1=0, pos2=0, pos3=0, pos4=0; var img = elmnt.querySelector('.robo-dialog'); 
-            img.onmousedown = dragMouseDown; img.ontouchstart = dragTouchStart;
-            function dragMouseDown(e) { e = e || window.event; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
-            function dragTouchStart(e) { pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
-            function elementDrag(e) { e = e || window.event; e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
-            function elementTouchDrag(e) { pos1 = pos3 - e.touches[0].clientX; pos2 = pos4 - e.touches[0].clientY; pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
-            function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
+            await fetch('/api/admin/action_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: 'hungki98vip', target_key: target, action: act})}); loadAdminKeys(); 
         }
     </script>
 </body>
