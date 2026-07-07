@@ -3,479 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>V31 GOD EMPEROR</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>HƯNG ĐẸP TRAI - CHUAHUNGKITO</title>
     <style>
-        :root { --gold: #FFD700; --red: #ff003c; --bg: #050505; --panel: rgba(5, 5, 5, 0.95); --cyan: #00ffff; --matrix: #0f0; --white: #fff;}
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; min-height: 100vh; position: relative; }
+        body { margin: 0; background: #020c1b; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        #game-iframe { width: 100vw; height: 100vh; border: none; }
         
-        #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.35; }
-        .glass { background: var(--panel); border: 1px solid rgba(0,255,255,0.3); border-radius: 12px; box-shadow: 0 0 25px rgba(0,255,255,0.15); backdrop-filter: blur(10px);}
+        /* Khung chứa công cụ điều khiển nổi */
+        #ai-tool-overlay {
+            position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 320px; z-index: 9999; display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* Logo trung tâm đóng vai trò nút kéo thả */
+        #drag-handle { 
+            width: 75px; height: 75px; border-radius: 50%; cursor: move; touch-action: none;
+            border: 3px solid #00d2ff; box-shadow: 0 0 20px rgba(0, 210, 255, 0.6); 
+            overflow: hidden; margin-bottom: 15px; background: #000;
+        }
         
-        .radar-bar { width: 100%; background: #000; color: var(--matrix); font-family: 'Share Tech Mono'; font-size: 11px; font-weight: bold; padding: 5px 0; border-bottom: 1px solid var(--matrix); display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,255,0,0.3);}
-        
-        header { height: 50px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--cyan); }
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cyan); display: flex; align-items: center; gap: 8px; text-shadow: 0 0 15px var(--cyan);}
-        
-        .nav-tabs { display: flex; justify-content: space-around; background: rgba(0,0,0,0.95); border-bottom: 1px solid #333; padding: 10px 0;}
-        .nav-item { font-size: 12px; font-weight: bold; color: #666; cursor: pointer; text-transform: uppercase; transition: 0.3s;}
-        .nav-item.active { color: var(--gold); text-shadow: 0 0 8px var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 5px;}
+        /* Bảng hiển thị thông số AI */
+        #tool-content {
+            background: rgba(6, 18, 36, 0.95); border: 2px solid #00d2ff;
+            border-radius: 15px; padding: 15px; width: 100%; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            box-sizing: border-box;
+        }
 
-        .view-section { display: none; padding: 15px; max-width: 500px; margin: 0 auto; animation: fadeIn 0.4s;}
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Lựa chọn máy chủ dữ liệu */
+        select.cyber-input {
+            width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid #00d2ff;
+            color: #fff; padding: 10px; border-radius: 8px; outline: none; margin-bottom: 10px; font-weight: bold;
+        }
 
-        #auth-wrapper { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 999; background: rgba(0,0,0,0.95); }
-        .auth-box { padding: 30px 20px; width: 90%; max-width: 320px; text-align: center; border: 2px solid var(--gold); box-shadow: 0 0 40px rgba(255,215,0,0.3); border-radius: 15px;}
+        /* Khối hiển thị kết quả phân tích */
+        .flex-boxes { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; }
+        .pred-box {
+            flex: 1; padding: 15px 0; border-radius: 10px; font-size: 1.5rem; font-weight: bold; color: #fff;
+            border: 2px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .box-xiu.active { background: rgba(0, 255, 102, 0.2); border-color: #00ff66; box-shadow: 0 0 15px #00ff66; color: #00ff66; }
+        .box-tai.active { background: rgba(255, 0, 85, 0.2); border-color: #ff0055; box-shadow: 0 0 15px #ff0055; color: #ff0055; }
 
-        .cate-title { font-size: 1rem; color: var(--cyan); margin: 10px 0; text-transform: uppercase; border-left: 3px solid var(--cyan); padding-left: 8px; font-family: 'Playfair Display';}
-        .btn { padding: 12px; border: 1px solid var(--cyan); border-radius: 8px; cursor: pointer; font-family: 'Nunito'; font-size: 12px; font-weight: 900; color: #000; width: 100%; margin-bottom: 10px; background: linear-gradient(90deg, #00ffff, #0088ff); text-transform: uppercase; transition: 0.2s; box-shadow: 0 0 15px rgba(0,255,255,0.4);}
-        .btn:active { transform: scale(0.95); }
-        .btn-dark { background: #111; color: var(--cyan); box-shadow: none; border-color:#333;}
-        .btn-red { background: linear-gradient(90deg, #ff003c, #990000); border-color: var(--red); color: #fff; box-shadow: 0 0 15px rgba(255,0,60,0.4);}
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .input-box { width: 100%; background: #050505; border: 1px solid #444; border-radius: 8px; color: var(--gold); padding: 14px; text-align: center; margin-bottom: 15px; font-weight: bold; font-family: 'Share Tech Mono'; letter-spacing: 2px;}
-
-        #game-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: #000; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes popIn { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
-        #game-frame { width: 100%; height: 100%; border: none; }
-        
-        .close-game-btn { position: absolute; top: 40px; left: 10px; background: rgba(0,0,0,0.9); color: var(--red); border: 1px solid var(--red); padding: 6px 12px; border-radius: 6px; font-weight: 900; z-index: 2001; cursor:pointer; font-size: 11px;}
-        
-        .drag-handle { width: 100%; text-align: center; color: #666; font-size: 18px; padding-bottom: 5px; cursor: grab; border-bottom: 1px dashed #333; margin-bottom: 10px;}
-        .drag-handle:active { cursor: grabbing; color: var(--cyan); }
-
-        #bridge-detect-panel { position: absolute; top: 40px; right: 10px; width: 160px; background: rgba(5,5,5,0.95); border: 1px solid var(--cyan); border-radius: 10px; padding: 10px; z-index: 2001; font-family: 'Share Tech Mono'; box-shadow: 0 0 20px rgba(0,255,255,0.2);}
-        .bridge-title { color: var(--cyan); font-weight: 900; text-align: center; font-size: 11px; margin-bottom:8px; letter-spacing: 1px;}
-        .bridge-name { font-size: 12px; color: var(--gold); font-weight: bold; text-align: center; line-height: 1.4; text-shadow: 0 0 8px var(--gold); animation: pulse 1.5s infinite;}
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-
-        #draggable-robot { position: absolute; top: 35%; left: 50%; transform: translateX(-50%); z-index: 2005; width: 250px; }
-        .robo-dialog { padding: 12px 15px 15px 15px; width: 100%; position: relative; z-index: 1; border: 2px solid var(--cyan); border-radius: 15px; background: rgba(5,5,5,0.98); display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 50px rgba(0,255,255,0.25);}
-        
-        .header-phien { font-size: 13px; font-weight: 900; color: #fff; margin-bottom: 12px; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 5px; width:100%; text-align:center;}
-        .phien-id { color: var(--gold); text-shadow: 0 0 8px var(--gold);}
-
-        .battle-board { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0; margin-bottom: 10px;}
-        
-        .side-box { width: 55px; height: 65px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Playfair Display'; font-size: 18px; font-weight: 900; color: #555; background: rgba(0,0,0,0.9); opacity: 0.4; transition: 0.3s;}
-        .side-tai.active { opacity: 1; color: var(--red); border-color: var(--red); background: rgba(255,0,60,0.15); box-shadow: 0 0 25px rgba(255,0,60,0.8); text-shadow: 0 0 10px var(--red); transform: scale(1.1); }
-        .side-xiu.active { opacity: 1; color: var(--cyan); border-color: var(--cyan); background: rgba(0,255,255,0.15); box-shadow: 0 0 25px rgba(0,255,255,0.8); text-shadow: 0 0 10px var(--cyan); transform: scale(1.1); }
-        .side-chan.active { opacity: 1; color: var(--red); border-color: var(--red); background: rgba(255,0,60,0.15); box-shadow: 0 0 25px rgba(255,0,60,0.8); text-shadow: 0 0 10px var(--red); transform: scale(1.1); }
-        .side-le.active { opacity: 1; color: var(--white); border-color: var(--white); background: rgba(255,255,255,0.15); box-shadow: 0 0 25px rgba(255,255,255,0.8); text-shadow: 0 0 10px var(--white); transform: scale(1.1); }
-
-        .center-hub { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; width: 85px; }
-        .robo-img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--cyan); box-shadow: 0 0 20px var(--cyan); background: #000; z-index: 5;}
-        
-        .countdown-ring { margin-top: -10px; font-size: 14px; font-family: 'Share Tech Mono'; font-weight: 900; background: rgba(0,0,0,0.9); border: 1px solid #444; padding: 4px 15px; border-radius: 12px; display: none; z-index:10;}
-
-        .confidence-container { width: 100%; background: #111; border-radius: 10px; height: 14px; margin-top: 5px; position: relative; border: 1px solid #333; overflow: hidden; display: none;}
-        .confidence-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), var(--red)); transition: width 1s ease-in-out; }
-        .confidence-text { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); font-size: 10px; font-family: 'Share Tech Mono'; font-weight: bold; color: #fff; text-shadow: 0 0 3px #000;}
-
-        .advice-text { color: var(--cyan); font-size: 12px; font-weight: 900; text-transform: uppercase; margin-top: 8px; width: 100%; text-align: center; letter-spacing: 1px; font-family: 'Share Tech Mono';}
-        .voice-toggle { position: absolute; top: 40px; left: 90px; color: var(--cyan); font-size: 18px; cursor: pointer; z-index: 2001; text-shadow: 0 0 10px var(--cyan);}
-        .fake-ip { position: absolute; top: 12px; right: 15px; color: var(--matrix); font-family: 'Share Tech Mono'; font-size: 9px; animation: blink 2s infinite;}
-        @keyframes blink { 50% { opacity: 0.4; } }
+        /* Nút điều khiển thu nhỏ/phóng to dạng 3 chấm */
+        .mini-dots-control { 
+            position: fixed; bottom: 30px; left: 20px; color: #00d2ff; 
+            font-size: 20px; cursor: pointer; z-index: 10000; background: rgba(0,0,0,0.5);
+            padding: 5px 12px; border-radius: 10px; border: 1px solid #00d2ff; letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
-    <canvas id="matrix-canvas"></canvas>
 
-    <div id="game-overlay">
-        <div class="radar-bar">
-            <i class="fas fa-satellite-dish" style="margin:0 10px; color:var(--matrix);"></i>
-            <marquee scrollamount="5">V31.1 GOD EMPEROR | TỐC CHIẾN VÁN ĐẦU | CHỐNG LAG NHÀ CÁI | KỶ LUẬT 10 GIÂY THỜI GIAN VÀNG...</marquee>
-            <div class="fake-ip" id="fake-ip">IP: 192.168.1.1</div>
+    <iframe id="game-iframe" src="https://lc79.bet"></iframe>
+
+    <div id="ai-tool-overlay">
+        <div id="drag-handle">
+            <img src="https://i.ibb.co/kZTjfLL/1783386936192.png" style="width:100%; height:100%; object-fit:cover;">
         </div>
-
-        <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-sign-out-alt"></i> THOÁT</button>
-        <i class="fas fa-volume-up voice-toggle" id="btn-voice" onclick="toggleVoice()"></i>
         
-        <div id="bridge-detect-panel">
-            <div id="bridge-detect-panel-header" class="drag-handle"><i class="fas fa-arrows-alt"></i> BẢNG CẦU</div>
-            <div class="bridge-title"><i class="fas fa-crosshairs"></i> V31 RADAR</div>
-            <div class="bridge-name" id="bridge-name">SYSTEM BOOTING...</div>
-        </div>
-
-        <iframe id="game-frame" src=""></iframe>
-        
-        <div id="draggable-robot">
-            <div class="robo-dialog glass">
-                <div id="draggable-robot-header" class="drag-handle"><i class="fas fa-grip-lines"></i> DI CHUYỂN TOOL</div>
-                <div class="header-phien">PHIÊN: <span id="robo-phien" class="phien-id">...</span></div>
-                
-                <div class="battle-board">
-                    <div class="side-box side-tai" id="box-tai">TÀI</div>
-                    <div class="center-hub">
-                        <img class="robo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png">
-                        <div class="countdown-ring" id="timer-15s">10s</div>
-                    </div>
-                    <div class="side-box side-xiu" id="box-xiu">XỈU</div>
-                </div>
-                
-                <div class="confidence-container" id="conf-bar-box">
-                    <div class="confidence-bar" id="conf-bar-fill"></div>
-                    <div class="confidence-text" id="conf-text">WIN RATE</div>
-                </div>
-
-                <div class="advice-text" id="robo-advice"><i class="fas fa-cog fa-spin"></i> SYNCING V31 CORE...</div>
+        <div id="tool-content">
+            <select id="tool-selector" class="cyber-input" onchange="forceScan()">
+                <option value="betvip_tx">MÁY CHỦ: BETVIP TỔNG HỢP</option>
+                <option value="lc79_tx">MÁY CHỦ: LC79 TỔNG HỢP</option>
+                <option value="sunwin_sicbo">MÁY CHỦ: SUNWIN TỔNG HỢP</option>
+            </select>
+            
+            <div id="tool-title" style="color: #fff; font-weight: bold; letter-spacing: 1px;">MÃ PHIÊN: ĐANG QUÉT...</div>
+            
+            <div class="flex-boxes">
+                <div class="pred-box box-xiu" id="box-l">XỈU</div>
+                <div class="pred-box box-tai" id="box-r">TÀI</div>
             </div>
+
+            <div id="tool-status" style="margin-top: 10px; font-size: 12px; color: #00d2ff;">CHUAHUNGKITO SYSTEM V2.0</div>
         </div>
     </div>
 
-    <div id="auth-wrapper">
-        <div class="auth-box glass">
-            <div class="logo" style="justify-content:center; margin-bottom:15px; font-size:2.8rem;"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png" style="width:75px; height:75px; border-color:var(--cyan);"></div>
-            <div style="font-family:'Playfair Display'; font-size:1.8rem; color:var(--cyan); font-weight:900; text-shadow:0 0 20px var(--cyan);">V31 ULTIMATE</div>
-            <div style="font-size: 10px; color: #aaa; margin-bottom: 25px; letter-spacing: 4px; font-family:'Share Tech Mono';">GOD OF GAMBLERS</div>
-            
-            <input type="password" id="login-key" class="input-box" placeholder="NHẬP MÃ KEY V31...">
-            <button class="btn" onclick="verifyKeyBtn()"><i class="fas fa-fingerprint"></i> KÍCH HOẠT QUYỀN LỰC</button>
-            <div id="login-msg" style="margin-top:10px; color:var(--red); font-size:12px; font-weight:bold;"></div>
-        </div>
-    </div>
+    <div class="mini-dots-control" onclick="toggleSize()">●●●</div>
 
-    <div id="main-app" style="display:none;">
-        <header>
-            <div class="logo"><img class="logo-img" src="https://i.postimg.cc/wMdhjZFJ/1773446152525.png"> BẢNG ĐIỀU KHIỂN</div>
-            <div style="color:var(--red); cursor:pointer; font-weight:bold; font-size:13px;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> THOÁT</div>
-        </header>
+    <script>
+        // Cơ chế điều khiển kéo thả đa điểm tương thích Mobile/PC
+        const overlay = document.getElementById('ai-tool-overlay');
+        const handle = document.getElementById('drag-handle');
+        let isDragging = false, startX, startY, initialX, initialY;
 
-        <div class="nav-tabs">
-            <div class="nav-item active" onclick="switchView('view-tool', this)">AI TOOL</div>
-            <div class="nav-item" onclick="switchView('view-profile', this)">HỒ SƠ KEY</div>
-            <div class="nav-item" id="tab-admin" style="display:none; color:var(--red);" onclick="switchView('view-admin', this)">GOD ADMIN</div>
-        </div>
+        handle.addEventListener('mousedown', dragStart);
+        handle.addEventListener('touchstart', dragStart, {passive: false});
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, {passive: false});
+        document.addEventListener('mouseup', dragEnd);
+        document.addEventListener('touchend', dragEnd);
 
-        <div id="view-tool" class="view-section active">
-            <div class="glass" style="padding: 15px; margin-bottom: 15px;">
-                <div class="cate-title" style="font-size:13px;"><i class="fas fa-dice"></i> HỆ THỐNG BETVIP</div>
-                <div class="grid-2">
-                    <button class="btn" onclick="startAiTool('betvip_tx', 'BETVIP TÀI XỈU', 'https://play.betvip.fit/')">TÀI XỈU HŨ</button>
-                    <button class="btn btn-dark" onclick="startAiTool('betvip_md5', 'BETVIP MD5', 'https://play.betvip.fit/')">TÀI XỈU MD5</button>
-                </div>
-            </div>
-            
-            <div class="glass" style="padding: 15px;">
-                <div class="cate-title" style="font-size:13px;"><i class="fas fa-globe"></i> HỆ THỐNG LC79.BET</div>
-                <div class="grid-2" style="margin-bottom: 10px;">
-                    <button class="btn" onclick="startAiTool('lc79_tx', 'LC79 TÀI XỈU', 'https://lc79.bet')">TÀI XỈU HŨ</button>
-                    <button class="btn btn-dark" onclick="startAiTool('lc79_md5', 'LC79 MD5', 'https://lc79.bet')">TÀI XỈU MD5</button>
-                </div>
-                <button class="btn btn-red" onclick="startAiTool('lc79_xd', 'LC79 XÓC ĐĨA', 'https://lc79.bet')"><i class="fas fa-coins"></i> XÓC ĐĨA CHẴN LẺ</button>
-            </div>
-        </div>
-
-        <div id="view-profile" class="view-section">
-            <div class="glass" style="padding: 25px; text-align:center;">
-                <div style="font-size:60px; color:var(--gold); margin-bottom:15px;"><i class="fas fa-shield-alt"></i></div>
-                <h3 style="color:#fff; margin-bottom: 25px;">THÔNG TIN BẢO MẬT V31</h3>
-                <div style="background:rgba(0,0,0,0.8); border:1px solid #333; padding:15px; border-radius:8px; margin-bottom:15px;">
-                    <div style="font-size:11px; color:#aaa; margin-bottom:8px;">MÃ KEY ĐANG DÙNG</div>
-                    <div style="font-size:18px; color:var(--cyan); font-family:'Share Tech Mono'; font-weight:bold; letter-spacing:1px;" id="prof-key">...</div>
-                </div>
-                <div style="background:rgba(0,0,0,0.8); border:1px solid #333; padding:15px; border-radius:8px;">
-                    <div style="font-size:11px; color:#aaa; margin-bottom:8px;">THỜI GIAN HẾT HẠN</div>
-                    <div style="font-size:16px; color:var(--red); font-family:'Share Tech Mono'; font-weight:bold;" id="prof-expire">...</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="view-admin" class="view-section">
-            <div class="glass" style="padding: 15px; margin-bottom:15px;">
-                <div class="cate-title" style="margin-top:0; color:var(--gold);">TẠO KEY MỚI</div>
-                <input type="text" id="custom-key-input" class="input-box" style="margin-bottom:10px;" placeholder="Tên Key (Bỏ trống = Random)">
-                <select id="key-duration" class="input-box" style="margin-bottom:10px;">
-                    <option value="1H">1 Giờ</option><option value="1D">1 Ngày</option><option value="3D">3 Ngày</option><option value="30D">1 Tháng</option>
-                </select>
-                <button class="btn" style="margin:0;" onclick="adminCreateKey()">CẤP QUYỀN KEY</button>
-            </div>
-            <div class="glass" style="padding: 15px;">
-                <div class="cate-title" style="margin-top:0; color:var(--cyan);">QUẢN LÝ TOÀN BỘ KEY</div>
-                <div id="admin-keys" style="max-height:250px; overflow-y:auto;"></div>
-            </div>
-        </div>
-    </div>
-        <script>
-        const canvas = document.getElementById('matrix-canvas'); const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*'.split('');
-        const fontSize = 14; const columns = canvas.width / fontSize;
-        const drops = []; for(let x = 0; x < columns; x++) drops[x] = 1;
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0ff'; ctx.font = fontSize + 'px Share Tech Mono'; 
-            for(let i = 0; i < drops.length; i++) {
-                const text = letters[Math.floor(Math.random() * letters.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
-        }
-        setInterval(drawMatrix, 40);
-
-        setInterval(()=> {
-            document.getElementById('fake-ip').innerText = "IP: " + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255);
-        }, 1500);
-
-        let currentKey = localStorage.getItem("v31_key") || ""; 
-        let currentRole = ""; let keyExpire = "";
-        let scanInterval; let phienCu = ""; let activeGame = ""; 
-        let isPredicting = false; let countdownTimer; 
-        let isVoiceOn = true;
-
-        function speak(text) { if(isVoiceOn) { let msg = new SpeechSynthesisUtterance(text); msg.lang = 'vi-VN'; msg.rate = 1.1; window.speechSynthesis.speak(msg); } }
-        function toggleVoice() { isVoiceOn = !isVoiceOn; document.getElementById('btn-voice').className = isVoiceOn ? "fas fa-volume-up voice-toggle" : "fas fa-volume-mute voice-toggle"; }
-        
-        function switchView(viewId, el) { 
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); 
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); 
-            if(viewId === 'view-admin') { loadAdminKeys(); } 
-        }
-
-        if(currentKey) { document.getElementById('login-key').value = currentKey; verifyKeyProcess(currentKey, true); }
-
-        function verifyKeyBtn() {
-            let k = document.getElementById('login-key').value.trim();
-            if(!k) return document.getElementById('login-msg').innerText = "❌ VUI LÒNG NHẬP MÃ KEY!";
-            verifyKeyProcess(k, false);
-        }
-
-        async function verifyKeyProcess(k, isAuto) {
-            let msg = document.getElementById('login-msg');
-            if (k === "hungki98vip") {
-                currentKey = k; currentRole = "admin"; keyExpire = "VĨNH VIỄN (GOD MODE)";
-                localStorage.setItem("v31_key", currentKey);
-                document.getElementById('auth-wrapper').style.display = 'none'; document.getElementById('main-app').style.display = 'block'; 
-                document.getElementById('prof-key').innerText = currentKey; document.getElementById('prof-expire').innerText = keyExpire;
-                document.getElementById('tab-admin').style.display = 'block';
-                switchView('view-tool', document.querySelectorAll('.nav-item')[0]);
-                if(!isAuto) speak("Đã mở khóa quyền lực tối cao.");
-                return; 
-            }
-
-            if(!isAuto) msg.innerText = "⏳ ĐANG XÁC THỰC MÃ KEY...";
-            try {
-                let res = await fetch('/api/verify_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({key: k})});
-                let json = await res.json();
-                if (json.status === "success") {
-                    currentKey = k; currentRole = json.role; keyExpire = json.expire;
-                    localStorage.setItem("v31_key", currentKey);
-                    document.getElementById('auth-wrapper').style.display = 'none'; document.getElementById('main-app').style.display = 'block'; 
-                    document.getElementById('prof-key').innerText = currentKey; document.getElementById('prof-expire').innerText = keyExpire;
-                    switchView('view-tool', document.querySelectorAll('.nav-item')[0]);
-                    if(!isAuto) speak("Xác thực thành công. Hệ thống sẵn sàng.");
-                } else { 
-                    if(!isAuto) msg.innerText = "❌ " + json.msg; else localStorage.removeItem("v31_key"); 
-                }
-            } catch(err) { if(!isAuto) msg.innerText = "⚠️ LỖI MẠNG! KHÔNG THỂ KẾT NỐI MÁY CHỦ."; }
-        }
-
-        function logout() { localStorage.removeItem("v31_key"); location.reload(); }
-
-        async function startAiTool(gameId, toolName, url) {
-            let k = document.getElementById('login-key').value.trim() || currentKey;
-            
-            if (url !== '') document.getElementById('game-frame').src = url;
-            document.getElementById('game-overlay').style.display = 'block';
-            document.getElementById('robo-phien').innerText = "ĐANG TẢI...";
-            document.getElementById('bridge-name').innerText = "CHECKING KEY...";
-            document.getElementById('robo-advice').innerHTML = '<i class="fas fa-shield-alt"></i> ĐANG MỞ KHOÁ TƯỜNG LỬA...';
-            document.getElementById('conf-bar-box').style.display = 'none';
-
-            let boxTai = document.getElementById('box-tai'); let boxXiu = document.getElementById('box-xiu');
-            if (gameId === 'lc79_xd') {
-                boxTai.innerText = "CHẴN"; boxXiu.innerText = "LẺ";
-                boxTai.className = "side-box side-chan"; boxXiu.className = "side-box side-le";
+        function dragStart(e) {
+            isDragging = true;
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX; startY = e.touches[0].clientY;
             } else {
-                boxTai.innerText = "TÀI"; boxXiu.innerText = "XỈU";
-                boxTai.className = "side-box side-tai"; boxXiu.className = "side-box side-xiu";
+                startX = e.clientX; startY = e.clientY;
             }
-            resetBoxes();
+            initialX = overlay.offsetLeft; initialY = overlay.offsetTop;
+            overlay.style.transform = 'none';
+        }
 
-            if (k !== 'hungki98vip') {
-                let res = await fetch('/api/verify_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({key: k})});
-                let json = await res.json();
-                if(json.status !== "success") { alert(json.msg); closeGame(); logout(); return; }
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            let currentX, currentY;
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX; currentY = e.touches[0].clientY;
+            } else {
+                currentX = e.clientX; currentY = e.clientY;
             }
-            
-            activeGame = gameId; 
-            phienCu = "START_SESSION"; 
-            isPredicting = false; 
-            clearInterval(scanInterval); clearInterval(countdownTimer); 
-            
-            document.getElementById('bridge-name').innerText = "ĐANG ĐỒNG BỘ V31...";
-            document.getElementById('robo-advice').innerHTML = '<i class="fas fa-cog fa-spin"></i> SYNCING V31 CORE...';
-            
-            speak("Kích hoạt giao thức " + toolName);
-            getSignalTX(); scanInterval = setInterval(getSignalTX, 2000);
+            overlay.style.left = (initialX + currentX - startX) + 'px';
+            overlay.style.top = (initialY + currentY - startY) + 'px';
         }
 
-        function closeGame() { activeGame = ""; phienCu = ""; clearInterval(scanInterval); clearInterval(countdownTimer); isPredicting = false; document.getElementById('game-overlay').style.display = 'none'; document.getElementById('game-frame').src = ''; }
-        function resetBoxes() { document.getElementById('box-tai').classList.remove('active'); document.getElementById('box-xiu').classList.remove('active'); }
+        function dragEnd() { isDragging = false; }
 
-        function startBetTimer() {
-            let betTime = 15; 
-            let timerEl = document.getElementById('timer-15s'); 
-            timerEl.style.display = 'block';
-            timerEl.style.color = '#00ffcc'; timerEl.style.borderColor = '#00ffcc';
-            timerEl.innerText = "VÀO TIỀN: " + betTime + "s";
-            
-            countdownTimer = setInterval(() => {
-                betTime--; 
-                if(betTime > 0) {
-                    timerEl.innerText = "VÀO TIỀN: " + betTime + "s";
-                } else { 
-                    clearInterval(countdownTimer); 
-                    resetBoxes(); 
-                    timerEl.style.color = '#ff003c'; timerEl.style.borderColor = '#ff003c';
-                    timerEl.innerText = "ĐỢI HẾT PHIÊN";
-                    document.getElementById('robo-advice').innerText = "ĐÃ KHÓA LỆNH. CHỜ MỞ BÁT MỚI..."; 
-                    document.getElementById('bridge-name').innerText = "CHỜ NHÀ CÁI...";
-                    document.getElementById('conf-bar-box').style.display = 'none';
-                    isPredicting = false; 
-                }
-            }, 1000);
+        // Cơ chế ẩn hiện nhanh giao diện qua nút 3 chấm
+        let isMinimized = false;
+        function toggleSize() {
+            const content = document.getElementById('tool-content');
+            isMinimized = !isMinimized;
+            content.style.display = isMinimized ? 'none' : 'block';
         }
 
-        function runHashEffect(timerEl, waitTime, data) {
-            let hexChars = "0123456789ABCDEF";
-            timerEl.style.display = 'block';
-            timerEl.style.color = '#ff003c'; timerEl.style.borderColor = '#ff003c';
-            
-            clearInterval(countdownTimer);
-            countdownTimer = setInterval(() => {
-                waitTime--;
-                if(waitTime > 0) {
-                    timerEl.innerText = "ĐỢI: " + waitTime + "s";
-                    let randomHash = "0x" + Array.from({length: 8}, () => hexChars[Math.floor(Math.random() * 16)]).join('');
-                    document.getElementById('bridge-name').innerText = "DECRYPTING: " + randomHash;
-                } else {
-                    clearInterval(countdownTimer);
-                    
-                    let result = data.du_doan; 
-                    document.getElementById('bridge-name').innerText = data.loi_khuyen;
-                    
-                    document.getElementById('conf-bar-box').style.display = 'block';
-                    document.getElementById('conf-bar-fill').style.width = data.ti_le + "%";
-                    document.getElementById('conf-text').innerText = "WIN RATE: " + data.ti_le + "%";
-                    
-                    if(result === "CHỜ CẦU" || result === "CHỜ") {
-                        speak("Cầu loạn, tạm nghỉ.");
-                        document.getElementById('robo-advice').innerText = "HỦY LỆNH, BẢO TOÀN VỐN";
-                        timerEl.style.color = '#ff003c'; timerEl.style.borderColor = '#ff003c';
-                        timerEl.innerText = "ĐỢI HẾT PHIÊN";
-                        isPredicting = false;
-                    } else {
-                        if(result === "TÀI" || result === "CHẴN") document.getElementById('box-tai').classList.add('active'); 
-                        else document.getElementById('box-xiu').classList.add('active');
-                        
-                        document.getElementById('robo-advice').innerText = "CHỐT KÈO: " + result;
-                        speak("Đánh " + result); 
-                        startBetTimer(); 
-                    }
-                }
-            }, 1000);
-        }
-
-        async function getSignalTX() {
-            if (isPredicting || !activeGame) return; 
+        // Đồng bộ dữ liệu phân tích từ Backend API
+        async function scanAPI() {
+            const tool = document.getElementById('tool-selector').value;
             try {
-                let res = await fetch(`/api/scan?tool=${activeGame}&key=${currentKey}`); 
+                let res = await fetch(`/api/scan?tool=${tool}`);
                 let json = await res.json();
                 
-                if(json.status === "error") { 
-                    if(json.msg.includes("đồng bộ")) {
-                        document.getElementById('robo-advice').innerText = "ĐANG LẤY MẪU DỮ LIỆU MỚI...";
-                        return; 
-                    }
-                    alert("LỖI HỆ THỐNG: " + json.msg); closeGame(); 
-                    if(json.msg.includes("hết hạn") || json.msg.includes("khóa")) logout();
-                    return; 
-                }
-                
-                let data = json.data;
-                
-                if(data.phien !== phienCu && data.phien !== "ĐANG TẢI...") {
-                    isPredicting = true; 
-                    let isFirstRun = (phienCu === "START_SESSION");
-                    phienCu = data.phien; 
-                    document.getElementById('robo-phien').innerText = data.phien; 
-                    resetBoxes(); 
+                if(json.status === 'success') {
+                    document.getElementById('tool-title').innerText = 'MÃ PHIÊN: #' + json.data.phien;
                     
-                    if (isFirstRun) {
-                        let result = data.du_doan; 
-                        document.getElementById('bridge-name').innerText = data.loi_khuyen;
-                        document.getElementById('conf-bar-box').style.display = 'block';
-                        document.getElementById('conf-bar-fill').style.width = data.ti_le + "%";
-                        document.getElementById('conf-text').innerText = "WIN RATE: " + data.ti_le + "%";
-                        
-                        if(result === "CHỜ CẦU" || result === "CHỜ" || result === "LOADING...") {
-                            speak("Đang chờ dữ liệu.");
-                            document.getElementById('robo-advice').innerText = "VUI LÒNG ĐỢI VÁN SAU...";
-                            let timerEl = document.getElementById('timer-15s');
-                            timerEl.style.display = 'block'; timerEl.style.color = '#ff003c'; timerEl.style.borderColor = '#ff003c';
-                            timerEl.innerText = "ĐỢI HẾT PHIÊN";
-                            isPredicting = false;
-                        } else {
-                            if(result === "TÀI" || result === "CHẴN") document.getElementById('box-tai').classList.add('active'); 
-                            else document.getElementById('box-xiu').classList.add('active');
-                            
-                            document.getElementById('robo-advice').innerText = "CHỐT KÈO: " + result;
-                            speak("Đánh " + result); 
-                            startBetTimer(); 
-                        }
+                    const boxX = document.getElementById('box-l');
+                    const boxT = document.getElementById('box-r');
+                    
+                    boxX.classList.remove('active');
+                    boxT.classList.remove('active');
+                    
+                    if(json.data.du_doan === 'TÀI') {
+                        boxT.classList.add('active');
+                        boxT.innerHTML = `TÀI<br><span style="font-size:12px">${json.data.ti_le}%</span>`;
+                        boxX.innerHTML = `XỈU`;
                     } else {
-                        document.getElementById('robo-advice').innerText = "AI ĐANG TÍNH TOÁN...";
-                        document.getElementById('conf-bar-box').style.display = 'none';
-                        runHashEffect(document.getElementById('timer-15s'), 10, data);
+                        boxX.classList.add('active');
+                        boxX.innerHTML = `XỈU<br><span style="font-size:12px">${json.data.ti_le}%</span>`;
+                        boxT.innerHTML = `TÀI`;
                     }
                 }
-            } catch (e) {
-                document.getElementById('robo-advice').innerHTML = '<i class="fas fa-exclamation-triangle"></i> LỖI KẾT NỐI, ĐANG THỬ LẠI...';
-            }
+            } catch (e) { console.log("Đang quét tín hiệu mạch..."); }
         }
 
-        function makeDraggable(elmnt) {
-            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            var header = document.getElementById(elmnt.id + "-header");
-            if (header) { header.onmousedown = dragMouseDown; header.ontouchstart = dragTouchStart; } 
-            else { elmnt.onmousedown = dragMouseDown; elmnt.ontouchstart = dragTouchStart; }
-            function dragMouseDown(e) { e = e || window.event; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
-            function dragTouchStart(e) { pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
-            function elementDrag(e) { e = e || window.event; e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
-            function elementTouchDrag(e) { e.preventDefault(); pos1 = pos3 - e.touches[0].clientX; pos2 = pos4 - e.touches[0].clientY; pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
-            function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
+        function forceScan() {
+            document.getElementById('tool-title').innerText = 'ĐANG TẢI DỮ LIỆU...';
+            scanAPI();
         }
 
-        makeDraggable(document.getElementById("draggable-robot"));
-        makeDraggable(document.getElementById("bridge-detect-panel"));
-
-        async function loadAdminKeys() { 
-            let res = await fetch(`/api/admin/list_keys?admin_key=hungki98vip`); let json = await res.json(); 
-            if(json.status !== "success") return; 
-            let htmlKeys = ""; 
-            json.keys.forEach(k => { 
-                let btn = k[2] == 0 ? `<button class="btn" style="padding:4px; font-size:10px; margin:0; width:50px; border-color:var(--red); color:var(--red); background:none;" onclick="actionKey('${k[0]}','ban')">KHÓA</button>` : `<button class="btn" style="padding:4px; font-size:10px; margin:0; width:50px; border-color:var(--cyan); color:var(--cyan); background:none;" onclick="actionKey('${k[0]}','unban')">MỞ</button>`;
-                htmlKeys += `<div style="border-bottom:1px solid #222; padding:8px 0;"><div style="display:flex; justify-content:space-between; align-items:center;"><b style="color:var(--gold); font-size:12px;">${k[0]}</b>${btn}</div><div style="font-size:10px; color:#888; margin-top:3px;">EXP: ${k[1]}</div><button class="btn" style="padding:4px; font-size:10px; margin-top:5px; width:100%; border-color:#555; background:none; color:#fff;" onclick="actionKey('${k[0]}','delete')">XÓA BỎ VĨNH VIỄN</button></div>`; 
-            }); 
-            document.getElementById('admin-keys').innerHTML = htmlKeys || "<i style='color:#555;'>Chưa có Key nào.</i>"; 
-        }
-
-        async function adminCreateKey() {
-            let dur = document.getElementById('key-duration').value; let customK = document.getElementById('custom-key-input').value.trim();
-            let res = await fetch('/api/admin/create_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: 'hungki98vip', duration: dur, custom_key: customK}) });
-            let json = await res.json(); 
-            if(json.status === "success") { prompt("TẠO KEY THÀNH CÔNG. COPY MÃ NÀY GIAO CHO KHÁCH:", json.new_key); document.getElementById('custom-key-input').value = ""; loadAdminKeys(); } else alert("Lỗi: " + json.msg);
-        }
-
-        async function actionKey(target, act) { 
-            if(act === 'delete' && !confirm("Bạn có chắc muốn xóa vĩnh viễn Key này không?")) return;
-            await fetch('/api/admin/action_key', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({admin_key: 'hungki98vip', target_key: target, action: act})}); loadAdminKeys(); 
-        }
+        scanAPI();
+        setInterval(scanAPI, 6000); // Tự động làm mới chu kỳ quét sau mỗi 6 giây
     </script>
 </body>
 </html>
