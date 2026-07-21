@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>DORAEMON AI v8.1 – ULTIMATE VIP</title>
+  <title>DORAEMON AI v10.0 – ULTIMATE VIP</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: #050510;
+      background: radial-gradient(circle at 50% 0%, #0a0015 0%, #000 100%);
       font-family: 'Orbitron', sans-serif;
       display: flex;
       align-items: center;
@@ -18,235 +18,156 @@
       padding: 15px;
       color: #fff;
     }
-    .container { width: 100%; max-width: 420px; }
+    .container { width: 100%; max-width: 430px; }
     .glass {
-      background: rgba(10, 10, 25, 0.8);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid rgba(0, 255, 255, 0.3);
-      border-radius: 30px;
+      background: rgba(15, 10, 30, 0.8);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(0, 255, 255, 0.35);
+      border-radius: 35px;
       padding: 30px 25px;
-      box-shadow: 0 0 40px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.05);
+      box-shadow: 0 0 50px rgba(0, 255, 255, 0.2), inset 0 0 30px rgba(0, 255, 255, 0.08);
       margin-bottom: 20px;
-    }
-    .logo {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .logo img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid cyan;
-      box-shadow: 0 0 30px cyan;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-    h1 {
-      text-align: center;
-      font-size: 2.2rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, cyan, magenta);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
-      margin: 10px 0 5px;
-    }
-    .subtitle {
-      text-align: center;
-      color: gold;
-      font-size: 0.8rem;
-      letter-spacing: 4px;
-      margin-bottom: 25px;
-    }
-    .input-field {
-      width: 100%;
-      padding: 16px;
-      margin: 10px 0;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 12px;
-      color: #fff;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.9rem;
-      outline: none;
-      transition: 0.3s;
-    }
-    .input-field:focus {
-      border-color: magenta;
-      box-shadow: 0 0 20px magenta;
-    }
-    .btn {
-      width: 100%;
-      padding: 16px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, cyan, magenta);
-      color: #000;
-      font-weight: 700;
-      font-size: 1.1rem;
-      font-family: 'Orbitron', sans-serif;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      box-shadow: 0 0 25px cyan;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .btn:hover {
-      box-shadow: 0 0 40px magenta;
-      transform: translateY(-3px);
-    }
-    .card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 18px;
-      padding: 18px;
-      margin: 12px 0;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .card:hover {
-      border-color: cyan;
-      box-shadow: 0 0 25px rgba(0,255,255,0.3);
-      transform: scale(1.02);
-    }
-    .card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 5px;
-    }
-    .card p {
-      color: #aaa;
-      font-size: 0.8rem;
-    }
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.92);
-      display: none;
-      flex-direction: column;
-      z-index: 100;
-    }
-    .overlay.active {
-      display: flex;
-    }
-    .overlay-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      background: rgba(0,0,0,0.5);
-    }
-    .overlay-header i {
-      font-size: 1.5rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .overlay-header i:hover { color: cyan; }
-    .dropdown {
       position: relative;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0; top: 40px;
-      background: #1a1a2e;
-      min-width: 200px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      z-index: 200;
       overflow: hidden;
     }
+    .glass::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,255,255,0.1) 0%, transparent 60%);
+      animation: rotate 10s linear infinite;
+      z-index: -1;
+    }
+    @keyframes rotate { 100% { transform: rotate(360deg); } }
+    .logo { text-align: center; margin-bottom: 20px; }
+    .logo img {
+      width: 110px; height: 110px; border-radius: 50%; border: 3px solid cyan;
+      box-shadow: 0 0 35px cyan; animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    h1 {
+      text-align: center; font-size: 2.3rem; font-weight: 900;
+      background: linear-gradient(90deg, #0ff, #f0f);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: 3px; margin: 10px 0 5px;
+    }
+    .subtitle {
+      text-align: center; color: gold; font-size: 0.8rem; letter-spacing: 5px;
+      margin-bottom: 15px; text-transform: uppercase;
+    }
+    .golden-hour-box {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid gold;
+      border-radius: 20px;
+      padding: 12px 20px;
+      margin: 0 0 25px;
+      text-align: center;
+    }
+    .golden-hour-box i { color: gold; margin-right: 8px; }
+    .input-field {
+      width: 100%; padding: 16px; margin: 10px 0; background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; color: #fff;
+      font-family: 'Orbitron', sans-serif; font-size: 0.9rem; outline: none; transition: 0.3s;
+    }
+    .input-field:focus { border-color: magenta; box-shadow: 0 0 25px magenta; }
+    .btn {
+      width: 100%; padding: 16px; margin-top: 15px; border: none; border-radius: 14px;
+      background: linear-gradient(135deg, #0ff, #f0f); color: #000; font-weight: 700;
+      font-size: 1.1rem; font-family: 'Orbitron', sans-serif; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 30px cyan;
+      transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn:hover { box-shadow: 0 0 50px magenta; transform: translateY(-3px); }
+    .card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px; padding: 18px; margin: 12px 0; cursor: pointer; transition: 0.3s;
+    }
+    .card:hover { border-color: cyan; box-shadow: 0 0 30px rgba(0,255,255,0.3); transform: scale(1.02); }
+    .card h3 { font-size: 1.3rem; margin-bottom: 5px; }
+    .card p { color: #aaa; font-size: 0.8rem; }
+    .overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95); display: none; flex-direction: column; z-index: 100;
+    }
+    .overlay.active { display: flex; }
+    .overlay-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px; background: rgba(0,0,0,0.6);
+    }
+    .overlay-header i { font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
+    .overlay-header i:hover { color: cyan; }
+    .dropdown { position: relative; }
+    .dropdown-content {
+      display: none; position: absolute; right: 0; top: 45px; background: #1a0a30;
+      min-width: 210px; border-radius: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+      z-index: 200; overflow: hidden;
+    }
     .dropdown-content a {
-      color: #fff;
-      padding: 14px 20px;
-      text-decoration: none;
-      display: block;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.8rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      transition: 0.2s;
+      color: #fff; padding: 14px 22px; text-decoration: none; display: block;
+      font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s;
     }
-    .dropdown-content a:hover {
-      background: cyan;
-      color: #000;
-    }
+    .dropdown-content a:hover { background: cyan; color: #000; }
     .show { display: block; }
     .result-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 20px;
     }
     .prediction {
-      font-size: 9rem;
-      font-weight: 900;
-      line-height: 1;
-      margin: 20px 0;
-      text-shadow: 0 0 30px currentColor;
-      animation: pulse 2s infinite;
+      font-size: 10rem; font-weight: 900; line-height: 1; margin: 20px 0;
+      text-shadow: 0 0 40px currentColor; animation: pulse 2s infinite;
     }
-    .tai { color: #ff3366; }
-    .xiu { color: #00ccff; }
-    @keyframes pulse {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
-    .info-row {
-      font-size: 1rem;
-      margin: 5px 0;
-      color: #ccc;
-    }
-    .reverse-badge {
-      background: gold;
-      color: #000;
-      padding: 4px 16px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 0.8rem;
-      margin-top: 10px;
-    }
+    .tai { color: #ff3366; } .xiu { color: #00ccff; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    .info-row { font-size: 1rem; margin: 5px 0; color: #ccc; }
     .last-history {
-      margin-top: 20px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 15px;
-      padding: 12px 16px;
-      width: 100%;
-      text-align: center;
-      font-size: 0.9rem;
+      margin-top: 20px; background: rgba(0,0,0,0.5); border-radius: 16px;
+      padding: 12px 18px; width: 100%; text-align: center; font-size: 0.9rem;
     }
-    .win { color: #4caf50; }
-    .lose { color: #ff3366; }
+    .win { color: #4caf50; } .lose { color: #ff3366; }
+    .version-badge {
+      position: absolute; top: 15px; right: 15px;
+      background: linear-gradient(135deg, cyan, magenta);
+      color: #000; font-weight: 700; font-size: 0.7rem; padding: 3px 10px;
+      border-radius: 15px; letter-spacing: 1px;
+    }
+    .ai-info {
+      font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 5px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
 <div class="container">
   <!-- Login Screen -->
   <div class="glass" id="loginScreen">
+    <div class="version-badge">v10.0</div>
     <div class="logo">
       <img src="https://i.ibb.co/QFDKgC1R/1783519521054.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616438.png'">
     </div>
     <h1>DORAEMON AI</h1>
-    <div class="subtitle">ULTIMATE VIP PRO</div>
+    <div class="subtitle">Ultimate VIP Pro</div>
+    <div class="golden-hour-box" id="goldenHourLogin">
+      <i class="fas fa-clock"></i> <span id="goldenTextLogin">Đang tải khung giờ vàng...</span>
+    </div>
     <input type="text" id="username" class="input-field" placeholder="TÊN ĐĂNG NHẬP">
     <input type="password" id="password" class="input-field" placeholder="MẬT KHẨU">
     <button class="btn" onclick="login()"><i class="fas fa-fingerprint"></i> MỞ KHÓA</button>
     <p id="loginError" style="color:red; text-align:center; margin-top:15px;"></p>
+    <div class="ai-info">🧠 AI tự động phân tích 15 phiên – Nhận diện mọi dạng cầu</div>
   </div>
 
   <!-- Dashboard -->
   <div class="glass" id="dashboard" style="display:none;">
-    <h2 id="welcome" style="text-align:center; margin-bottom:25px; font-size:1.5rem;"></h2>
+    <div class="version-badge">v10.0</div>
+    <h2 id="welcome" style="text-align:center; margin-bottom:10px; font-size:1.6rem;"></h2>
+    <div class="golden-hour-box" id="goldenHourDash">
+      <i class="fas fa-star"></i> <span id="goldenTextDash">Đang tải...</span>
+    </div>
     <div class="card" onclick="openGame('lc79')">
       <h3><i class="fas fa-crown" style="color:gold;"></i> LC79.BET</h3>
       <p>Chạm để chọn chế độ</p>
@@ -260,6 +181,7 @@
       <p>Chạm để chọn chế độ</p>
     </div>
     <button class="btn" style="background:red; margin-top:20px;" onclick="logout()">ĐĂNG XUẤT</button>
+    <div class="ai-info">🧠 Nhận diện: 1-1, 2-2, bệt, 1-2-3, nghiêng, đối xứng...</div>
   </div>
 </div>
 
@@ -286,7 +208,6 @@
       <div class="info-row">Phiên: <span id="sessionId" style="color:#fff;"></span></div>
       <div class="info-row">Độ chính xác: <span id="accuracy" style="color:#fff;"></span>%</div>
       <div id="reason" style="color:gold; margin-top:8px; font-size:0.8rem;"></div>
-      <div id="reverseBadge" class="reverse-badge" style="display:none;">🔄 ĐẢO CẦU</div>
     </div>
     <div class="last-history" id="lastHistoryBox">
       <div style="color:#aaa; margin-bottom:5px;">📌 KẾT QUẢ PHIÊN TRƯỚC</div>
@@ -297,6 +218,21 @@
 
 <script>
 let auth = false, currentTool = '', currentMode = '', interval = null;
+
+async function loadGoldenHour() {
+  try {
+    const res = await fetch('/api/golden_hours');
+    const data = await res.json();
+    if (data.status === 'success') {
+      const gh = data.data;
+      const text = `${gh.khung_gio} - ${gh.danh_gia}`;
+      document.getElementById('goldenTextLogin').innerText = text;
+      document.getElementById('goldenTextDash').innerText = text;
+    }
+  } catch(e) {}
+}
+loadGoldenHour();
+setInterval(loadGoldenHour, 60000);
 
 async function login() {
   const u = document.getElementById('username').value.trim();
@@ -369,10 +305,8 @@ async function fetchPrediction() {
       document.getElementById('sessionId').innerText = d.phien;
       document.getElementById('accuracy').innerText = d.ti_le;
       document.getElementById('reason').innerText = d.loi_khuyen || '';
-      document.getElementById('reverseBadge').style.display = d.reverse_mode ? 'inline-block' : 'none';
       document.getElementById('resultBox').style.display = 'block';
 
-      // Hiển thị lịch sử 1 phiên
       const last = d.last_result;
       const histDiv = document.getElementById('lastHistoryContent');
       if (last && last.du_doan) {
@@ -397,4 +331,4 @@ window.addEventListener('click', function(e) {
 });
 </script>
 </body>
-  </html>
+</html>
