@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>DORAEMON AI v10.0 – ULTIMATE VIP</title>
+  <title>DORAEMON AI v12.0 – VIP MAX</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -18,14 +18,14 @@
       padding: 15px;
       color: #fff;
     }
-    .container { width: 100%; max-width: 430px; }
+    .container { width: 100%; max-width: 450px; }
     .glass {
       background: rgba(15, 10, 30, 0.8);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
       border: 1px solid rgba(0, 255, 255, 0.35);
       border-radius: 35px;
-      padding: 30px 25px;
+      padding: 30px 20px;
       box-shadow: 0 0 50px rgba(0, 255, 255, 0.2), inset 0 0 30px rgba(0, 255, 255, 0.08);
       margin-bottom: 20px;
       position: relative;
@@ -87,8 +87,6 @@
       border-radius: 20px; padding: 18px; margin: 12px 0; cursor: pointer; transition: 0.3s;
     }
     .card:hover { border-color: cyan; box-shadow: 0 0 30px rgba(0,255,255,0.3); transform: scale(1.02); }
-    .card h3 { font-size: 1.3rem; margin-bottom: 5px; }
-    .card p { color: #aaa; font-size: 0.8rem; }
     .overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.95); display: none; flex-direction: column; z-index: 100;
@@ -98,25 +96,20 @@
       display: flex; justify-content: space-between; align-items: center;
       padding: 20px; background: rgba(0,0,0,0.6);
     }
-    .overlay-header i { font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
-    .overlay-header i:hover { color: cyan; }
+    .overlay-header i { font-size: 1.5rem; cursor: pointer; }
     .dropdown { position: relative; }
     .dropdown-content {
       display: none; position: absolute; right: 0; top: 45px; background: #1a0a30;
-      min-width: 210px; border-radius: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+      min-width: 200px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.9);
       z-index: 200; overflow: hidden;
     }
     .dropdown-content a {
-      color: #fff; padding: 14px 22px; text-decoration: none; display: block;
-      font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
+      color: #fff; padding: 14px 20px; display: block; font-size: 0.8rem;
       border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s;
     }
     .dropdown-content a:hover { background: cyan; color: #000; }
     .show { display: block; }
-    .result-area {
-      flex: 1; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; padding: 20px;
-    }
+    .result-area { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
     .prediction {
       font-size: 10rem; font-weight: 900; line-height: 1; margin: 20px 0;
       text-shadow: 0 0 40px currentColor; animation: pulse 2s infinite;
@@ -135,9 +128,8 @@
       color: #000; font-weight: 700; font-size: 0.7rem; padding: 3px 10px;
       border-radius: 15px; letter-spacing: 1px;
     }
-    .ai-info {
-      font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 5px;
-      text-align: center;
+    .manual-md5-box {
+      margin-top: 20px; background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px;
     }
   </style>
 </head>
@@ -145,12 +137,12 @@
 <div class="container">
   <!-- Login Screen -->
   <div class="glass" id="loginScreen">
-    <div class="version-badge">v10.0</div>
+    <div class="version-badge">v12.0</div>
     <div class="logo">
       <img src="https://i.ibb.co/QFDKgC1R/1783519521054.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616438.png'">
     </div>
     <h1>DORAEMON AI</h1>
-    <div class="subtitle">Ultimate VIP Pro</div>
+    <div class="subtitle">VIP MAX EDITION</div>
     <div class="golden-hour-box" id="goldenHourLogin">
       <i class="fas fa-clock"></i> <span id="goldenTextLogin">Đang tải khung giờ vàng...</span>
     </div>
@@ -158,30 +150,19 @@
     <input type="password" id="password" class="input-field" placeholder="MẬT KHẨU">
     <button class="btn" onclick="login()"><i class="fas fa-fingerprint"></i> MỞ KHÓA</button>
     <p id="loginError" style="color:red; text-align:center; margin-top:15px;"></p>
-    <div class="ai-info">🧠 AI tự động phân tích 15 phiên – Nhận diện mọi dạng cầu</div>
   </div>
 
   <!-- Dashboard -->
   <div class="glass" id="dashboard" style="display:none;">
-    <div class="version-badge">v10.0</div>
+    <div class="version-badge">v12.0</div>
     <h2 id="welcome" style="text-align:center; margin-bottom:10px; font-size:1.6rem;"></h2>
     <div class="golden-hour-box" id="goldenHourDash">
       <i class="fas fa-star"></i> <span id="goldenTextDash">Đang tải...</span>
     </div>
-    <div class="card" onclick="openGame('lc79')">
-      <h3><i class="fas fa-crown" style="color:gold;"></i> LC79.BET</h3>
-      <p>Chạm để chọn chế độ</p>
-    </div>
-    <div class="card" onclick="openGame('betvip')">
-      <h3><i class="fas fa-gem" style="color:cyan;"></i> BETVIP</h3>
-      <p>Chạm để chọn chế độ</p>
-    </div>
-    <div class="card" onclick="openGame('sunwin')">
-      <h3><i class="fas fa-sun" style="color:orange;"></i> SUNWIN</h3>
-      <p>Chạm để chọn chế độ</p>
-    </div>
+    <div class="card" onclick="openGame('lc79')"><h3>🏦 LC79.BET</h3><p>Chạm để mở bảng điều khiển</p></div>
+    <div class="card" onclick="openGame('betvip')"><h3>🎰 BETVIP</h3><p>Chạm để mở bảng điều khiển</p></div>
+    <div class="card" onclick="openGame('sunwin')"><h3>☀️ SUNWIN</h3><p>Chạm để mở bảng điều khiển</p></div>
     <button class="btn" style="background:red; margin-top:20px;" onclick="logout()">ĐĂNG XUẤT</button>
-    <div class="ai-info">🧠 Nhận diện: 1-1, 2-2, bệt, 1-2-3, nghiêng, đối xứng...</div>
   </div>
 </div>
 
@@ -194,7 +175,7 @@
       <i class="fas fa-ellipsis-v" onclick="document.getElementById('modeMenu').classList.toggle('show')"></i>
       <div class="dropdown-content" id="modeMenu">
         <a href="#" onclick="selectMode('tx_md5')">🎯 TÀI XỈU MD5</a>
-        <a href="#" onclick="selectMode('tx_hu')">🎰 TÀI XỈU HŨ</a>
+        <a href="#" onclick="selectMode('tx')">🎰 TÀI XỈU HŨ</a>
         <a href="#" onclick="selectMode('xoc_dia')">🎲 XÓC ĐĨA</a>
       </div>
     </div>
@@ -209,9 +190,17 @@
       <div class="info-row">Độ chính xác: <span id="accuracy" style="color:#fff;"></span>%</div>
       <div id="reason" style="color:gold; margin-top:8px; font-size:0.8rem;"></div>
     </div>
+    <!-- Lịch sử 1 phiên -->
     <div class="last-history" id="lastHistoryBox">
       <div style="color:#aaa; margin-bottom:5px;">📌 KẾT QUẢ PHIÊN TRƯỚC</div>
       <div id="lastHistoryContent">Chưa có dữ liệu</div>
+    </div>
+    <!-- Manual MD5 -->
+    <div class="manual-md5-box">
+      <div style="color:var(--gold); margin-bottom:10px;"><i class="fas fa-key"></i> GIẢI MÃ MD5 THỦ CÔNG</div>
+      <input type="text" id="md5Input" class="input-field" placeholder="Dán chuỗi MD5 32 ký tự" maxlength="32">
+      <button class="btn" onclick="analyzeMD5()" style="font-size:0.9rem;">PHÂN TÍCH MD5</button>
+      <div id="md5Result" style="margin-top:10px; text-align:center;"></div>
     </div>
   </div>
 </div>
@@ -272,6 +261,7 @@ function openGame(tool) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('modeDisplay').innerText = 'Chọn chế độ từ menu 3 chấm';
   document.getElementById('lastHistoryContent').innerHTML = 'Chưa có dữ liệu';
+  document.getElementById('md5Result').innerHTML = '';
   clearInterval(interval);
 }
 
@@ -324,6 +314,32 @@ async function fetchPrediction() {
   }
 }
 
+async function analyzeMD5() {
+  const md5 = document.getElementById('md5Input').value.trim();
+  if (!/^[a-f0-9]{32}$/i.test(md5)) {
+    document.getElementById('md5Result').innerText = 'Chuỗi MD5 không hợp lệ!';
+    return;
+  }
+  try {
+    const res = await fetch('/api/manual_md5', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ key: 'hungki98vip', md5: md5 })
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      document.getElementById('md5Result').innerHTML = `
+        <div>Tài: ${data.tai}% | Xỉu: ${data.xiu}%</div>
+        <div style="font-size:1.5rem; font-weight:bold;">Dự đoán: <span style="color:${data.suggestion==='TÀI'?'var(--red)':'var(--blue)'}">${data.suggestion}</span></div>
+      `;
+    } else {
+      document.getElementById('md5Result').innerText = data.msg;
+    }
+  } catch(e) {
+    document.getElementById('md5Result').innerText = 'Lỗi kết nối';
+  }
+}
+
 window.addEventListener('click', function(e) {
   if (!e.target.matches('.fa-ellipsis-v')) {
     document.getElementById('modeMenu').classList.remove('show');
@@ -331,4 +347,4 @@ window.addEventListener('click', function(e) {
 });
 </script>
 </body>
-</html>
+        </html>
