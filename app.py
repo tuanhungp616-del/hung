@@ -1,7 +1,8 @@
 # ═══════════════════════════════════════════════════════════════
-#  DORAEMON INTELLIGENCE AI v8.1 – ULTIMATE VIP PRO
-#  Lịch sử chỉ 1 phiên – AI tự nhận biết Thắng/Thua
+#  DORAEMON INTELLIGENCE AI v9.0 – ULTIMATE VIP PRO (NO REVERSE)
+#  Lịch sử 1 phiên – AI tự nhận biết Thắng/Thua
 #  Thuật toán: Markov bậc 4, Entropy, Bayesian, Deep Pattern
+#  Thêm khung giờ vàng dễ nổ hũ, giao diện VIP xịn
 # ═══════════════════════════════════════════════════════════════
 
 from flask import Flask, request, jsonify, send_file
@@ -32,7 +33,7 @@ def khoi_tao_db():
 
 khoi_tao_db()
 
-# ═══════════════ AI ENGINE PRO ═══════════════
+# ═══════════════ AI ENGINE PRO v9.0 ═══════════════
 class TaiXiuAIPro:
     def __init__(self):
         self.markov_order = 4
@@ -135,37 +136,37 @@ class TaiXiuAIPro:
 ai = TaiXiuAIPro()
 
 # ═══════════════ STATE & HISTORY ═══════════════
-tool_state = defaultdict(lambda: {"loss":0, "rev":False, "rev_loss":0, "last_pred":None})
-# Chỉ lưu 1 lịch sử duy nhất cho mỗi tool+mode
+last_pred_map = defaultdict(lambda: None)
 last_history = defaultdict(lambda: None)
-
-def update_state_and_reverse(tool, mode, actual_result):
-    state = tool_state[f"{tool}_{mode}"]
-    if state["last_pred"] is not None and actual_result is not None:
-        win = (state["last_pred"] == actual_result)
-        if win:
-            if state["rev"]: state["rev_loss"] = 0
-            else: state["loss"] = 0
-        else:
-            if state["rev"]:
-                state["rev_loss"] += 1
-                if state["rev_loss"] >= 3:
-                    state["rev"] = False
-                    state["rev_loss"] = 0
-                    state["loss"] = 0
-            else:
-                state["loss"] += 1
-                if state["loss"] >= 3:
-                    state["rev"] = True
-                    state["loss"] = 0
-                    state["rev_loss"] = 0
-    return state["rev"]
 
 def get_id(item):
     if isinstance(item, dict):
         for k in ['id','phien','sessionId','SessionID']:
             if k in item and str(item[k]).isdigit(): return int(item[k])
     return 0
+
+# ═══════════════ KHUNG GIỜ VÀNG ═══════════════
+def get_golden_hours():
+    """Trả về khung giờ dễ nổ hũ dựa trên thời gian hiện tại (mang tính chất tham khảo)"""
+    now = datetime.now()
+    hour = now.hour
+    # Khung giờ vàng: 11h-13h, 20h-22h, 23h-1h
+    if 11 <= hour < 13:
+        return {"khung_gio": "11:00 - 13:00", "danh_gia": "Cực kỳ dễ nổ", "color": "#ffd740"}
+    elif 20 <= hour < 22:
+        return {"khung_gio": "20:00 - 22:00", "danh_gia": "Dễ nổ lớn", "color": "#ffd740"}
+    elif hour >= 23 or hour < 1:
+        return {"khung_gio": "23:00 - 01:00", "danh_gia": "Tỷ lệ nổ cao", "color": "#ffd740"}
+    elif 6 <= hour < 9:
+        return {"khung_gio": "06:00 - 09:00", "danh_gia": "Có thể nổ", "color": "#ff9800"}
+    elif 17 <= hour < 20:
+        return {"khung_gio": "17:00 - 20:00", "danh_gia": "Tạm ổn", "color": "#ff9800"}
+    else:
+        return {"khung_gio": "Các giờ khác", "danh_gia": "Bình thường", "color": "#9e9e9e"}
+
+@app.route("/api/golden_hours")
+def golden_hours():
+    return jsonify({"status":"success", "data": get_golden_hours()})
 
 @app.route("/api/scan")
 def scan():
@@ -208,24 +209,18 @@ def scan():
                 hist.append("Tài" if ("TAI" in val or "TÀI" in val or "'T'" in val) else "Xỉu")
 
         actual = hist[-1].upper() if hist else None
-        rev = update_state_and_reverse(tool, mode, actual)
-        state = tool_state[f"{tool}_{mode}"]
-
-        # Lưu lịch sử DUY NHẤT 1 phiên gần nhất
-        if state["last_pred"] is not None and actual is not None:
-            win = (state["last_pred"] == actual)
+        prev_pred = last_pred_map[f"{tool}_{mode}"]
+        if prev_pred is not None and actual is not None:
+            win = (prev_pred == actual)
             last_history[f"{tool}_{mode}"] = {
                 "phien": str(sessions[-1].get("id","?")) if sessions else "?",
-                "du_doan": state["last_pred"],
+                "du_doan": prev_pred,
                 "ket_qua": actual,
                 "win": win
             }
 
         raw_pred, reason, conf = ai.predict(hist)
-        if state["rev"]:
-            raw_pred = "XỈU" if raw_pred == "TÀI" else "TÀI"
-            reason = "🔄 ĐẢO CẦU - " + reason
-        state["last_pred"] = raw_pred
+        last_pred_map[f"{tool}_{mode}"] = raw_pred
 
         du_doan_hien_thi = raw_pred
         kq_cuoi_hien_thi = actual if actual else ""
@@ -246,8 +241,8 @@ def scan():
                 "phien": next_phien,
                 "loi_khuyen": reason,
                 "kq_cuoi": kq_cuoi_hien_thi,
-                "reverse_mode": state["rev"],
-                "last_result": last_history[f"{tool}_{mode}"]  # gửi kèm lịch sử 1 phiên
+                "reverse_mode": False,
+                "last_result": last_history[f"{tool}_{mode}"]
             }
         })
     except Exception as e:
