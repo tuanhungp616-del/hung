@@ -1,8 +1,7 @@
 # ═══════════════════════════════════════════════════════════════
-#  DORAEMON INTELLIGENCE AI v9.0 – ULTIMATE VIP PRO (NO REVERSE)
-#  Lịch sử 1 phiên – AI tự nhận biết Thắng/Thua
-#  Thuật toán: Markov bậc 4, Entropy, Bayesian, Deep Pattern
-#  Thêm khung giờ vàng dễ nổ hũ, giao diện VIP xịn
+#  DORAEMON INTELLIGENCE AI v10.0 – FULL PACKAGE
+#  app.py – Server Flask triển khai trên Render/VPS
+#  Tích hợp AdvancedCauDetector, khung giờ vàng, lịch sử 1 phiên
 # ═══════════════════════════════════════════════════════════════
 
 from flask import Flask, request, jsonify, send_file
@@ -16,37 +15,147 @@ CORS(app)
 DB_FILE = "royal_keys.db"
 USER_DB = "users.db"
 
+# ─── Database helpers ────────────────────────────────────
 def get_db(): return sqlite3.connect(DB_FILE, check_same_thread=False)
 def get_user_db(): return sqlite3.connect(USER_DB, check_same_thread=False)
 
 def khoi_tao_db():
     with get_db() as conn:
         c = conn.cursor()
-        c.execute('''CREATE TABLE IF NOT EXISTS keys (key_str TEXT PRIMARY KEY, expire_time DATETIME, is_banned INTEGER)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS keys (
+                        key_str TEXT PRIMARY KEY,
+                        expire_time DATETIME,
+                        is_banned INTEGER
+                     )''')
         c.execute("INSERT OR IGNORE INTO keys VALUES ('hungki98vip','2099-12-31 23:59:59',0)")
         conn.commit()
     with get_user_db() as conn:
         c = conn.cursor()
-        c.execute('''CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, password TEXT, role TEXT, created_at DATETIME)''')
-        c.execute("INSERT OR IGNORE INTO users VALUES ('admin', ?, 'admin', ?)", (hashlib.sha256('admin123'.encode()).hexdigest(), datetime.now()))
+        c.execute('''CREATE TABLE IF NOT EXISTS users (
+                        username TEXT PRIMARY KEY,
+                        password TEXT,
+                        role TEXT,
+                        created_at DATETIME
+                     )''')
+        c.execute("INSERT OR IGNORE INTO users VALUES ('admin', ?, 'admin', ?)",
+                  (hashlib.sha256('admin123'.encode()).hexdigest(), datetime.now()))
         conn.commit()
 
 khoi_tao_db()
 
-# ═══════════════ AI ENGINE PRO v9.0 ═══════════════
-class TaiXiuAIPro:
-    def __init__(self):
-        self.markov_order = 4
-        self.entropy_window = 25
+# ═══════════════ ADVANCED CẦU DETECTOR (15 PHIÊN) ═══════════════
+class AdvancedCauDetector:
+    def __init__(self, window=15):
+        self.window = window
 
-    def _entropy(self, data):
-        if not data: return 0
-        cnt = Counter(data)
-        total = len(data)
-        return -sum((c/total) * math.log2(c/total) for c in cnt.values())
+    def _last_n(self, hist, n):
+        return hist[-n:] if len(hist) >= n else hist
 
-    def _markov_predict(self, hist):
-        order = self.markov_order
+    def detect_bet(self, hist):
+        if len(hist) < 4: return None, 0
+        last = hist[-1]
+        count = 1
+        for i in range(len(hist)-2, -1, -1):
+            if hist[i] == last: count += 1
+            else: break
+        if count >= 12:      # Bệt rồng
+            pred = "Xỉu" if last == "Tài" else "Tài"
+            return pred.upper(), 75
+        elif count >= 5:
+            pred = "Xỉu" if last == "Tài" else "Tài"
+            return pred.upper(), 80
+        elif count >= 4:
+            pred = "Xỉu" if last == "Tài" else "Tài"
+            return pred.upper(), 70
+        return None, 0
+
+    def detect_1_1(self, hist):
+        if len(hist) < 4: return None, 0
+        last4 = hist[-4:]
+        if last4[0] != last4[1] and last4[1] != last4[2] and last4[2] != last4[3]:
+            length = 1
+            for i in range(len(hist)-2, -1, -1):
+                if hist[i] != hist[i+1]: length += 1
+                else: break
+            if length >= 4:
+                pred = "Xỉu" if hist[-1] == "Tài" else "Tài"
+                conf = min(85 + length*2, 99)
+                return pred.upper(), conf
+        return None, 0
+
+    def detect_2_2(self, hist):
+        if len(hist) < 6: return None, 0
+        last6 = hist[-6:]
+        if (last6[0]==last6[1] and last6[2]==last6[3] and last6[4]==last6[5] and
+            last6[0]!=last6[2] and last6[2]!=last6[4]):
+            cur = last6[4]
+            pred = "Xỉu" if cur == "Tài" else "Tài"
+            return pred.upper(), 90
+        return None, 0
+
+    def detect_1_2_or_2_1(self, hist):
+        if len(hist) < 6: return None, 0
+        last6 = hist[-6:]
+        # Mẫu 1-2-1-2: a,b,b,a,b,b
+        if (last6[0]==last6[3] and last6[1]==last6[2]==last6[4]==last6[5] and last6[0]!=last6[1]):
+            return last6[0].upper(), 88
+        # Mẫu 2-1-2-1: a,a,b,a,a,b
+        if (last6[0]==last6[1]==last6[3]==last6[4] and last6[2]==last6[5] and last6[0]!=last6[2]):
+            return last6[0].upper(), 88
+        return None, 0
+
+    def detect_1_2_3(self, hist):
+        if len(hist) < 6: return None, 0
+        groups = []
+        i = len(hist)-1
+        while i >= 0 and len(groups) < 3:
+            cur = hist[i]
+            cnt = 1
+            while i-1 >= 0 and hist[i-1] == cur:
+                cnt += 1
+                i -= 1
+            groups.append((cur, cnt))
+            i -= 1
+        if len(groups) == 3:
+            sizes = [g[1] for g in groups]
+            if sizes == [3, 2, 1] or sizes == [1, 2, 3]:
+                pred = "Xỉu" if groups[0][0] == "Tài" else "Tài"
+                return pred.upper(), 82
+        return None, 0
+
+    def detect_nghieng(self, hist):
+        if len(hist) < 10: return None, 0
+        cnt = Counter(hist)
+        total = len(hist)
+        p_tai = cnt["Tài"] / total
+        p_xiu = cnt["Xỉu"] / total
+        if p_tai >= 0.7:
+            return "XỈU", 65 + int(p_tai*20)
+        elif p_xiu >= 0.7:
+            return "TÀI", 65 + int(p_xiu*20)
+        return None, 0
+
+    def detect_doi_xung(self, hist):
+        if len(hist) < 7: return None, 0
+        last7 = hist[-7:]
+        if (last7[0]==last7[6] and last7[1]==last7[5] and last7[2]==last7[4] and
+            last7[0]!=last7[1] and last7[1]!=last7[2]):
+            pred = "Xỉu" if hist[-1] == "Tài" else "Tài"
+            return pred.upper(), 70
+        return None, 0
+
+    def detect_3_3(self, hist):
+        if len(hist) < 9: return None, 0
+        last9 = hist[-9:]
+        if (last9[0]==last9[1]==last9[2] and last9[3]==last9[4]==last9[5] and
+            last9[6]==last9[7]==last9[8] and last9[0]!=last9[3] and last9[3]!=last9[6]):
+            cur_triple = last9[6]
+            pred = "Xỉu" if cur_triple == "Tài" else "Tài"
+            return pred.upper(), 88
+        return None, 0
+
+    def markov_predict(self, hist):
+        order = 2
         if len(hist) < order + 1: return None, 0
         trans = defaultdict(lambda: defaultdict(int))
         for i in range(len(hist) - order):
@@ -62,80 +171,49 @@ class TaiXiuAIPro:
         conf = (probs[pred] / total) * 100
         return pred, conf
 
-    def _pattern_detect(self, hist):
-        if len(hist) < 6: return None, 0
-        for plen in [3,4]:
-            for i in range(len(hist) - plen*2):
-                pat = hist[i:i+plen]
-                for j in range(i+plen, len(hist)-plen):
-                    if hist[j:j+plen] == pat:
-                        if j+plen < len(hist):
-                            return hist[j+plen], 85.0
-                        elif i+plen < len(hist):
-                            return hist[i+plen], 80.0
-        return None, 0
-
-    def _bayesian(self, hist):
-        if len(hist) < 10: return 0.5, 0.5
-        tai = hist[-30:].count("Tài")
-        xiu = hist[-30:].count("Xỉu")
-        total = tai + xiu
-        alpha, beta = 2, 2
-        p_tai = (tai + alpha) / (total + alpha + beta)
-        p_xiu = (xiu + beta) / (total + alpha + beta)
-        return p_tai, p_xiu
-
-    def predict(self, hist):
-        if not hist or len(hist) < 2:
+    def predict(self, full_hist):
+        hist = self._last_n(full_hist, self.window)
+        if len(hist) < 2:
             return "TÀI", "KHÔNG ĐỦ DỮ LIỆU", 50.0
 
-        last = hist[-1]
-        markov_pred, markov_conf = self._markov_predict(hist)
-        pat_pred, pat_conf = self._pattern_detect(hist)
-        entropy = self._entropy(hist[-self.entropy_window:])
-        p_tai, p_xiu = self._bayesian(hist)
+        detectors = [
+            ("Cầu 1-1", self.detect_1_1),
+            ("Cầu 2-2", self.detect_2_2),
+            ("Cầu 1-2/2-1", self.detect_1_2_or_2_1),
+            ("Cầu 1-2-3", self.detect_1_2_3),
+            ("Cầu bệt", self.detect_bet),
+            ("Cầu 3-3", self.detect_3_3),
+            ("Cầu nghiêng", self.detect_nghieng),
+            ("Cầu đối xứng", self.detect_doi_xung),
+        ]
 
-        votes = {"Tài":0, "Xỉu":0}
-        reasons = []
+        best_pred, best_reason, best_conf = None, "", 0
+        for name, detector in detectors:
+            pred, conf = detector(hist)
+            if pred and conf > best_conf:
+                best_pred, best_reason, best_conf = pred, f"{name} ({conf}%)", conf
+                if conf >= 90: break
 
-        if markov_pred and markov_conf > 55:
-            votes[markov_pred] += 3
-            reasons.append(f"Markov: {markov_pred} ({markov_conf:.0f}%)")
-        if pat_pred and pat_conf > 70:
-            votes[pat_pred] += 2
-            reasons.append(f"Mẫu cầu: {pat_pred}")
-        if p_tai > p_xiu + 0.2:
-            votes["Tài"] += 2
-            reasons.append(f"Bayes Tài ({p_tai*100:.0f}%)")
-        elif p_xiu > p_tai + 0.2:
-            votes["Xỉu"] += 2
-            reasons.append(f"Bayes Xỉu ({p_xiu*100:.0f}%)")
-        if entropy < 0.7:
-            trend = Counter(hist[-5:]).most_common(1)[0][0]
-            votes[trend] += 1
-            reasons.append("Cầu ổn định")
+        if best_pred and best_conf >= 65:
+            return best_pred, best_reason, best_conf
+
+        m_pred, m_conf = self.markov_predict(hist)
+        if m_pred and m_conf > 50:
+            return m_pred.upper(), f"Markov ({m_conf:.0f}%)", m_conf
+
+        cnt = Counter(hist)
+        if cnt["Tài"] > cnt["Xỉu"]:
+            pred, reason = "XỈU", "Đảo xu hướng (nghiêng Tài)"
+        elif cnt["Xỉu"] > cnt["Tài"]:
+            pred, reason = "TÀI", "Đảo xu hướng (nghiêng Xỉu)"
         else:
-            nguoc = "Xỉu" if last == "Tài" else "Tài"
-            votes[nguoc] += 1
-            reasons.append("Hỗn loạn -> đảo")
+            pred, reason = random.choice(["TÀI","XỈU"]), "Ngẫu nhiên"
+        conf = max(cnt.values()) / len(hist) * 100 if len(hist) > 0 else 50
+        return pred, reason, min(conf, 75)
 
-        if votes["Tài"] > votes["Xỉu"]:
-            pred = "TÀI"
-        elif votes["Xỉu"] > votes["Tài"]:
-            pred = "XỈU"
-        else:
-            pred = "TÀI" if p_tai > p_xiu else "XỈU"
+ai = AdvancedCauDetector(window=15)
 
-        max_votes = max(votes.values())
-        total_votes = votes["Tài"] + votes["Xỉu"]
-        conf = (max_votes / total_votes * 100) if total_votes > 0 else 50
-        conf = min(99.9, max(65, conf + random.uniform(-2, 4)))
-        main_reason = "; ".join(reasons[:2]) if reasons else "Tổng hợp"
-        return pred, main_reason, conf
-
-ai = TaiXiuAIPro()
-
-# ═══════════════ STATE & HISTORY ═══════════════
+# ─── State & history (1 phiên) ──────────────────────────
 last_pred_map = defaultdict(lambda: None)
 last_history = defaultdict(lambda: None)
 
@@ -145,12 +223,10 @@ def get_id(item):
             if k in item and str(item[k]).isdigit(): return int(item[k])
     return 0
 
-# ═══════════════ KHUNG GIỜ VÀNG ═══════════════
+# ─── Khung giờ vàng ─────────────────────────────────────
 def get_golden_hours():
-    """Trả về khung giờ dễ nổ hũ dựa trên thời gian hiện tại (mang tính chất tham khảo)"""
     now = datetime.now()
     hour = now.hour
-    # Khung giờ vàng: 11h-13h, 20h-22h, 23h-1h
     if 11 <= hour < 13:
         return {"khung_gio": "11:00 - 13:00", "danh_gia": "Cực kỳ dễ nổ", "color": "#ffd740"}
     elif 20 <= hour < 22:
@@ -164,6 +240,7 @@ def get_golden_hours():
     else:
         return {"khung_gio": "Các giờ khác", "danh_gia": "Bình thường", "color": "#9e9e9e"}
 
+# ═══════════════ ROUTES ═══════════════════════════════════════
 @app.route("/api/golden_hours")
 def golden_hours():
     return jsonify({"status":"success", "data": get_golden_hours()})
@@ -188,7 +265,7 @@ def scan():
     elif tool == "betvip":
         url = "https://wtx.macminim6.online/v1/tx/sessions"
     elif tool == "sunwin":
-        url = "https://sunwin-api.example.com/tx"
+        url = "https://sunwin-api.example.com/tx"  # placeholder
     else:
         return jsonify({"status":"error","msg":"Sàn không hỗ trợ"})
 
@@ -199,18 +276,18 @@ def scan():
         if not isinstance(sessions, list): sessions = []
         sessions = sorted(sessions, key=get_id)
 
-        hist = []
+        full_hist = []
         is_chanle = ("chanle" in url.lower() or mode == "xoc_dia")
         for s in sessions[-50:]:
             val = str(s).upper()
             if is_chanle:
-                hist.append("Tài" if ("CHẴN" in val or "CHAN" in val or "'C'" in val) else "Xỉu")
+                full_hist.append("Tài" if ("CHẴN" in val or "CHAN" in val or "'C'" in val) else "Xỉu")
             else:
-                hist.append("Tài" if ("TAI" in val or "TÀI" in val or "'T'" in val) else "Xỉu")
+                full_hist.append("Tài" if ("TAI" in val or "TÀI" in val or "'T'" in val) else "Xỉu")
 
-        actual = hist[-1].upper() if hist else None
+        actual = full_hist[-1].upper() if full_hist else None
         prev_pred = last_pred_map[f"{tool}_{mode}"]
-        if prev_pred is not None and actual is not None:
+        if prev_pred and actual:
             win = (prev_pred == actual)
             last_history[f"{tool}_{mode}"] = {
                 "phien": str(sessions[-1].get("id","?")) if sessions else "?",
@@ -219,7 +296,7 @@ def scan():
                 "win": win
             }
 
-        raw_pred, reason, conf = ai.predict(hist)
+        raw_pred, reason, conf = ai.predict(full_hist)
         last_pred_map[f"{tool}_{mode}"] = raw_pred
 
         du_doan_hien_thi = raw_pred
@@ -268,6 +345,67 @@ def login():
         if hashlib.sha256(pwd.encode()).hexdigest() != row[0]:
             return jsonify({"status":"error","msg":"Mật khẩu không đúng"})
         return jsonify({"status":"success","data":{"name":user,"role":row[1]}})
+
+# Admin APIs giữ lại (có thể giản lược nếu không cần)
+@app.route("/api/verify_key", methods=["POST"])
+def verify_key():
+    req = request.get_json() or {}
+    k = req.get("key","").strip()
+    if not k: return jsonify({"status":"error","msg":"Nhập Key!"})
+    if k == "hungki98vip": return jsonify({"status":"success","role":"admin","expire":"VĨNH VIỄN"})
+    with get_db() as conn:
+        c = conn.cursor()
+        c.execute("SELECT expire_time, is_banned FROM keys WHERE key_str=?",(k,))
+        row = c.fetchone()
+        if not row: return jsonify({"status":"error","msg":"KEY KHÔNG TỒN TẠI"})
+        if row[1]==1: return jsonify({"status":"error","msg":"KEY BỊ KHÓA"})
+        if datetime.now() > datetime.strptime(row[0],"%Y-%m-%d %H:%M:%S"):
+            return jsonify({"status":"error","msg":"KEY HẾT HẠN"})
+        return jsonify({"status":"success","role":"user","expire":row[0]})
+
+@app.route("/api/admin/list_keys")
+def admin_list_keys():
+    key = request.args.get("admin_key","")
+    if key != "hungki98vip": return jsonify({"status":"error"})
+    with get_db() as conn:
+        c = conn.cursor()
+        c.execute("SELECT key_str, expire_time, is_banned FROM keys WHERE key_str!='hungki98vip' ORDER BY expire_time DESC")
+        return jsonify({"status":"success","keys":c.fetchall()})
+
+@app.route("/api/admin/create_key", methods=["POST"])
+def create_key():
+    req = request.get_json() or {}
+    admin_key = req.get("admin_key","")
+    duration = req.get("duration","")
+    custom = req.get("custom_key","")
+    if admin_key != "hungki98vip": return jsonify({"status":"error"})
+    new_key = custom.strip() if custom.strip() else "VIP-"+''.join(random.choices(string.ascii_uppercase+string.digits,k=6))
+    now = datetime.now()
+    if duration == "1H": exp = now + timedelta(hours=1)
+    elif duration == "1D": exp = now + timedelta(days=1)
+    elif duration == "3D": exp = now + timedelta(days=3)
+    elif duration == "30D": exp = now + timedelta(days=30)
+    else: return jsonify({"status":"error","msg":"Thời gian không hợp lệ"})
+    with get_db() as conn:
+        c = conn.cursor()
+        c.execute("INSERT INTO keys VALUES (?, ?, 0)", (new_key, exp.strftime("%Y-%m-%d %H:%M:%S")))
+        conn.commit()
+    return jsonify({"status":"success","new_key":new_key,"expire":exp.strftime("%Y-%m-%d %H:%M:%S")})
+
+@app.route("/api/admin/action_key", methods=["POST"])
+def action_key():
+    req = request.get_json() or {}
+    admin_key = req.get("admin_key","")
+    target = req.get("target_key","")
+    action = req.get("action","")
+    if admin_key != "hungki98vip": return jsonify({"status":"error"})
+    with get_db() as conn:
+        c = conn.cursor()
+        if action == "ban": c.execute("UPDATE keys SET is_banned=1 WHERE key_str=?",(target,))
+        elif action == "unban": c.execute("UPDATE keys SET is_banned=0 WHERE key_str=?",(target,))
+        elif action == "delete": c.execute("DELETE FROM keys WHERE key_str=?",(target,))
+        conn.commit()
+    return jsonify({"status":"success"})
 
 @app.route("/")
 def home():
