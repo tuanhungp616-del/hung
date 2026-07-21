@@ -1,7 +1,7 @@
 # ═══════════════════════════════════════════════════════════════
-#  DORAEMON INTELLIGENCE AI v8.0 – VIP PRO (SIÊU XỊN)
-#  Thuật toán: Hybrid Markov bậc 4, Entropy, Bayesian, Pattern
-#  Giao diện: Neon Glassmorphism Cao Cấp
+#  DORAEMON INTELLIGENCE AI v8.1 – ULTIMATE VIP PRO
+#  Lịch sử chỉ 1 phiên – AI tự nhận biết Thắng/Thua
+#  Thuật toán: Markov bậc 4, Entropy, Bayesian, Deep Pattern
 # ═══════════════════════════════════════════════════════════════
 
 from flask import Flask, request, jsonify, send_file
@@ -99,7 +99,7 @@ class TaiXiuAIPro:
 
         if markov_pred and markov_conf > 55:
             votes[markov_pred] += 3
-            reasons.append(f"Markov bậc 4: {markov_pred} ({markov_conf:.0f}%)")
+            reasons.append(f"Markov: {markov_pred} ({markov_conf:.0f}%)")
         if pat_pred and pat_conf > 70:
             votes[pat_pred] += 2
             reasons.append(f"Mẫu cầu: {pat_pred}")
@@ -136,7 +136,8 @@ ai = TaiXiuAIPro()
 
 # ═══════════════ STATE & HISTORY ═══════════════
 tool_state = defaultdict(lambda: {"loss":0, "rev":False, "rev_loss":0, "last_pred":None})
-history_log = defaultdict(list)
+# Chỉ lưu 1 lịch sử duy nhất cho mỗi tool+mode
+last_history = defaultdict(lambda: None)
 
 def update_state_and_reverse(tool, mode, actual_result):
     state = tool_state[f"{tool}_{mode}"]
@@ -210,16 +211,15 @@ def scan():
         rev = update_state_and_reverse(tool, mode, actual)
         state = tool_state[f"{tool}_{mode}"]
 
+        # Lưu lịch sử DUY NHẤT 1 phiên gần nhất
         if state["last_pred"] is not None and actual is not None:
             win = (state["last_pred"] == actual)
-            history_log[f"{tool}_{mode}"].append({
+            last_history[f"{tool}_{mode}"] = {
                 "phien": str(sessions[-1].get("id","?")) if sessions else "?",
                 "du_doan": state["last_pred"],
                 "ket_qua": actual,
                 "win": win
-            })
-            if len(history_log[f"{tool}_{mode}"]) > 20:
-                history_log[f"{tool}_{mode}"].pop(0)
+            }
 
         raw_pred, reason, conf = ai.predict(hist)
         if state["rev"]:
@@ -246,7 +246,8 @@ def scan():
                 "phien": next_phien,
                 "loi_khuyen": reason,
                 "kq_cuoi": kq_cuoi_hien_thi,
-                "reverse_mode": state["rev"]
+                "reverse_mode": state["rev"],
+                "last_result": last_history[f"{tool}_{mode}"]  # gửi kèm lịch sử 1 phiên
             }
         })
     except Exception as e:
@@ -256,7 +257,8 @@ def scan():
 def get_history():
     tool = request.args.get("tool","")
     mode = request.args.get("mode","tx_md5")
-    return jsonify(history_log.get(f"{tool}_{mode}", []))
+    his = last_history.get(f"{tool}_{mode}", None)
+    return jsonify(his if his else {})
 
 @app.route("/api/login", methods=["POST"])
 def login():
@@ -271,8 +273,6 @@ def login():
         if hashlib.sha256(pwd.encode()).hexdigest() != row[0]:
             return jsonify({"status":"error","msg":"Mật khẩu không đúng"})
         return jsonify({"status":"success","data":{"name":user,"role":row[1]}})
-
-# ... (admin APIs giữ nguyên, không thay đổi)
 
 @app.route("/")
 def home():
