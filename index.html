@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>DORAEMON AI v12.0 – VIP MAX</title>
+  <title>DORAEMON AI v12.0 – VIP MAX (15s Cooldown)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
@@ -82,6 +82,7 @@
       transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
     }
     .btn:hover { box-shadow: 0 0 50px magenta; transform: translateY(-3px); }
+    .btn:disabled { opacity: 0.5; pointer-events: none; }
     .card {
       background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.15);
       border-radius: 20px; padding: 18px; margin: 12px 0; cursor: pointer; transition: 0.3s;
@@ -131,6 +132,19 @@
     .manual-md5-box {
       margin-top: 20px; background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px;
     }
+    .cooldown-banner {
+      background: rgba(255, 152, 0, 0.2);
+      border: 1px solid #ff9800;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ff9800;
+      display: none;
+    }
+    .cooldown-banner.active { display: block; }
+    .cooldown-timer { font-size: 2rem; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -181,6 +195,10 @@
     </div>
   </div>
   <div class="result-area">
+    <div class="cooldown-banner" id="cooldownBanner">
+      ⏳ AI ĐANG TÍNH TOÁN PHIÊN TIẾP THEO...<br>
+      <span class="cooldown-timer" id="cooldownTimer">15</span> giây
+    </div>
     <div id="modeDisplay" style="margin-bottom:20px; color:#aaa;">Chọn chế độ từ menu</div>
     <div id="loading" style="display:none;"><i class="fas fa-spinner fa-pulse fa-2x"></i></div>
     <div id="resultBox" style="display:none; text-align:center;">
@@ -207,6 +225,7 @@
 
 <script>
 let auth = false, currentTool = '', currentMode = '', interval = null;
+let cooldownActive = false, cooldownTimerId = null, cooldownSeconds = 15;
 
 async function loadGoldenHour() {
   try {
@@ -247,6 +266,7 @@ async function login() {
 function logout() {
   auth = false;
   clearInterval(interval);
+  stopCooldown();
   document.getElementById('dashboard').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'block';
   document.getElementById('gameOverlay').classList.remove('active');
@@ -254,6 +274,7 @@ function logout() {
 
 function openGame(tool) {
   if (!auth) return;
+  stopCooldown();
   currentTool = tool;
   document.getElementById('gameTitle').innerText = tool.toUpperCase();
   document.getElementById('gameOverlay').classList.add('active');
@@ -262,26 +283,69 @@ function openGame(tool) {
   document.getElementById('modeDisplay').innerText = 'Chọn chế độ từ menu 3 chấm';
   document.getElementById('lastHistoryContent').innerHTML = 'Chưa có dữ liệu';
   document.getElementById('md5Result').innerHTML = '';
+  document.getElementById('cooldownBanner').classList.remove('active');
   clearInterval(interval);
 }
 
 function closeGame() {
+  stopCooldown();
   document.getElementById('gameOverlay').classList.remove('active');
   clearInterval(interval);
 }
 
 function selectMode(mode) {
+  stopCooldown();
   currentMode = mode;
   document.getElementById('modeMenu').classList.remove('show');
   document.getElementById('modeDisplay').innerText = `Chế độ: ${mode.replace('_', ' ').toUpperCase()}`;
   document.getElementById('resultBox').style.display = 'none';
   document.getElementById('loading').style.display = 'block';
+  document.getElementById('cooldownBanner').classList.remove('active');
   fetchPrediction();
   clearInterval(interval);
   interval = setInterval(fetchPrediction, 5000);
 }
 
+function stopCooldown() {
+  if (cooldownTimerId) {
+    clearInterval(cooldownTimerId);
+    cooldownTimerId = null;
+  }
+  cooldownActive = false;
+  document.getElementById('cooldownBanner').classList.remove('active');
+  // Khôi phục interval nếu đang có mode
+  if (currentTool && currentMode) {
+    clearInterval(interval);
+    interval = setInterval(fetchPrediction, 5000);
+  }
+}
+
+function startCooldown() {
+  // Dừng mọi interval hiện tại
+  clearInterval(interval);
+  cooldownActive = true;
+  cooldownSeconds = 15;
+  document.getElementById('cooldownBanner').classList.add('active');
+  document.getElementById('cooldownTimer').innerText = cooldownSeconds;
+  
+  cooldownTimerId = setInterval(() => {
+    cooldownSeconds--;
+    document.getElementById('cooldownTimer').innerText = cooldownSeconds;
+    if (cooldownSeconds <= 0) {
+      // Hết cooldown, quét phiên tiếp theo
+      clearInterval(cooldownTimerId);
+      cooldownTimerId = null;
+      cooldownActive = false;
+      document.getElementById('cooldownBanner').classList.remove('active');
+      // Gọi ngay một lần và bắt đầu interval mới
+      fetchPrediction();
+      interval = setInterval(fetchPrediction, 5000);
+    }
+  }, 1000);
+}
+
 async function fetchPrediction() {
+  if (cooldownActive) return; // Không gọi API khi đang trong cooldown
   if (!currentTool || !currentMode) return;
   try {
     const res = await fetch(`/api/scan?tool=${currentTool}&mode=${currentMode}&key=hungki98vip`);
@@ -307,6 +371,11 @@ async function fetchPrediction() {
         `;
       } else {
         histDiv.innerHTML = 'Đang chờ dữ liệu...';
+      }
+
+      // Sau khi hiển thị kết quả, bắt đầu cooldown 15 giây
+      if (!cooldownActive) {
+        startCooldown();
       }
     }
   } catch(e) {
@@ -347,4 +416,4 @@ window.addEventListener('click', function(e) {
 });
 </script>
 </body>
-        </html>
+  </html>
