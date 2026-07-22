@@ -3,358 +3,280 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>DORAEMON AI v12.0 – MINI WIDGET</title>
+  <title>DORAEMON AI v12.0 – MINI TOOLBAR</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
+    body, html { height:100%; width:100%; overflow:hidden; background:#000; }
+    #app { width:100%; height:100%; display:flex; flex-direction:column; }
+    /* Màn hình nhập key */
+    #key-screen {
+      flex:1; display:flex; align-items:center; justify-content:center;
       background: radial-gradient(circle at 50% 0%, #0a0015 0%, #000 100%);
-      font-family: 'Orbitron', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 15px;
-      color: #fff;
-      overflow: hidden; /* để không bị cuộn khi kéo widget */
     }
-    .container { width: 100%; max-width: 450px; }
-    .glass {
-      background: rgba(15, 10, 30, 0.8);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
-      border: 1px solid rgba(0, 255, 255, 0.35);
-      border-radius: 35px;
-      padding: 30px 20px;
-      box-shadow: 0 0 50px rgba(0, 255, 255, 0.2), inset 0 0 30px rgba(0, 255, 255, 0.08);
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
+    .key-box {
+      background: rgba(15,10,30,0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid cyan;
+      border-radius: 30px;
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(0,255,255,0.3);
+      width: 90%;
+      max-width: 400px;
     }
-    .glass::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(0,255,255,0.1) 0%, transparent 60%);
-      animation: rotate 10s linear infinite;
-      z-index: -1;
-    }
-    @keyframes rotate { 100% { transform: rotate(360deg); } }
-    .logo { text-align: center; margin-bottom: 20px; }
-    .logo img {
-      width: 110px; height: 110px; border-radius: 50%; border: 3px solid cyan;
-      box-shadow: 0 0 35px cyan; animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-    h1 {
-      text-align: center; font-size: 2.3rem; font-weight: 900;
+    .key-box h1 {
+      font-size: 2rem; font-weight: 900;
       background: linear-gradient(90deg, #0ff, #f0f);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      letter-spacing: 3px; margin: 10px 0 5px;
+      margin-bottom: 20px;
     }
-    .subtitle {
-      text-align: center; color: gold; font-size: 0.8rem; letter-spacing: 5px;
-      margin-bottom: 15px; text-transform: uppercase;
+    .key-input {
+      width:100%; padding:15px; border-radius:10px; border:none;
+      background: #111; color:#fff; font-size:1.1rem; text-align:center;
+      margin: 15px 0; outline:none; border:1px solid #333;
     }
-    .golden-hour-box {
-      background: rgba(255, 215, 0, 0.1);
-      border: 1px solid gold;
-      border-radius: 20px;
-      padding: 12px 20px;
-      margin: 0 0 25px;
-      text-align: center;
+    .key-input:focus { border-color: cyan; }
+    .key-btn {
+      width:100%; padding:15px; border:none; border-radius:10px;
+      background: linear-gradient(135deg, cyan, magenta);
+      color:#000; font-weight:700; font-size:1.2rem; cursor:pointer;
+      margin-top: 10px;
     }
-    .golden-hour-box i { color: gold; margin-right: 8px; }
-    .input-field {
-      width: 100%; padding: 16px; margin: 10px 0; background: rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; color: #fff;
-      font-family: 'Orbitron', sans-serif; font-size: 0.9rem; outline: none; transition: 0.3s;
-    }
-    .input-field:focus { border-color: magenta; box-shadow: 0 0 25px magenta; }
-    .btn {
-      width: 100%; padding: 16px; margin-top: 15px; border: none; border-radius: 14px;
-      background: linear-gradient(135deg, #0ff, #f0f); color: #000; font-weight: 700;
-      font-size: 1.1rem; font-family: 'Orbitron', sans-serif; cursor: pointer;
-      text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 30px cyan;
-      transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
-    }
-    .btn:hover { box-shadow: 0 0 50px magenta; transform: translateY(-3px); }
-    .card {
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px; padding: 18px; margin: 12px 0; cursor: pointer; transition: 0.3s;
-    }
-    .card:hover { border-color: cyan; box-shadow: 0 0 30px rgba(0,255,255,0.3); transform: scale(1.02); }
-
-    /* Overlay toàn màn hình khi mở rộng */
-    .overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.95); display: none; flex-direction: column; z-index: 100;
-    }
-    .overlay.active { display: flex; }
-    .overlay-header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 20px; background: rgba(0,0,0,0.6);
-    }
-    .overlay-header i { font-size: 1.5rem; cursor: pointer; }
-    .dropdown { position: relative; }
-    .dropdown-content {
-      display: none; position: absolute; right: 0; top: 45px; background: #1a0a30;
-      min-width: 200px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.9);
-      z-index: 200; overflow: hidden;
-    }
-    .dropdown-content a {
-      color: #fff; padding: 14px 20px; display: block; font-size: 0.8rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s;
-    }
-    .dropdown-content a:hover { background: cyan; color: #000; }
-    .show { display: block; }
-
-    /* Floating Widget (Mini) */
-    .floating-widget {
-      position: fixed;
-      bottom: 30px;
-      right: 20px;
-      width: 200px;
-      background: rgba(15, 10, 30, 0.9);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid cyan;
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(0,255,255,0.4);
-      z-index: 300;
-      display: none;
+    /* Màn hình chọn sàn */
+    #select-screen {
+      flex:1; display:none; align-items:center; justify-content:center;
+      background: radial-gradient(circle at 50% 0%, #0a0015 0%, #000 100%);
       flex-direction: column;
-      align-items: center;
-      padding: 15px 10px;
-      cursor: grab;
-      user-select: none;
-      transition: opacity 0.2s;
     }
-    .floating-widget:active { cursor: grabbing; }
-    .floating-widget .widget-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 2px solid cyan;
-      margin-bottom: 8px;
-      box-shadow: 0 0 15px cyan;
-      background: #000;
+    .select-btn {
+      width: 80%; max-width: 300px; padding: 20px; margin: 15px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px; color:#fff; font-size:1.5rem; cursor:pointer;
+      text-align: center; transition: 0.3s;
     }
-    .floating-widget .widget-avatar img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
+    .select-btn:hover { border-color: cyan; box-shadow: 0 0 30px cyan; }
+    /* Màn hình game + toolbar */
+    #game-screen {
+      flex:1; display:none; flex-direction:column; position:relative;
     }
-    .floating-widget .widget-prediction {
-      font-size: 1.3rem;
-      font-weight: 900;
-      margin: 5px 0;
+    #game-iframe {
+      flex:1; border:none; width:100%;
     }
-    .floating-widget .widget-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 5px;
+    #toolbar {
+      height: 60px; background: rgba(10,10,20,0.95);
+      border-top: 1px solid cyan;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 15px;
+      backdrop-filter: blur(15px);
+      z-index: 200;
     }
-    .floating-widget .widget-buttons i {
-      font-size: 1.2rem;
-      color: #fff;
-      background: rgba(255,255,255,0.1);
-      padding: 6px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: 0.2s;
+    .toolbar-left { display:flex; align-items:center; gap:10px; }
+    .toolbar-exit {
+      background: none; border: none; color: #ff3366; font-size: 1.3rem;
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      font-weight: 700;
     }
-    .floating-widget .widget-buttons i:hover { color: cyan; }
-
-    /* Minimize button trong overlay */
-    .minimize-btn {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
+    .toolbar-prediction {
+      font-size: 1.5rem; font-weight: 900;
+      display: flex; align-items: center; gap: 10px;
     }
+    .toolbar-prediction .pred-text { font-size: 2rem; }
+    .tai { color: #ff3366; } .xiu { color: #00ccff; }
+    .cooldown-text { font-size: 0.9rem; color: #ff9800; }
+    .toolbar-right { position: relative; }
+    .menu-btn { background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
+    .menu-dropdown {
+      display: none; position: absolute; bottom: 70px; right: 0;
+      background: #1a1a2e; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      min-width: 180px; overflow: hidden; z-index: 300;
+    }
+    .menu-dropdown a {
+      color: #fff; padding: 14px 20px; display: block; font-size: 0.9rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1); text-decoration: none;
+    }
+    .menu-dropdown a:hover { background: cyan; color: #000; }
+    .show { display: block; }
   </style>
 </head>
 <body>
-
-<!-- LOGIN & DASHBOARD (giữ nguyên như trước) -->
-<div class="container">
-  <div class="glass" id="loginScreen">
-    <!-- Nội dung login như cũ -->
+<div id="app">
+  <!-- KEY SCREEN -->
+  <div id="key-screen">
+    <div class="key-box">
+      <h1>DORAEMON AI</h1>
+      <input type="password" id="keyInput" class="key-input" placeholder="Nhập key admin...">
+      <button class="key-btn" onclick="verifyKey()">MỞ KHÓA</button>
+      <p id="keyError" style="color:red; margin-top:10px;"></p>
+    </div>
   </div>
-  <div class="glass" id="dashboard" style="display:none;">
-    <!-- Danh sách sàn game -->
-  </div>
-</div>
 
-<!-- OVERLAY TOÀN MÀN HÌNH (có thêm nút thu nhỏ) -->
-<div class="overlay" id="gameOverlay">
-  <div class="overlay-header">
-    <i class="fas fa-chevron-left" onclick="closeGame()"></i>
-    <span id="gameTitle" style="font-size:1.3rem; font-weight:700;"></span>
-    <div style="display:flex; gap:15px; align-items:center;">
-      <button class="minimize-btn" onclick="minimizeWidget()"><i class="fas fa-window-minimize"></i></button>
-      <div class="dropdown">
-        <i class="fas fa-ellipsis-v" onclick="document.getElementById('modeMenu').classList.toggle('show')"></i>
-        <div class="dropdown-content" id="modeMenu">
-          <a href="#" onclick="selectMode('tx_md5')">🎯 TÀI XỈU MD5</a>
-          <a href="#" onclick="selectMode('tx')">🎰 TÀI XỈU HŨ</a>
-          <a href="#" onclick="selectMode('xoc_dia')">🎲 XÓC ĐĨA</a>
+  <!-- SELECT SCREEN -->
+  <div id="select-screen">
+    <button class="select-btn" onclick="startGame('lc79')">🏦 LC79.BET</button>
+    <button class="select-btn" onclick="startGame('betvip')">🎰 BETVIP</button>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game-screen">
+    <iframe id="game-iframe" src="" allow="camera;microphone"></iframe>
+    <div id="toolbar">
+      <div class="toolbar-left">
+        <button class="toolbar-exit" onclick="exitGame()"><i class="fas fa-times"></i> Thoát</button>
+      </div>
+      <div class="toolbar-prediction" id="predictionArea">
+        <span class="pred-text" id="predText">--</span>
+        <span class="cooldown-text" id="cooldownText"></span>
+      </div>
+      <div class="toolbar-right">
+        <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-ellipsis-v"></i></button>
+        <div class="menu-dropdown" id="modeMenu">
+          <a href="#" onclick="selectMode('tx_md5')">🎯 Tài Xỉu MD5</a>
+          <a href="#" onclick="selectMode('tx')">🎰 Tài Xỉu Hũ</a>
+          <a href="#" onclick="selectMode('xoc_dia')">🎲 Xóc Đĩa</a>
         </div>
       </div>
     </div>
   </div>
-  <div class="result-area" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;">
-    <div class="cooldown-banner" id="cooldownBanner">...</div>
-    <div id="modeDisplay" style="margin-bottom:20px; color:#aaa;">Chọn chế độ từ menu</div>
-    <div id="loading" style="display:none;"><i class="fas fa-spinner fa-pulse fa-2x"></i></div>
-    <div id="resultBox" style="display:none; text-align:center;">
-      <div class="prediction" id="predictionText"></div>
-      <div class="info-row">...</div>
-    </div>
-    <div class="last-history" id="lastHistoryBox">...</div>
-    <div class="manual-md5-box">...</div>
-  </div>
-</div>
-
-<!-- FLOATING WIDGET MINI -->
-<div class="floating-widget" id="floatingWidget">
-  <div class="widget-avatar">
-    <img src="https://i.ibb.co/QFDKgC1R/1783519521054.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616438.png'">
-  </div>
-  <div class="widget-prediction" id="widgetPrediction">--</div>
-  <div style="font-size:0.7rem; color:#aaa;" id="widgetSession">Phiên: --</div>
-  <div class="widget-buttons">
-    <i class="fas fa-ellipsis-v" onclick="toggleWidgetMenu()"></i>
-    <i class="fas fa-expand" onclick="maximizeWidget()"></i>
-    <i class="fas fa-times" onclick="closeWidget()"></i>
-  </div>
-  <!-- Dropdown nhỏ cho widget -->
-  <div class="dropdown-content" id="widgetModeMenu" style="right:50px; bottom:60px; display:none;">
-    <a href="#" onclick="selectMode('tx_md5'); toggleWidgetMenu();">🎯 TX MD5</a>
-    <a href="#" onclick="selectMode('tx'); toggleWidgetMenu();">🎰 TX HŨ</a>
-    <a href="#" onclick="selectMode('xoc_dia'); toggleWidgetMenu();">🎲 XÓC ĐĨA</a>
-  </div>
 </div>
 
 <script>
-// Các biến toàn cục (giống như trước, thêm một số hàm cho widget)
-let auth = false, currentTool = '', currentMode = '', interval = null;
-let cooldownActive = false, cooldownTimerId = null;
+// Biến toàn cục
+let apiKey = '';
+let currentTool = '';
+let currentMode = '';
+let scanTimer = null;
+let cooldownTimer = null;
+let cooldownActive = false;
 
-// --- DRAG & DROP WIDGET ---
-const widget = document.getElementById('floatingWidget');
-let isDragging = false, offsetX, offsetY;
-
-widget.addEventListener('mousedown', (e) => {
-  if (e.target.closest('.widget-buttons') || e.target.closest('.dropdown-content')) return;
-  isDragging = true;
-  const rect = widget.getBoundingClientRect();
-  offsetX = e.clientX - rect.left;
-  offsetY = e.clientY - rect.top;
-  widget.style.cursor = 'grabbing';
-});
-document.addEventListener('mousemove', (e) => {
-  if (!isDragging) return;
-  widget.style.left = (e.clientX - offsetX) + 'px';
-  widget.style.top = (e.clientY - offsetY) + 'px';
-  widget.style.right = 'auto';
-  widget.style.bottom = 'auto';
-});
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-  widget.style.cursor = 'grab';
-});
-
-// Touch events
-widget.addEventListener('touchstart', (e) => {
-  if (e.target.closest('.widget-buttons') || e.target.closest('.dropdown-content')) return;
-  isDragging = true;
-  const rect = widget.getBoundingClientRect();
-  offsetX = e.touches[0].clientX - rect.left;
-  offsetY = e.touches[0].clientY - rect.top;
-});
-document.addEventListener('touchmove', (e) => {
-  if (!isDragging) return;
-  e.preventDefault();
-  widget.style.left = (e.touches[0].clientX - offsetX) + 'px';
-  widget.style.top = (e.touches[0].clientY - offsetY) + 'px';
-  widget.style.right = 'auto';
-  widget.style.bottom = 'auto';
-}, {passive: false});
-document.addEventListener('touchend', () => { isDragging = false; });
-
-// --- HÀM CHUYỂN ĐỔI GIỮA OVERLAY VÀ WIDGET ---
-function minimizeWidget() {
-  document.getElementById('gameOverlay').classList.remove('active');
-  document.getElementById('floatingWidget').style.display = 'flex';
-  // Cập nhật dữ liệu mini
-  updateWidgetData();
-}
-
-function maximizeWidget() {
-  document.getElementById('floatingWidget').style.display = 'none';
-  document.getElementById('gameOverlay').classList.add('active');
-}
-
-function closeWidget() {
-  stopCooldown();
-  clearInterval(interval);
-  document.getElementById('floatingWidget').style.display = 'none';
-  document.getElementById('gameOverlay').classList.remove('active');
-  currentTool = ''; currentMode = '';
-}
-
-// Cập nhật thông tin hiển thị trên widget từ kết quả mới nhất
-function updateWidgetData() {
-  const predEl = document.getElementById('predictionText');
-  const sessionEl = document.getElementById('sessionId');
-  if (predEl && sessionEl) {
-    document.getElementById('widgetPrediction').innerText = predEl.innerText || '--';
-    document.getElementById('widgetPrediction').className = 'widget-prediction ' + (predEl.className.includes('tai') ? 'tai' : 'xiu');
-    document.getElementById('widgetSession').innerText = 'Phiên: ' + (sessionEl.innerText || '--');
+// Hàm verify key
+async function verifyKey() {
+  const key = document.getElementById('keyInput').value.trim();
+  const err = document.getElementById('keyError');
+  if (!key) { err.innerText = 'Vui lòng nhập key!'; return; }
+  err.innerText = '';
+  try {
+    const res = await fetch('/api/verify_key', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ key: key })
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      apiKey = key;
+      document.getElementById('key-screen').style.display = 'none';
+      document.getElementById('select-screen').style.display = 'flex';
+    } else {
+      err.innerText = data.msg || 'Key không hợp lệ!';
+    }
+  } catch(e) {
+    err.innerText = 'Lỗi kết nối!';
   }
 }
 
-function toggleWidgetMenu() {
-  const menu = document.getElementById('widgetModeMenu');
-  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+// Bắt đầu game (mở iframe và toolbar)
+function startGame(tool) {
+  currentTool = tool;
+  currentMode = ''; // chưa chọn chế độ
+  document.getElementById('select-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'flex';
+  
+  // Chọn URL web nhà cái
+  let url = '';
+  if (tool === 'lc79') url = 'https://lc79.bet';
+  else if (tool === 'betvip') url = 'https://play.betvip.fit';
+  else url = 'https://lc79.bet';
+  document.getElementById('game-iframe').src = url;
+  
+  // Reset dự đoán
+  document.getElementById('predText').innerText = '--';
+  document.getElementById('predText').className = 'pred-text';
+  document.getElementById('cooldownText').innerText = '';
+  stopAllTimers();
+  cooldownActive = false;
 }
 
-// --- GIỮ NGUYÊN CÁC HÀM KHÁC (login, openGame, selectMode, fetchPrediction, analyzeMD5...) ---
-// ... (như code cũ, thêm gọi updateWidgetData() sau khi fetch thành công)
-// Đoạn fetchPrediction sau khi nhận dữ liệu sẽ gọi updateWidgetData() nếu widget đang hiện.
+// Thoát game, quay lại màn chọn sàn
+function exitGame() {
+  stopAllTimers();
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('select-screen').style.display = 'flex';
+  document.getElementById('game-iframe').src = '';
+  currentTool = '';
+  currentMode = '';
+}
 
-// Điều chỉnh selectMode để đồng bộ với widget mode menu
+// Chọn chế độ từ menu
 function selectMode(mode) {
-  stopCooldown();
   currentMode = mode;
   document.getElementById('modeMenu').classList.remove('show');
-  document.getElementById('modeDisplay').innerText = `Chế độ: ${mode.replace('_', ' ').toUpperCase()}`;
-  document.getElementById('resultBox').style.display = 'none';
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('cooldownBanner').classList.remove('active');
-  fetchPrediction();
-  clearInterval(interval);
-  interval = setInterval(fetchPrediction, 5000);
+  // Bắt đầu quét ngay
+  stopAllTimers();
+  cooldownActive = false;
+  document.getElementById('cooldownText').innerText = '';
+  scanNow(); // lần đầu
+  scanTimer = setInterval(() => {
+    if (!cooldownActive) scanNow();
+  }, 1000); // kiểm tra mỗi giây, nhưng scanNow sẽ tự cooldown sau khi có kết quả
 }
 
-// Khi fetchPrediction thành công, gọi thêm:
-// if (document.getElementById('floatingWidget').style.display === 'flex') updateWidgetData();
-
-// Hàm closeGame (nút back trong overlay) cũng cần tắt widget nếu đang mở.
-function closeGame() {
-  stopCooldown();
-  clearInterval(interval);
-  document.getElementById('gameOverlay').classList.remove('active');
-  document.getElementById('floatingWidget').style.display = 'none';
+// Dừng tất cả timer
+function stopAllTimers() {
+  if (scanTimer) clearInterval(scanTimer);
+  if (cooldownTimer) clearInterval(cooldownTimer);
+  scanTimer = null;
+  cooldownTimer = null;
 }
+
+// Gọi API scan
+async function scanNow() {
+  if (!currentTool || !currentMode || cooldownActive) return;
+  try {
+    const res = await fetch(`/api/scan?tool=${currentTool}&mode=${currentMode}&key=${apiKey}`);
+    const data = await res.json();
+    if (data.status === 'success') {
+      const d = data.data;
+      const pred = d.du_doan;
+      const predEl = document.getElementById('predText');
+      predEl.innerText = pred;
+      predEl.className = 'pred-text ' + (pred.includes('TÀI') ? 'tai' : 'xiu');
+      // Bắt đầu cooldown 15 giây
+      startCooldown();
+    }
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+// Bắt đầu đếm ngược 15 giây
+function startCooldown() {
+  cooldownActive = true;
+  let sec = 15;
+  document.getElementById('cooldownText').innerText = `(${sec}s)`;
+  cooldownTimer = setInterval(() => {
+    sec--;
+    document.getElementById('cooldownText').innerText = `(${sec}s)`;
+    if (sec <= 0) {
+      clearInterval(cooldownTimer);
+      cooldownTimer = null;
+      cooldownActive = false;
+      document.getElementById('cooldownText').innerText = '';
+    }
+  }, 1000);
+}
+
+// Toggle menu 3 chấm
+function toggleMenu() {
+  document.getElementById('modeMenu').classList.toggle('show');
+}
+
+// Đóng menu khi click bên ngoài
+window.addEventListener('click', function(e) {
+  if (!e.target.closest('.menu-btn') && !e.target.closest('.menu-dropdown')) {
+    document.getElementById('modeMenu').classList.remove('show');
+  }
+});
 </script>
 </body>
 </html>
